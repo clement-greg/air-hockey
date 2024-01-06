@@ -56,5 +56,5 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'air-hockey'
-          package: ./dist/air-hockey
+          package: ./dist/air-hockey/browser
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E18F7AFEDF9141F892E7A3E60EB1A748 }}
