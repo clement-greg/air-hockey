@@ -12,4 +12,9 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class AppComponent {
   title = 'air-hockey';
+
+  message: string = '';
+  showMessage() {
+    this.message = 'This message now shows!!!!';
+  }
 }
