@@ -25,6 +25,18 @@ export class HomeComponent {
       });
 
     });
+    this.launchVideo();
+  }
+
+  launchVideo() {
+    const video: any = document.getElementById('bg-video');
+    if(!video) {
+      setTimeout(()=> this.launchVideo(), 100);
+    } else {
+      console.log('playing')
+      video.mutued = true;
+      video.play();
+    }
   }
 
   processGameMessage(message: GameMessage) {

@@ -66,7 +66,8 @@
               "buildTarget": "air-hockey:build:production"
             },
             "development": {
-              "buildTarget": "air-hockey:build:development"
+              "buildTarget": "air-hockey:build:development",
+              "port": 47212
             }
           },
           "defaultConfiguration": "development"
