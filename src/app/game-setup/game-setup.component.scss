@@ -1,0 +1,38 @@
+.avatar-selector {
+    width: 600px;
+    overflow: hidden;
+    white-space: nowrap;
+    >div {
+        transition: transform .5s ease;
+        ul {
+            list-style: none;
+            padding: 0;
+            li {
+                display: inline-block;
+                padding: 30px;
+                img {
+                    height: 80px;
+                    transition: transform .5s ease;
+                }
+                &.selected {
+                    background-color: orange;
+                    img {
+                        transform: scale(1.2);
+                    }
+                }
+            }
+        }
+    }
+}
+
+.selected-players {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 600px;
+    >div {
+        text-align: center;
+        padding: 30px;
+    }
+}
+

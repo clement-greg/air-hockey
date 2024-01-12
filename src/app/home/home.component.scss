@@ -7,3 +7,33 @@ video {
     height: 100vh;
     object-fit: cover;
 }
+
+.game-surface {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.game-setup {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    left: 0;
+}
+
+.game-setup>div {
+    box-shadow: 1px 1px 24px 1px #0000001a;
+    background-color: #fff;
+    padding: 30px;
+}
+
+.player-score {
+    padding-left: 150px;
+    padding-right: 150px;
+}

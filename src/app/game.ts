@@ -8,6 +8,10 @@ export class Game {
 
     running = false;
 
+    player1: Player;
+    player2: Player;
+    winner: Player;
+
     constructor(private duration: number) {
 
     }
@@ -40,7 +44,6 @@ export class Game {
         const dt = new Date(this.startTime);
 
         dt.setSeconds(dt.getSeconds() + this.duration);
-        console.log(dt);
         return dt;
     }
 
@@ -49,20 +52,65 @@ export class Game {
     }
 
     get secondsRemaining() {
+        if (!this.startTime) {
+            return '-';
+        }
         let remaining = this.getSecondsBetweenDates(new Date(), this.endTime);
         if (remaining < 0) {
             remaining = 0;
             this.running = false;
+            if(this.player1Score > this.player2Score) {
+                this.winner = this.player1;
+            }
+            if(this.player2Score > this.player1Score) {
+                this.winner = this.player2;
+            }
         }
 
         return remaining;
     }
 
     private getSecondsBetweenDates(date1: Date, date2: Date): number {
-        // Get the difference in milliseconds
         let diffInMilliseconds = date2.getTime() - date1.getTime();
-
-        // Convert milliseconds to seconds and return
         return Math.floor(diffInMilliseconds / 1000);
     }
 }
+
+export class Player {
+    avatar: string;
+
+    constructor(playerNumber: number) { }
+}
+
+export class GameSetupConfig {
+    player1: Player;
+    player2: Player;
+}
+
+export function getPlayerTypes() {
+    return [
+            'alien',
+    'mouse',
+    'bear',
+    'cat',
+    'chicken',
+    'dog',
+    'dragon',
+    'duck',
+    'knight',
+    'llama',
+    'lion',
+    'monkey',
+    'moose',
+    'rabbit',
+    'tiger',
+    'troll',
+    'unicorn',
+    'werewolf',
+    'wizard',
+    ];
+}
+
+// export enum PlayerType {
+
+// }
