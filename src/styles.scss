@@ -6,6 +6,13 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     font-size: 120px;
     line-height: 130px;
     text-shadow: 4px 4px 14px rgba(0,0,0,0.6);
+    color: rgba(255,255,255,.8);
+}
+
+.mat-h2, .mat-headline-6, .mat-typography .mat-h2, .mat-typography .mat-headline-6, .mat-typography h2 {
+    font-size: 70px;
+    text-shadow: 4px 4px 14px rgba(0,0,0,0.6);
+    color: rgba(255,255,255,.8);
 }
 
 .flex-container {
@@ -19,6 +26,15 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .center {
     text-align: center;
 }
+
+@keyframes white-box-enter {
+    from {
+        transform: translateY(-200px) scale(.5);
+    }
+    to {
+        transform: translateY(0) scale(1);
+    }
+}
 .white-box {
     width: 100%;
     max-width: 350px;
@@ -27,10 +43,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     box-shadow: 1px 1px 24px 1px #0000001a;
     border-radius: 17px;
     padding: 30px;
-    background-color: #fff;
-    * {
-        color: #666;
-    }
+    backdrop-filter: blur(10px);
+    animation: white-box-enter .5s ease;
 }
 
 .game-avatar {

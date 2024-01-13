@@ -1,4 +1,4 @@
-import { Component, NgZone } from '@angular/core';
+import { Component, HostListener, NgZone } from '@angular/core';
 import { Game, GameSetupConfig } from '../game';
 import { MatButtonModule } from '@angular/material/button';
 import { GameMessage } from '../game-message';
@@ -44,6 +44,22 @@ export class HomeComponent {
     }
   }
 
+  @HostListener('document:keyup', ['$event'])
+  keyPress(evt: KeyboardEvent) {
+    switch (evt.key) {
+      case ' ':
+        this.handleSpace();
+        break;
+    }
+  }
+
+  handleSpace() {
+    if(this.game?.winner) {
+      delete this.game?.winner;
+      this.startGame();
+    }
+  }
+
   processGameMessage(message: GameMessage) {
     this.game.processGameMessage(message);
     if(message.messageType === 'GAME_STARTED') {
@@ -66,9 +82,9 @@ export class HomeComponent {
   startGame() {
     delete this.game.winner;
     this.config = new GameSetupConfig();
+    this.game = new Game(10);
     this.gameSetup = true;
     const video: any = document.getElementById('bg-video');
     video.play();
-
   }
 }

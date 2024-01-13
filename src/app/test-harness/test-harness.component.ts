@@ -36,12 +36,12 @@ export class TestHarnessComponent {
       sender: 'Server',
       messageType: 'GAME_STARTED'
     });
-    const iframe = document.querySelector("iframe");
-    iframe.focus();
+
   }
 
   sendMessage(message:GameMessage) {
     const iframe = document.querySelector("iframe");
     (iframe as any).contentWindow.postMessage (JSON.stringify(message), "*");
+    iframe.focus();
   }
 }
