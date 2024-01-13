@@ -28,15 +28,25 @@ export class Game {
             case 'PLAYER_1_SCORED':
                 if (this.running) {
                     this.player1Score++;
+                    this.playScoreSound();
                 }
                 break;
             case 'PLAYER_2_SCORED':
                 if (this.running) {
                     this.player2Score++;
+                    this.playScoreSound();
                 }
                 break;
 
         }
+    }
+
+    private playScoreSound() {
+        const sound: any = document.getElementById('score-1');
+        sound.pause();
+        sound.currentTime = 0;
+        sound.volume = .1;
+        sound.play();
     }
 
     get endTime(): Date {
@@ -58,16 +68,31 @@ export class Game {
         let remaining = this.getSecondsBetweenDates(new Date(), this.endTime);
         if (remaining < 0) {
             remaining = 0;
+            if (this.running) {
+                if (this.player1Score > this.player2Score) {
+                    this.winner = this.player1;
+                    this.playWin();
+                }
+                if (this.player2Score > this.player1Score) {
+                    this.winner = this.player2;
+                    this.playWin();
+                }
+            }
             this.running = false;
-            if(this.player1Score > this.player2Score) {
-                this.winner = this.player1;
-            }
-            if(this.player2Score > this.player1Score) {
-                this.winner = this.player2;
-            }
         }
 
         return remaining;
+    }
+
+    private playWin() {
+        const gameAudio: any = document.getElementById('arcade-funk');
+        gameAudio.pause();
+        const win: any = document.getElementById('win-soundfx');
+
+        win.currentTime = 0;
+        win.volume = .1;
+        win.loop = false;
+        win.play();
     }
 
     private getSecondsBetweenDates(date1: Date, date2: Date): number {
@@ -89,25 +114,31 @@ export class GameSetupConfig {
 
 export function getPlayerTypes() {
     return [
-            'alien',
-    'mouse',
-    'bear',
-    'cat',
-    'chicken',
-    'dog',
-    'dragon',
-    'duck',
-    'knight',
-    'llama',
-    'lion',
-    'monkey',
-    'moose',
-    'rabbit',
-    'tiger',
-    'troll',
-    'unicorn',
-    'werewolf',
-    'wizard',
+        'mouse',
+        'bear',
+        'cat',
+        'chicken',
+        'dog',
+        'dragon',
+        'duck',
+        'knight',
+        'llama',
+        'lion',
+        'monkey',
+        'monster-1',
+        'monster-2',
+        'tank',
+        'monster-truck',
+        'snake',
+        'ape',
+        'moose',
+        'eagle',
+        'rabbit',
+        'tiger',
+        'troll',
+        'unicorn',
+        'werewolf',
+        'wizard',
     ];
 }
 

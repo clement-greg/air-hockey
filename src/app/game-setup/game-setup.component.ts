@@ -100,7 +100,7 @@ export class GameSetupComponent {
 
   get scrollOffset() {
     const index = this.playerTypes.indexOf(this.selectedItem);
-    const nonsScrollCount = 3;
+    const nonsScrollCount = 2;
     if (index < nonsScrollCount) {
       return '';
     }

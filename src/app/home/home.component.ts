@@ -41,6 +41,8 @@ export class HomeComponent {
       console.log('playing')
       video.mutued = true;
       video.play();
+
+
     }
   }
 
@@ -72,6 +74,13 @@ export class HomeComponent {
     this.game.restart();
     this.game.player1 = this.config.player1;
     this.game.player2 = this.config.player2;
+    const bgAudio: any = document.getElementById('bg-music');
+    bgAudio.pause();
+    const gameAudio: any = document.getElementById('arcade-funk');
+    gameAudio.volume = .05;
+    gameAudio.currentTime = 0;
+    gameAudio.play();
+
 
     clearInterval(this.interval);
     this.interval = setInterval(()=> {
@@ -80,11 +89,24 @@ export class HomeComponent {
   }
 
   startGame() {
+    const defaultPlayer1 = this.config?.player1;
+    const defaultPlayer2 = this.config?.player2;
+
     delete this.game.winner;
     this.config = new GameSetupConfig();
+    this.config.player1 = defaultPlayer1;
+    this.config.player2 = defaultPlayer2;
     this.game = new Game(10);
     this.gameSetup = true;
     const video: any = document.getElementById('bg-video');
     video.play();
+
+    const bgAudio: any = document.getElementById('bg-music');
+    bgAudio.currentTime = 0;
+    bgAudio.volume = .05;
+    bgAudio.play();
+
+    const gameAudio: any = document.getElementById('arcade-funk');
+    gameAudio.pause();
   }
 }
