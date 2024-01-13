@@ -1,21 +1,42 @@
-<!-- <video autoplay muted="true" playsinline src="../../assets/video/hockey-background.mp4"  loop id="bg-video">
-</video> -->
-<video loop muted autoplay id="bg-video">
+<video loop muted playsinline autoplay id="bg-video">
     <source src="../../assets/video/hockey-background.mp4" type="video/mp4">
-  </video>
-<p>home works!</p>
+</video>
+<div class="game-surface">
+    <div *ngIf="config.player1 && config.player2">
+
+        <div class="center">
+            Time Remaining
+            <h1>{{game.secondsRemaining}}</h1>
+        </div>
+        <div class="flex-container">
+            <div class="center player-score">
+                <img class="game-avatar" src="../../assets/images/{{config.player1.avatar}}.jpg">
+                <h1>{{game.player1Score}}</h1>
+            </div>
+            <div class="center player-score">
+                <img class="game-avatar" src="../../assets/images/{{config.player2.avatar}}.jpg">
+                <h1>{{game.player2Score}}</h1>
+            </div>
+        </div>
 
 
-<button mat-button mat-raised-button color="primary" (click)="startGame()">Start Game</button>
-
-<h1>{{game.secondsRemaining}}</h1>
-
-<div>
-    Player 1
-    <h1>{{game.player1Score}}</h1>
+    </div>
 </div>
 
-<div>
-    Player 2
-    <h1>{{game.player2Score}}</h1>
+<div class="game-setup" *ngIf="gameSetup">
+    <app-game-setup [(config)]="config" (configChange)="configChange()"></app-game-setup>
+
+</div>
+
+<div class="game-setup" *ngIf="game.winner">
+    <div class="white-box">
+        <app-display-winner [winner]="game.winner"></app-display-winner>
+    </div>
+</div>
+
+<div style="display: none;">
+    <audio src="../../assets/music/score-1.mp3" id="score-1"></audio>
+    <audio src="../../assets/music/bg-music.mp3" loop id="bg-music"></audio>
+    <audio src="../../assets/music/arcade_funk.mp3" loop id="arcade-funk"></audio>
+    <audio src="../../assets/music/win.mp3" loop="false" id="win-soundfx"></audio>
 </div>

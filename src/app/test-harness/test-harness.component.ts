@@ -31,8 +31,17 @@ export class TestHarnessComponent {
     });
   }
 
+  startGame() {
+    this.sendMessage({
+      sender: 'Server',
+      messageType: 'GAME_STARTED'
+    });
+
+  }
+
   sendMessage(message:GameMessage) {
     const iframe = document.querySelector("iframe");
     (iframe as any).contentWindow.postMessage (JSON.stringify(message), "*");
+    iframe.focus();
   }
 }

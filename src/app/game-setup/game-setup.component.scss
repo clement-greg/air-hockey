@@ -1,0 +1,49 @@
+.avatar-selector {
+    width: 600px;
+    overflow: hidden;
+    white-space: nowrap;
+    >div {
+        transition: transform .5s ease;
+        padding: 40px;
+        ul {
+            list-style: none;
+            padding: 0;
+            li {
+                display: inline-block;
+                padding: 30px;
+                img {
+                    height: 80px;
+                    transition: transform .5s ease;
+                    border-radius: 50%;
+                }
+                &.selected {
+                    // background: linear-gradient(360deg, rgba(3, 121, 3, 1) 0%, rgba(80, 212, 137, 1) 100%);
+                    img {
+                        transform: scale(2);
+                        box-shadow: 0px 0px 24px 0px rgb(255 255 40);
+                        z-index: 2;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.selected-players {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 600px;
+    >div {
+        text-align: center;
+        padding: 30px;
+    }
+}
+
+.game-avatar {
+    transition: box-shadow 1s ease;
+    &.current {
+        box-shadow: 0px 0px 24px 0px rgb(255 255 40);
+    }
+}
+
