@@ -2,7 +2,7 @@
     <source src="../../assets/video/hockey-background.mp4" type="video/mp4">
 </video>
 <div class="game-surface">
-    <div *ngIf="config.player1 && config.player2">
+    <div *ngIf="game?.config?.player1 && game?.config?.player2">
 
         <div class="center">
             Time Remaining
@@ -10,21 +10,19 @@
         </div>
         <div class="flex-container">
             <div class="center player-score">
-                <img class="game-avatar" src="../../assets/images/{{config.player1.avatar}}.jpg">
+                <img class="game-avatar" src="../../assets/images/{{game.config.player1.avatar}}.jpg">
                 <h1>{{game.player1Score}}</h1>
             </div>
             <div class="center player-score">
-                <img class="game-avatar" src="../../assets/images/{{config.player2.avatar}}.jpg">
+                <img class="game-avatar" src="../../assets/images/{{game.config.player2.avatar}}.jpg">
                 <h1>{{game.player2Score}}</h1>
             </div>
         </div>
-
-
     </div>
 </div>
 
-<div class="game-setup" *ngIf="gameSetup">
-    <app-game-setup [(config)]="config" (configChange)="configChange()"></app-game-setup>
+<div class="game-setup" *ngIf="game.gameSetup">
+    <app-game-setup [(config)]="game.config" (configChange)="configChange()"></app-game-setup>
 
 </div>
 
@@ -32,6 +30,15 @@
     <div class="white-box">
         <app-display-winner [winner]="game.winner"></app-display-winner>
     </div>
+</div>
+
+<div class="game-intro" *ngIf="game.introMode">
+    <div>
+        <lottie-player src="https://lottie.host/75b9d86d-a206-4e91-b26c-badd7cb0c0fe/nshTIIF5IY.json"
+            background="transparent" speed="1" loop autoplay>
+        </lottie-player>
+    </div>
+
 </div>
 
 <div style="display: none;">

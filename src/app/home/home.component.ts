@@ -1,4 +1,4 @@
-import { Component, HostListener, NgZone } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, HostListener, NgZone } from '@angular/core';
 import { Game, GameSetupConfig } from '../game';
 import { MatButtonModule } from '@angular/material/button';
 import { GameMessage } from '../game-message';
@@ -11,21 +11,19 @@ import { DisplayWinnerComponent } from '../display-winner/display-winner.compone
   standalone: true,
   imports: [MatButtonModule, GameSetupComponent, CommonModule, DisplayWinnerComponent],
   templateUrl: './home.component.html',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
 
   game = new Game(10);
   interval: any;
-  gameSetup = false;
-  config: GameSetupConfig = new GameSetupConfig();
 
   constructor(zone: NgZone) {
-    window.addEventListener('message', event=> {
-      console.log("Message received from the parent: " + event.data); // Message received from parent
+    window.addEventListener('message', event => {
       const gameMessage: GameMessage = JSON.parse(event.data);
 
-      zone.run(()=> {
+      zone.run(() => {
         this.processGameMessage(gameMessage);
       });
 
@@ -35,10 +33,9 @@ export class HomeComponent {
 
   launchVideo() {
     const video: any = document.getElementById('bg-video');
-    if(!video) {
-      setTimeout(()=> this.launchVideo(), 100);
+    if (!video) {
+      setTimeout(() => this.launchVideo(), 100);
     } else {
-      console.log('playing')
       video.mutued = true;
       video.play();
 
@@ -50,30 +47,37 @@ export class HomeComponent {
   keyPress(evt: KeyboardEvent) {
     switch (evt.key) {
       case ' ':
-        this.handleSpace();
+        this.game?.handleSpace();
         break;
+
+      case 'l':
+        this.processGameMessage({
+          sender: 'Server',
+          messageType: 'PLAYER_1_SCORED'
+        });
+        break;
+      case 'r':
+        this.processGameMessage({
+          sender: 'Server',
+          messageType: 'PLAYER_2_SCORED'
+        });
+        break;
+
     }
   }
 
-  handleSpace() {
-    if(this.game?.winner) {
-      delete this.game?.winner;
-      this.startGame();
-    }
-  }
+
 
   processGameMessage(message: GameMessage) {
     this.game.processGameMessage(message);
-    if(message.messageType === 'GAME_STARTED') {
-      this.startGame();
+    if (message.messageType === 'GAME_STARTED') {
+      this.game.startGame();
     }
   }
 
   configChange() {
-    this.gameSetup = false;
+    this.game.gameSetup = false;
     this.game.restart();
-    this.game.player1 = this.config.player1;
-    this.game.player2 = this.config.player2;
     const bgAudio: any = document.getElementById('bg-music');
     bgAudio.pause();
     const gameAudio: any = document.getElementById('arcade-funk');
@@ -83,30 +87,10 @@ export class HomeComponent {
 
 
     clearInterval(this.interval);
-    this.interval = setInterval(()=> {
+    this.interval = setInterval(() => {
       this.game.loop();
     }, 50);
   }
 
-  startGame() {
-    const defaultPlayer1 = this.config?.player1;
-    const defaultPlayer2 = this.config?.player2;
 
-    delete this.game.winner;
-    this.config = new GameSetupConfig();
-    this.config.player1 = defaultPlayer1;
-    this.config.player2 = defaultPlayer2;
-    this.game = new Game(10);
-    this.gameSetup = true;
-    const video: any = document.getElementById('bg-video');
-    video.play();
-
-    const bgAudio: any = document.getElementById('bg-music');
-    bgAudio.currentTime = 0;
-    bgAudio.volume = .05;
-    bgAudio.play();
-
-    const gameAudio: any = document.getElementById('arcade-funk');
-    gameAudio.pause();
-  }
 }
