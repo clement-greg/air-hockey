@@ -14,6 +14,7 @@ export class Game {
     config: GameSetupConfig = new GameSetupConfig();
     introMode = true;
     gameSetup = false;
+    isTie = false;
 
     constructor(private duration: number) {
 
@@ -80,8 +81,12 @@ export class Game {
                     this.winner = this.config.player2;
                     this.playWin();
                 }
+                else if(this.player1Score === this.player2Score) {
+                    this.isTie = true;
+                    this.running = false;
+                }
+                this.handleEndOfGame();
             }
-            this.handleEndOfGame();
         }
 
         return remaining;
@@ -93,18 +98,20 @@ export class Game {
         this.running = false;
         this.eogTimeout = setTimeout(()=> {
             delete this.winner;
+            this.isTie = false;
             this.introMode = true;
         }, 30000);
     }
 
     handleSpace() {
-        if (this.winner || this.introMode) {
+        if (this.winner || this.introMode || this.isTie) {
           delete this.winner;
           this.startGame();
         }
       }
 
       startGame() {
+        this.isTie = false;
         clearTimeout(this.eogTimeout);
         const defaultPlayer1 = this.config?.player1;
         const defaultPlayer2 = this.config?.player2;
@@ -175,16 +182,19 @@ export function getPlayerTypes() {
         'monkey',
         'hockey-player',
         'monster-1',
-        'monster-2',
         'tank',
         'monster-truck',
+        'fairy',
         'snake',
         'ape',
+        'monster-2',
         'moose',
         'eagle',
         'rabbit',
+        'witch',
         'tiger',
         'troll',
+        'construction-worker',
         'unicorn',
         'werewolf',
         'wizard',

@@ -5,18 +5,19 @@ import { GameMessage } from '../game-message';
 import { GameSetupComponent } from '../game-setup/game-setup.component';
 import { CommonModule } from '@angular/common';
 import { DisplayWinnerComponent } from '../display-winner/display-winner.component';
+import { DisplayTieComponent } from '../display-tie/display-tie.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [MatButtonModule, GameSetupComponent, CommonModule, DisplayWinnerComponent],
+  imports: [MatButtonModule, GameSetupComponent, CommonModule, DisplayWinnerComponent, DisplayTieComponent],
   templateUrl: './home.component.html',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
 
-  game = new Game(10);
+  game = new Game(60);
   interval: any;
 
   constructor(zone: NgZone) {
@@ -65,8 +66,6 @@ export class HomeComponent {
 
     }
   }
-
-
 
   processGameMessage(message: GameMessage) {
     this.game.processGameMessage(message);
