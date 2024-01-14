@@ -8,9 +8,12 @@ export class Game {
 
     running = false;
 
-    player1: Player;
-    player2: Player;
+/*     player1: Player;
+    player2: Player; */
     winner: Player;
+    config: GameSetupConfig = new GameSetupConfig();
+    introMode = true;
+    gameSetup = false;
 
     constructor(private duration: number) {
 
@@ -70,19 +73,60 @@ export class Game {
             remaining = 0;
             if (this.running) {
                 if (this.player1Score > this.player2Score) {
-                    this.winner = this.player1;
+                    this.winner = this.config.player1;
                     this.playWin();
                 }
                 if (this.player2Score > this.player1Score) {
-                    this.winner = this.player2;
+                    this.winner = this.config.player2;
                     this.playWin();
                 }
             }
-            this.running = false;
+            this.handleEndOfGame();
         }
 
         return remaining;
     }
+
+    private eogTimeout:any = null;
+    handleEndOfGame() {
+
+        this.running = false;
+        this.eogTimeout = setTimeout(()=> {
+            delete this.winner;
+            this.introMode = true;
+        }, 30000);
+    }
+
+    handleSpace() {
+        if (this.winner || this.introMode) {
+          delete this.winner;
+          this.startGame();
+        }
+      }
+
+      startGame() {
+        clearTimeout(this.eogTimeout);
+        const defaultPlayer1 = this.config?.player1;
+        const defaultPlayer2 = this.config?.player2;
+    
+        delete this.winner;
+        this.config = new GameSetupConfig();
+        this.config.player1 = defaultPlayer1;
+        this.config.player2 = defaultPlayer2;
+
+        this.gameSetup = true;
+        const video: any = document.getElementById('bg-video');
+        video.play();
+    
+        const bgAudio: any = document.getElementById('bg-music');
+        bgAudio.currentTime = 0;
+        bgAudio.volume = .05;
+        bgAudio.play();
+    
+        const gameAudio: any = document.getElementById('arcade-funk');
+        gameAudio.pause();
+        this.introMode = false;
+      }
 
     private playWin() {
         const gameAudio: any = document.getElementById('arcade-funk');
@@ -93,6 +137,10 @@ export class Game {
         win.volume = .1;
         win.loop = false;
         win.play();
+
+/*         setTimeout(()=> {
+            delete this.winner;
+        },30000); */
     }
 
     private getSecondsBetweenDates(date1: Date, date2: Date): number {
@@ -125,6 +173,7 @@ export function getPlayerTypes() {
         'llama',
         'lion',
         'monkey',
+        'hockey-player',
         'monster-1',
         'monster-2',
         'tank',
@@ -141,7 +190,3 @@ export function getPlayerTypes() {
         'wizard',
     ];
 }
-
-// export enum PlayerType {
-
-// }

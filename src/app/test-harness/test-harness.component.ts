@@ -13,7 +13,7 @@ import { GameMessage } from '../game-message';
 export class TestHarnessComponent {
 
   constructor(protected _sanitizer: DomSanitizer) {
-    console.log(document.location)
+
   }
 
   private _origin: any;
