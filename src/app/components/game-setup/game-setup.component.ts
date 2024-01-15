@@ -1,6 +1,8 @@
 import { CUSTOM_ELEMENTS_SCHEMA, Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
-import { GameSetupConfig, Player, getPlayerTypes } from '../game';
+import {  getPlayerTypes } from '../../models/game';
 import { CommonModule } from '@angular/common';
+import { Player } from '../../models/player';
+import { GameSetupConfig } from '../../models/game-setup-config';
 
 @Component({
   selector: 'app-game-setup',
@@ -101,10 +103,7 @@ export class GameSetupComponent {
 
   get scrollOffset() {
     const index = this.playerTypes.indexOf(this.selectedItem);
-    const nonsScrollCount = 2;
-    // if (index < nonsScrollCount) {
-    //   return '';
-    // }
+    const nonsScrollCount = 2; 
 
     const placesToScroll = index - nonsScrollCount;
 

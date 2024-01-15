@@ -1,20 +1,19 @@
 import { GameMessage } from "./game-message";
+import { GameSetupConfig } from "./game-setup-config";
+import { Player } from "./player";
+import { GameSettings } from "./settings";
 
 export class Game {
     startTime: Date;
-
     player1Score = 0;
     player2Score = 0;
-
     running = false;
-
-/*     player1: Player;
-    player2: Player; */
     winner: Player;
     config: GameSetupConfig = new GameSetupConfig();
     introMode = true;
     gameSetup = false;
     isTie = false;
+    settingsVisible = false;
 
     constructor(private duration: number) {
 
@@ -27,6 +26,7 @@ export class Game {
         this.player2Score = 0;
         this.running = true;
     }
+
     processGameMessage(message: GameMessage) {
         switch (message.messageType) {
             case 'PLAYER_1_SCORED':
@@ -41,16 +41,17 @@ export class Game {
                     this.playScoreSound();
                 }
                 break;
-
         }
     }
 
     private playScoreSound() {
-        const sound: any = document.getElementById('score-1');
-        sound.pause();
-        sound.currentTime = 0;
-        sound.volume = .1;
-        sound.play();
+        if (GameSettings.Instance.playSoundFX) {
+            const sound: any = document.getElementById('score-1');
+            sound.pause();
+            sound.currentTime = 0;
+            sound.volume = .1;
+            sound.play();
+        }
     }
 
     get endTime(): Date {
@@ -81,7 +82,7 @@ export class Game {
                     this.winner = this.config.player2;
                     this.playWin();
                 }
-                else if(this.player1Score === this.player2Score) {
+                else if (this.player1Score === this.player2Score) {
                     this.isTie = true;
                     this.running = false;
                 }
@@ -92,11 +93,11 @@ export class Game {
         return remaining;
     }
 
-    private eogTimeout:any = null;
+    private eogTimeout: any = null;
     handleEndOfGame() {
 
         this.running = false;
-        this.eogTimeout = setTimeout(()=> {
+        this.eogTimeout = setTimeout(() => {
             delete this.winner;
             this.isTie = false;
             this.introMode = true;
@@ -105,17 +106,17 @@ export class Game {
 
     handleSpace() {
         if (this.winner || this.introMode || this.isTie) {
-          delete this.winner;
-          this.startGame();
+            delete this.winner;
+            this.startGame();
         }
-      }
+    }
 
-      startGame() {
+    startGame() {
         this.isTie = false;
         clearTimeout(this.eogTimeout);
         const defaultPlayer1 = this.config?.player1;
         const defaultPlayer2 = this.config?.player2;
-    
+
         delete this.winner;
         this.config = new GameSetupConfig();
         this.config.player1 = defaultPlayer1;
@@ -124,16 +125,19 @@ export class Game {
         this.gameSetup = true;
         const video: any = document.getElementById('bg-video');
         video.play();
-    
+
         const bgAudio: any = document.getElementById('bg-music');
         bgAudio.currentTime = 0;
         bgAudio.volume = .05;
-        bgAudio.play();
-    
+
+        if (GameSettings.Instance.playBackgroundMusic) {
+            bgAudio.play();
+        }
+
         const gameAudio: any = document.getElementById('arcade-funk');
         gameAudio.pause();
         this.introMode = false;
-      }
+    }
 
     private playWin() {
         const gameAudio: any = document.getElementById('arcade-funk');
@@ -145,9 +149,9 @@ export class Game {
         win.loop = false;
         win.play();
 
-/*         setTimeout(()=> {
-            delete this.winner;
-        },30000); */
+        /*         setTimeout(()=> {
+                    delete this.winner;
+                },30000); */
     }
 
     private getSecondsBetweenDates(date1: Date, date2: Date): number {
@@ -156,16 +160,7 @@ export class Game {
     }
 }
 
-export class Player {
-    avatar: string;
 
-    constructor(playerNumber: number) { }
-}
-
-export class GameSetupConfig {
-    player1: Player;
-    player2: Player;
-}
 
 export function getPlayerTypes() {
     return [

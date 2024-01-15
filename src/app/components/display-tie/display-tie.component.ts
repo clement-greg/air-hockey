@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { Game } from '../game';
+import { Game } from '../../models/game';
 
 @Component({
   selector: 'app-display-tie',

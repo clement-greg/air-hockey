@@ -1,5 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA, Component, Input } from '@angular/core';
-import { Player } from '../game';
+import { Player } from '../../models/player';
 
 @Component({
   selector: 'app-display-winner',

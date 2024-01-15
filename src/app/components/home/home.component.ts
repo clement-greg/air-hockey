@@ -1,26 +1,31 @@
-import { CUSTOM_ELEMENTS_SCHEMA, Component, HostListener, NgZone } from '@angular/core';
-import { Game, GameSetupConfig } from '../game';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, HostListener, NgZone, OnDestroy } from '@angular/core';
+import { Game } from '../../models/game';
 import { MatButtonModule } from '@angular/material/button';
-import { GameMessage } from '../game-message';
+import { GameMessage } from '../../models/game-message';
 import { GameSetupComponent } from '../game-setup/game-setup.component';
 import { CommonModule } from '@angular/common';
 import { DisplayWinnerComponent } from '../display-winner/display-winner.component';
 import { DisplayTieComponent } from '../display-tie/display-tie.component';
+import { SettingsComponent } from '../settings/settings.component';
+import { PubSubService } from '../../services/pub-sub.service';
+import { Subscription } from 'rxjs';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [MatButtonModule, GameSetupComponent, CommonModule, DisplayWinnerComponent, DisplayTieComponent],
+  imports: [MatButtonModule, GameSetupComponent, MatIconModule, CommonModule, DisplayWinnerComponent, DisplayTieComponent, SettingsComponent],
   templateUrl: './home.component.html',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   styleUrl: './home.component.scss'
 })
-export class HomeComponent {
+export class HomeComponent implements OnDestroy {
 
   game = new Game(60);
   interval: any;
+  private subscription: Subscription
 
-  constructor(zone: NgZone) {
+  constructor(zone: NgZone, private pubSub: PubSubService) {
     window.addEventListener('message', event => {
       const gameMessage: GameMessage = JSON.parse(event.data);
 
@@ -29,19 +34,14 @@ export class HomeComponent {
       });
 
     });
-    this.launchVideo();
+
+    this.subscription = pubSub.subscription.subscribe(message => {
+      console.log('settings changed');
+      console.log(message.messageBody);
+    });
   }
-
-  launchVideo() {
-    const video: any = document.getElementById('bg-video');
-    if (!video) {
-      setTimeout(() => this.launchVideo(), 100);
-    } else {
-      video.mutued = true;
-      video.play();
-
-
-    }
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   @HostListener('document:keyup', ['$event'])
@@ -63,6 +63,11 @@ export class HomeComponent {
           messageType: 'PLAYER_2_SCORED'
         });
         break;
+      case 's':
+        this.game.settingsVisible = true;
+        break;
+      case 'b':
+        this.game.settingsVisible = false;
 
     }
   }

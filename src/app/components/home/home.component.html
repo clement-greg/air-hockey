@@ -32,6 +32,20 @@
     </div>
 </div>
 
+<div class="game-setup" *ngIf="game.settingsVisible">
+    <div class="white-box">
+        <div class="flex-container">
+            <div></div>
+            <div class="no-grow">
+                <button mat-button (click)="game.settingsVisible = false">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </div>
+        </div>
+        <app-settings></app-settings>
+    </div>
+</div>
+
 <div class="game-intro" *ngIf="game.introMode">
     <div>
         <lottie-player src="https://lottie.host/75b9d86d-a206-4e91-b26c-badd7cb0c0fe/nshTIIF5IY.json"

@@ -1,5 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 
+
+
 html, body { height: 100%; color: #fff}
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .mat-h1, .mat-headline-5, .mat-typography .mat-h1, .mat-typography .mat-headline-5, .mat-typography h1 {
@@ -25,8 +27,15 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     flex: auto;
 }
 
+.flex-container>*.no-grow {
+    flex: none !important;
+}
+
 .center {
     text-align: center;
+}
+.mat-mdc-checkbox .mdc-form-field {
+    color: #fff !important;
 }
 
 @keyframes white-box-enter {
@@ -52,4 +61,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .game-avatar {
     height: 150px;
     border-radius: 50%;
+}
+
+button mat-icon {
+    color: #fff !important;
 }
