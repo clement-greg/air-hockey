@@ -17,6 +17,6 @@ export class PubSubService {
 }
 
 export class PubSubMessage {
-  type: 'SETTINGS-CHANGED';
+  type: 'SETTINGS-CHANGED' | 'PLAYER_1_SCORED' | 'PLAYER_2_SCORED';
   messageBody: any;
 }

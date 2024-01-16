@@ -14,6 +14,7 @@ export class Game {
     gameSetup = false;
     isTie = false;
     settingsVisible = false;
+    playPong = false;
 
     constructor(private duration: number) {
 
@@ -97,6 +98,7 @@ export class Game {
     handleEndOfGame() {
 
         this.running = false;
+        this.playPong = false;
         this.eogTimeout = setTimeout(() => {
             delete this.winner;
             this.isTie = false;

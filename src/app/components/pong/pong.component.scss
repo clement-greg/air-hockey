@@ -1,0 +1,19 @@
+.game-object {
+    position: fixed;
+    z-index: 1;
+
+}
+
+.paddle-1 {
+    top: 300px;
+    left: 0;
+    height: 160px;
+}
+.paddle-2 {
+    top: 300px;
+    height: 160px;
+}
+
+.puck {
+
+}

@@ -10,11 +10,12 @@ import { SettingsComponent } from '../settings/settings.component';
 import { PubSubService } from '../../services/pub-sub.service';
 import { Subscription } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
+import { PongComponent } from '../pong/pong.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [MatButtonModule, GameSetupComponent, MatIconModule, CommonModule, DisplayWinnerComponent, DisplayTieComponent, SettingsComponent],
+  imports: [MatButtonModule, GameSetupComponent, MatIconModule, CommonModule, DisplayWinnerComponent, DisplayTieComponent, SettingsComponent, PongComponent],
   templateUrl: './home.component.html',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   styleUrl: './home.component.scss'
@@ -36,8 +37,19 @@ export class HomeComponent implements OnDestroy {
     });
 
     this.subscription = pubSub.subscription.subscribe(message => {
-      console.log('settings changed');
-      console.log(message.messageBody);
+      console.log(message)
+      if (message.type === 'PLAYER_1_SCORED') {
+
+        this.processGameMessage({
+          sender: 'Server',
+          messageType: 'PLAYER_1_SCORED'
+        });
+      } if (message.type === 'PLAYER_2_SCORED') {
+        this.processGameMessage({
+          sender: 'Server',
+          messageType: 'PLAYER_2_SCORED'
+        });
+      }
     });
   }
   ngOnDestroy(): void {
@@ -68,6 +80,13 @@ export class HomeComponent implements OnDestroy {
         break;
       case 'b':
         this.game.settingsVisible = false;
+        break;
+      case 'p':
+        
+        if (this.game.running) {
+          this.game.playPong = true;
+        }
+        break;
 
     }
   }
