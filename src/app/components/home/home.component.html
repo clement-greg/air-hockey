@@ -1,0 +1,68 @@
+<video loop muted playsinline autoplay id="bg-video">
+    <source src="../../assets/video/hockey-background.mp4" type="video/mp4">
+</video>
+<div class="game-surface">
+    <div *ngIf="game?.config?.player1 && game?.config?.player2">
+
+        <div class="center">
+            Time Remaining
+            <h1>{{game.secondsRemaining}}</h1>
+        </div>
+        <div class="flex-container">
+            <div class="center player-score">
+                <img class="game-avatar" src="../../assets/images/{{game.config.player1.avatar}}.jpg">
+                <h1>{{game.player1Score}}</h1>
+            </div>
+            <div class="center player-score">
+                <img class="game-avatar" src="../../assets/images/{{game.config.player2.avatar}}.jpg">
+                <h1>{{game.player2Score}}</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="game-setup" *ngIf="game.gameSetup">
+    <app-game-setup [(config)]="game.config" (configChange)="configChange()"></app-game-setup>
+
+</div>
+
+<div class="game-setup" *ngIf="game.winner">
+    <div class="white-box">
+        <app-display-winner [winner]="game.winner"></app-display-winner>
+    </div>
+</div>
+
+<div class="game-setup" *ngIf="game.settingsVisible">
+    <div class="white-box">
+        <div class="flex-container">
+            <div></div>
+            <div class="no-grow">
+                <button mat-button (click)="game.settingsVisible = false">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </div>
+        </div>
+        <app-settings></app-settings>
+    </div>
+</div>
+
+<div class="game-intro" *ngIf="game.introMode">
+    <div>
+        <lottie-player src="https://lottie.host/75b9d86d-a206-4e91-b26c-badd7cb0c0fe/nshTIIF5IY.json"
+            background="transparent" speed="1" loop autoplay>
+        </lottie-player>
+    </div>
+
+</div>
+
+<div class="game-setup" *ngIf="game.isTie">
+    <app-display-tie [game]="game"></app-display-tie>
+
+</div>
+
+<div style="display: none;">
+    <audio src="../../assets/music/score-1.mp3" id="score-1"></audio>
+    <audio src="../../assets/music/bg-music.mp3" loop id="bg-music"></audio>
+    <audio src="../../assets/music/arcade_funk.mp3" loop id="arcade-funk"></audio>
+    <audio src="../../assets/music/win.mp3" loop="false" id="win-soundfx"></audio>
+</div>

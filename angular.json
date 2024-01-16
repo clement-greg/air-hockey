@@ -33,7 +33,9 @@
               "@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "./node_modules/@lottiefiles/lottie-player/dist/lottie-player.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -66,7 +68,8 @@
               "buildTarget": "air-hockey:build:production"
             },
             "development": {
-              "buildTarget": "air-hockey:build:development"
+              "buildTarget": "air-hockey:build:development",
+              "port": 47212
             }
           },
           "defaultConfiguration": "development"

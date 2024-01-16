@@ -1,4 +1,68 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
+
+
+html, body { height: 100%; color: #fff}
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.mat-h1, .mat-headline-5, .mat-typography .mat-h1, .mat-typography .mat-headline-5, .mat-typography h1 {
+    font-size: 120px;
+    line-height: 130px;
+    text-shadow: 4px 4px 14px rgba(0,0,0,0.6);
+    color: rgba(255,255,255,.8);
+    font-family: "sporty-pro", sans-serif !important;
+}
+
+.mat-h2, .mat-headline-6, .mat-typography .mat-h2, .mat-typography .mat-headline-6, .mat-typography h2 {
+    font-size: 70px;
+    text-shadow: 4px 4px 14px rgba(0,0,0,0.6);
+    color: rgba(255,255,255,.8);
+    font-family: "sporty-pro", sans-serif !important;
+}
+
+.flex-container {
+    display: flex;
+}
+
+.flex-container>* {
+    flex: auto;
+}
+
+.flex-container>*.no-grow {
+    flex: none !important;
+}
+
+.center {
+    text-align: center;
+}
+.mat-mdc-checkbox .mdc-form-field {
+    color: #fff !important;
+}
+
+@keyframes white-box-enter {
+    from {
+        transform: translateY(-200px) scale(.5);
+    }
+    to {
+        transform: translateY(0) scale(1);
+    }
+}
+.white-box {
+    width: 100%;
+    max-width: 350px;
+    display: table;
+    margin: 50px auto 0;
+    box-shadow: 1px 1px 24px 1px #0000001a;
+    border-radius: 17px;
+    padding: 30px;
+    backdrop-filter: blur(10px);
+    animation: white-box-enter .5s ease;
+}
+
+.game-avatar {
+    height: 150px;
+    border-radius: 50%;
+}
+
+button mat-icon {
+    color: #fff !important;
+}

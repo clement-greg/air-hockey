@@ -1,0 +1,34 @@
+<div class="white-box" style="height: 400px;">
+
+    <div class="selected-players">
+        <div>
+
+            <img class="game-avatar" [class.current]="!config.player1" *ngIf="!config.player1" src="../../assets/images/question-mark.jpg">
+            <img class="game-avatar" *ngIf="config.player1" src="../../assets/images/{{config.player1.avatar}}.jpg">
+            <br>
+            Player 1
+        </div>
+        <div>
+            <img class="game-avatar" [class.current]="!config.player2 && config.player1"  *ngIf="!config.player2" src="../../assets/images/question-mark.jpg">
+            <img class="game-avatar" *ngIf="config.player2" src="../../assets/images/{{config.player2.avatar}}.jpg">
+            <br>
+            Player 2
+        </div>
+    </div>
+    <div class="avatar-selector" *ngIf="!config.player1 || !config.player2">
+        <div [style.transform]="scrollOffset">
+            <ul>
+                <li *ngFor="let playerType of playerTypes" [class.selected]="selectedItem === playerType">
+
+                    <img src="../../assets/images/{{playerType}}.jpg">
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div *ngIf="config.player1 && config.player2" style="text-align: center;">
+        <lottie-player style="height: 175px;" src="https://lottie.host/1947fa7c-b49e-48bc-b5ad-cb095b63d13b/F3HgMZ4QoZ.json"  background="transparent"  speed="1" loop  autoplay >
+        </lottie-player><br>
+        Press Start To Continue
+    </div>
+</div>
