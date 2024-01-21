@@ -16,10 +16,22 @@ export class JoystickState {
     onButtonPress: (index: number) => void;
     private pressedButtons: number[] = [];
 
+
+
     constructor(public index: number) {
         this.gameLoop();
     }
 
+    get isLeft() {
+        return this.left;
+    }
+    get isRight() {
+    return this.right;}
+    get isUp() {
+    return this.up;}
+    get isDown() {
+        return this.down;
+    }
     buttonPressed(b: any) {
         if (typeof b === "object") {
             return b.pressed;
