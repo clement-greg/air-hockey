@@ -1,7 +1,7 @@
 import { CUSTOM_ELEMENTS_SCHEMA, Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
-import {  getPlayerTypes } from '../../models/game';
+import { getPlayerTypes } from '../../models/game';
 import { CommonModule } from '@angular/common';
-import { Player } from '../../models/player';
+import { JoystickState, Player } from '../../models/player';
 import { GameSetupConfig } from '../../models/game-setup-config';
 
 @Component({
@@ -17,10 +17,25 @@ export class GameSetupComponent {
 
   @Input() config: GameSetupConfig = new GameSetupConfig();
   @Output() configChange: EventEmitter<GameSetupConfig> = new EventEmitter();
+  private joystick1 = new JoystickState(0);
 
 
   constructor() {
     this.selectedItem = this.playerTypes[11];
+
+    this.joystick1.onLeftJoyStick = this.selectLeft.bind(this);
+    this.joystick1.onRightJoyStick = this.selectRight.bind(this);
+    this.joystick1.onButtonPress = this.buttonPress.bind(this);
+
+  }
+
+  buttonPress(buttonNumber: number) {
+    if (buttonNumber === 0) {
+      this.selectAvatar();
+    }
+    if (buttonNumber === 1) {
+      this.back();
+    }
   }
 
   @HostListener('document:keyup', ['$event'])
@@ -49,7 +64,7 @@ export class GameSetupComponent {
       return;
     }
     if (this.config.player1) {
-  
+
       delete this.config.player1;
       return;
     }
@@ -103,7 +118,7 @@ export class GameSetupComponent {
 
   get scrollOffset() {
     const index = this.playerTypes.indexOf(this.selectedItem);
-    const nonsScrollCount = 2; 
+    const nonsScrollCount = 2;
 
     const placesToScroll = index - nonsScrollCount;
 
