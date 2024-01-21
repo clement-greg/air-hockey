@@ -16,8 +16,6 @@ class MyServer(BaseHTTPRequestHandler):
         self.send_header("Content-type", "text/html")
         self.end_headers()
 
-        print("Address:")
-        print(self.path)
         if self.path == "/exchange-updates":
             self.wfile.write(bytes(json.dumps(scores), "utf-8"))
             scores.clear()
