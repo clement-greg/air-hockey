@@ -11,6 +11,7 @@ import { PubSubService } from '../../services/pub-sub.service';
 import { Subscription } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { PongComponent } from '../pong/pong.component';
+import { JoystickState } from '../../models/player';
 
 @Component({
   selector: 'app-home',
@@ -24,7 +25,8 @@ export class HomeComponent implements OnDestroy {
 
   game = new Game(60);
   interval: any;
-  private subscription: Subscription
+  private subscription: Subscription;
+  joystick1State = new JoystickState(0);
 
   constructor(zone: NgZone, private pubSub: PubSubService) {
     window.addEventListener('message', event => {
@@ -50,7 +52,28 @@ export class HomeComponent implements OnDestroy {
           messageType: 'PLAYER_2_SCORED'
         });
       }
+
     });
+    this.joystick1State.onButtonPress  = this.joystickButtonPress.bind(this);
+  }
+
+  private joystickButtonPress(index: number) {
+    if(index === 0) {
+      this.game?.handleSpace();
+    }
+  }
+
+  gamepads: any = {};
+  gamepadHandler(event: any, connected: boolean) {
+    const gamepad = event.gamepad;
+    // Note:
+    // gamepad === navigator.getGamepads()[gamepad.index]
+
+    if (connected) {
+      this.gamepads[gamepad.index] = gamepad;
+    } else {
+      delete this.gamepads[gamepad.index];
+    }
   }
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
@@ -82,7 +105,7 @@ export class HomeComponent implements OnDestroy {
         this.game.settingsVisible = false;
         break;
       case 'p':
-        
+
         if (this.game.running) {
           this.game.playPong = true;
         }
