@@ -7,7 +7,7 @@
     <title>Air Hockey</title>
 </head>
 
-<body style="margin: 0;padding: 0;">
+<body style="margin: 0;padding: 0;overflow: hidden">
     <iframe id="the-frame" onload="iFrameLoaded(this)" style="width: 100vw;height: 100vh;border: none;"
         src="https://air-hockey.azurewebsites.net/">
 
@@ -18,6 +18,15 @@
         function iFrameLoaded() {
             document.getElementById('the-frame').focus();
         }
+
+        setInterval(()=> {
+            fetch('/exchange-updates').then(value=> value.json()).then(value=> {
+                console.log(value);
+                for(const message of value) {
+                    document.getElementById('the-frame').contentWindow.postMessage(JSON.stringify(message), '*');
+                }
+            });
+        }, 500);
     </script>
 
 </body>
