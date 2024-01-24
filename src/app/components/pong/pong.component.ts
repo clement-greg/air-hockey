@@ -128,6 +128,7 @@ export class PongComponent implements OnInit, OnDestroy {
 
     const paddle2: HTMLElement = document.querySelector('.paddle-2');
     paddle2.style.top = `${this.paddle2.position.y - 82}px`;
+    paddle2.style.left = `${this.paddle2.position.x - 82}px`;
 
     const puck: HTMLElement = document.querySelector('.puck');
     puck.style.top = `${this.puck.position.y - (this.BALL_SIZE)}px`;
