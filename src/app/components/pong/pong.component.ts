@@ -1,5 +1,6 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { PubSubService } from '../../services/pub-sub.service';
+import { JoystickState } from '../../models/player';
 declare var Matter: any;
 
 
@@ -33,6 +34,7 @@ export class PongComponent implements OnInit, OnDestroy {
   PADDLE_SIZE = 80;
   runAnimationFrame: number;
   renderAnimationFrame: number;
+  joystick1 = new JoystickState(0);
 
   constructor(private pubSub: PubSubService) {
 
@@ -211,6 +213,10 @@ export class PongComponent implements OnInit, OnDestroy {
   update() {
 
     Matter.Engine.update(this.engine);
+    this.leftArrowKeyDown = this.joystick1.isDown;
+    this.leftArrowKeyLeft = this.joystick1.isLeft;
+    this.leftArrowKeyRight = this.joystick1.isRight;
+    this.leftArrowKeyUp = this.joystick1.isUp;
 
     if (this.leftArrowKeyDown) {
       console.log('setting position')
