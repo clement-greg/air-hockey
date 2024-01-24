@@ -30,6 +30,7 @@ export class PongComponent implements OnInit, OnDestroy {
   engine: any;
   puckDirection: 'left' | 'right' = 'right';
   puckRotation = 0;
+  PUCK_FORCE = .1;
 
   PADDLE_SIZE = 80;
   runAnimationFrame: number;
@@ -219,7 +220,6 @@ export class PongComponent implements OnInit, OnDestroy {
     this.leftArrowKeyUp = this.joystick1.isUp;
 
     if (this.leftArrowKeyDown) {
-      console.log('setting position')
       Matter.Body.setPosition(this.paddle1, { x: this.paddle1.position.x, y: this.paddle1.position.y + 20 });
       if (this.paddle1.position.y > this.GAME_HEIGHT - this.PADDLE_SIZE) {
         Matter.Body.setPosition(this.paddle1, { x: this.paddle1.position.x, y: this.GAME_HEIGHT - this.PADDLE_SIZE });
@@ -250,12 +250,12 @@ export class PongComponent implements OnInit, OnDestroy {
     const puck = this.puck;
 
     if (puck.velocity.x < 0 && this.puckDirection === 'right') {
-      Matter.Body.applyForce(puck, { x: puck.position.x, y: puck.position.y }, { x: -.05, y: 0 });
+      Matter.Body.applyForce(puck, { x: puck.position.x, y: puck.position.y }, { x: -this.PUCK_FORCE, y: 0 });
       this.puckDirection = 'left';
     }
 
     if (puck.velocity.x > 0 && this.puckDirection === 'left') {
-      Matter.Body.applyForce(puck, { x: puck.position.x, y: puck.position.y }, { x: .05, y: 0 });
+      Matter.Body.applyForce(puck, { x: puck.position.x, y: puck.position.y }, { x: this.PUCK_FORCE, y: 0 });
       this.puckDirection = 'right';
     }
 
