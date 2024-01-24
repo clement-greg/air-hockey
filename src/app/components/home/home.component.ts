@@ -27,13 +27,18 @@ export class HomeComponent implements OnDestroy {
   interval: any;
   private subscription: Subscription;
   joystick1State = new JoystickState(0);
+  private lastMessageReceived: Date = new Date();
 
   constructor(zone: NgZone, private pubSub: PubSubService) {
     window.addEventListener('message', event => {
       const gameMessage: GameMessage = JSON.parse(event.data);
 
       zone.run(() => {
-        this.processGameMessage(gameMessage);
+        const miliseconds = new Date().getTime() - this.lastMessageReceived.getTime();
+        if (miliseconds > 2000) {
+          this.processGameMessage(gameMessage);
+          this.lastMessageReceived = new Date();
+        }
       });
 
     });
@@ -54,11 +59,11 @@ export class HomeComponent implements OnDestroy {
       }
 
     });
-    this.joystick1State.onButtonPress  = this.joystickButtonPress.bind(this);
+    this.joystick1State.onButtonPress = this.joystickButtonPress.bind(this);
   }
 
   private joystickButtonPress(index: number) {
-    if(index === 0) {
+    if (index === 0) {
       this.game?.handleSpace();
     }
   }
