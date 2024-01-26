@@ -18,6 +18,7 @@ export class GameSetupComponent {
   @Input() config: GameSetupConfig = new GameSetupConfig();
   @Output() configChange: EventEmitter<GameSetupConfig> = new EventEmitter();
   private joystick1 = new JoystickState(0);
+  private joystick2 = new JoystickState(1);
 
 
   constructor() {
@@ -26,6 +27,10 @@ export class GameSetupComponent {
     this.joystick1.onLeftJoyStick = this.selectLeft.bind(this);
     this.joystick1.onRightJoyStick = this.selectRight.bind(this);
     this.joystick1.onButtonPress = this.buttonPress.bind(this);
+
+    this.joystick2.onLeftJoyStick = this.selectLeft.bind(this);
+    this.joystick2.onRightJoyStick = this.selectRight.bind(this);
+    this.joystick2.onButtonPress = this.buttonPress.bind(this);
 
   }
 

@@ -27,6 +27,8 @@ export class HomeComponent implements OnDestroy {
   interval: any;
   private subscription: Subscription;
   joystick1State = new JoystickState(0);
+  joystick2State = new JoystickState(1);
+
   private lastMessageReceived: Date = new Date();
 
   constructor(zone: NgZone, private pubSub: PubSubService) {
@@ -62,6 +64,7 @@ export class HomeComponent implements OnDestroy {
 
     });
     this.joystick1State.onButtonPress = this.joystickButtonPress.bind(this);
+    this.joystick2State.onButtonPress = this.joystickButtonPress.bind(this);
   }
 
   private joystickButtonPress(index: number) {
@@ -73,8 +76,6 @@ export class HomeComponent implements OnDestroy {
   gamepads: any = {};
   gamepadHandler(event: any, connected: boolean) {
     const gamepad = event.gamepad;
-    // Note:
-    // gamepad === navigator.getGamepads()[gamepad.index]
 
     if (connected) {
       this.gamepads[gamepad.index] = gamepad;
@@ -92,7 +93,6 @@ export class HomeComponent implements OnDestroy {
       case ' ':
         this.game?.handleSpace();
         break;
-
       case 'l':
         this.processGameMessage({
           sender: 'Server',
@@ -112,12 +112,10 @@ export class HomeComponent implements OnDestroy {
         this.game.settingsVisible = false;
         break;
       case 'p':
-
         if (this.game.running) {
           this.game.playPong = true;
         }
         break;
-
     }
   }
 
@@ -138,12 +136,9 @@ export class HomeComponent implements OnDestroy {
     gameAudio.currentTime = 0;
     gameAudio.play();
 
-
     clearInterval(this.interval);
     this.interval = setInterval(() => {
       this.game.loop();
     }, 50);
   }
-
-
 }
