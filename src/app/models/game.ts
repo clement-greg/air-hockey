@@ -26,6 +26,13 @@ export class Game {
         this.player1Score = 0;
         this.player2Score = 0;
         this.running = true;
+        if (window.parent) {
+            const msg: GameMessage = {
+                messageType: 'GAME_STARTED',
+                sender: 'Client'
+            };
+            window.parent.postMessage(JSON.stringify(msg), '*');
+        }
     }
 
     processGameMessage(message: GameMessage) {
@@ -98,6 +105,13 @@ export class Game {
     handleEndOfGame() {
 
         this.running = false;
+        if (window.parent) {
+            const msg: GameMessage = {
+                messageType: 'GAME_OVER',
+                sender: 'Client'
+            };
+            window.parent.postMessage(JSON.stringify(msg), '*');
+        }
         this.playPong = false;
         this.eogTimeout = setTimeout(() => {
             delete this.winner;

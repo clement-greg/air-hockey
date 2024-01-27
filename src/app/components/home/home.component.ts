@@ -27,19 +27,27 @@ export class HomeComponent implements OnDestroy {
   interval: any;
   private subscription: Subscription;
   joystick1State = new JoystickState(0);
+  joystick2State = new JoystickState(1);
+
+  private lastMessageReceived: Date = new Date();
 
   constructor(zone: NgZone, private pubSub: PubSubService) {
     window.addEventListener('message', event => {
       const gameMessage: GameMessage = JSON.parse(event.data);
 
       zone.run(() => {
-        this.processGameMessage(gameMessage);
+
+        // Prevent the same event from processing twice
+        const miliseconds = new Date().getTime() - this.lastMessageReceived.getTime();
+        if (miliseconds > 2000) {
+          this.processGameMessage(gameMessage);
+          this.lastMessageReceived = new Date();
+        }
       });
 
     });
 
     this.subscription = pubSub.subscription.subscribe(message => {
-      console.log(message)
       if (message.type === 'PLAYER_1_SCORED') {
 
         this.processGameMessage({
@@ -54,11 +62,12 @@ export class HomeComponent implements OnDestroy {
       }
 
     });
-    this.joystick1State.onButtonPress  = this.joystickButtonPress.bind(this);
+    this.joystick1State.onButtonPress = this.joystickButtonPress.bind(this);
+    this.joystick2State.onButtonPress = this.joystickButtonPress.bind(this);
   }
 
   private joystickButtonPress(index: number) {
-    if(index === 0) {
+    if (index === 0) {
       this.game?.handleSpace();
     }
   }
@@ -66,8 +75,6 @@ export class HomeComponent implements OnDestroy {
   gamepads: any = {};
   gamepadHandler(event: any, connected: boolean) {
     const gamepad = event.gamepad;
-    // Note:
-    // gamepad === navigator.getGamepads()[gamepad.index]
 
     if (connected) {
       this.gamepads[gamepad.index] = gamepad;
@@ -85,7 +92,6 @@ export class HomeComponent implements OnDestroy {
       case ' ':
         this.game?.handleSpace();
         break;
-
       case 'l':
         this.processGameMessage({
           sender: 'Server',
@@ -105,12 +111,10 @@ export class HomeComponent implements OnDestroy {
         this.game.settingsVisible = false;
         break;
       case 'p':
-
         if (this.game.running) {
           this.game.playPong = true;
         }
         break;
-
     }
   }
 
@@ -131,12 +135,9 @@ export class HomeComponent implements OnDestroy {
     gameAudio.currentTime = 0;
     gameAudio.play();
 
-
     clearInterval(this.interval);
     this.interval = setInterval(() => {
       this.game.loop();
     }, 50);
   }
-
-
 }

@@ -30,11 +30,13 @@ export class PongComponent implements OnInit, OnDestroy {
   engine: any;
   puckDirection: 'left' | 'right' = 'right';
   puckRotation = 0;
+  PUCK_FORCE = .1;
 
   PADDLE_SIZE = 80;
   runAnimationFrame: number;
   renderAnimationFrame: number;
   joystick1 = new JoystickState(0);
+  joystick2 = new JoystickState(1);
 
   constructor(private pubSub: PubSubService) {
 
@@ -126,6 +128,7 @@ export class PongComponent implements OnInit, OnDestroy {
 
     const paddle2: HTMLElement = document.querySelector('.paddle-2');
     paddle2.style.top = `${this.paddle2.position.y - 82}px`;
+    paddle2.style.left = `${this.paddle2.position.x - 82}px`;
 
     const puck: HTMLElement = document.querySelector('.puck');
     puck.style.top = `${this.puck.position.y - (this.BALL_SIZE)}px`;
@@ -135,36 +138,36 @@ export class PongComponent implements OnInit, OnDestroy {
 
 
 
-  paddleone_ai(paddle: any, dis: any) {
-    const ball = this.puck;
+  // paddleone_ai(paddle: any, dis: any) {
+  //   const ball = this.puck;
 
-    if (ball.velocity.x > dis * ball.velocity.x) {
-      return true;
-    }
+  //   if (ball.velocity.x > dis * ball.velocity.x) {
+  //     return true;
+  //   }
 
-    let x_dist = Math.abs(paddle.position.x - ball.position.x);
-    let time_dist = x_dist / ball.velocity.x;
-    let ball_finial_pos_y = (ball.position.y + (ball.velocity.y * time_dist));
+  //   let x_dist = Math.abs(paddle.position.x - ball.position.x);
+  //   let time_dist = x_dist / ball.velocity.x;
+  //   let ball_finial_pos_y = (ball.position.y + (ball.velocity.y * time_dist));
 
-    if (Math.abs((ball_finial_pos_y - (paddle.position.y + paddle.height / 2)))) {
+  //   if (Math.abs((ball_finial_pos_y - (paddle.position.y + paddle.height / 2)))) {
 
-    } else if (ball_finial_pos_y > paddle.position.y + 50) {
-      if (paddle.position.y < this.GAME_HEIGHT - 100) {
+  //   } else if (ball_finial_pos_y > paddle.position.y + 50) {
+  //     if (paddle.position.y < this.GAME_HEIGHT - 100) {
 
-        Matter.Body.setPosition(paddle, { x: paddle.position.x, y: paddle.position.y + 7 });
-      }
-    } else if (ball_finial_pos_y < paddle.position.y - 50) {
-      if (paddle.position.y > 100) {
+  //       Matter.Body.setPosition(paddle, { x: paddle.position.x, y: paddle.position.y + 7 });
+  //     }
+  //   } else if (ball_finial_pos_y < paddle.position.y - 50) {
+  //     if (paddle.position.y > 100) {
 
-        Matter.Body.setPosition(paddle, { x: paddle.position.x, y: paddle.position.y - 7 });
-      }
-    } else {
+  //       Matter.Body.setPosition(paddle, { x: paddle.position.x, y: paddle.position.y - 7 });
+  //     }
+  //   } else {
 
-    }
+  //   }
 
-    return false;
+  //   return false;
 
-  }
+  // }
 
   leftArrowKeyDown = false;
   leftArrowKeyUp = false;
@@ -209,6 +212,10 @@ export class PongComponent implements OnInit, OnDestroy {
     }
   }
 
+  rightArrowKeyDown = false;
+  rightArrowKeyLeft = false;
+  rightArrowKeyRight = false;
+  rightArrowKeyUp = false;
 
   update() {
 
@@ -218,17 +225,33 @@ export class PongComponent implements OnInit, OnDestroy {
     this.leftArrowKeyRight = this.joystick1.isRight;
     this.leftArrowKeyUp = this.joystick1.isUp;
 
+    this.rightArrowKeyDown = this.joystick2.isDown;
+    this.rightArrowKeyLeft = this.joystick2.isLeft;
+    this.rightArrowKeyRight = this.joystick2.isRight;
+    this.rightArrowKeyUp = this.joystick2.isUp;
+
     if (this.leftArrowKeyDown) {
-      console.log('setting position')
       Matter.Body.setPosition(this.paddle1, { x: this.paddle1.position.x, y: this.paddle1.position.y + 20 });
       if (this.paddle1.position.y > this.GAME_HEIGHT - this.PADDLE_SIZE) {
         Matter.Body.setPosition(this.paddle1, { x: this.paddle1.position.x, y: this.GAME_HEIGHT - this.PADDLE_SIZE });
+      }
+    }
+    if(this.rightArrowKeyDown) {
+      Matter.Body.setPosition(this.paddle2, { x: this.paddle2.position.x, y: this.paddle2.position.y + 20 });
+      if (this.paddle2.position.y > this.GAME_HEIGHT - this.PADDLE_SIZE) {
+        Matter.Body.setPosition(this.paddle2, { x: this.paddle2.position.x, y: this.GAME_HEIGHT - this.PADDLE_SIZE });
       }
     }
     if (this.leftArrowKeyUp) {
       Matter.Body.setPosition(this.paddle1, { x: this.paddle1.position.x, y: this.paddle1.position.y - 20 });
       if (this.paddle1.position.y < (this.PADDLE_SIZE)) {
         Matter.Body.setPosition(this.paddle1, { x: this.paddle1.position.x, y: this.PADDLE_SIZE });
+      }
+    }
+    if(this.rightArrowKeyUp) {
+      Matter.Body.setPosition(this.paddle2, { x: this.paddle2.position.x, y: this.paddle2.position.y - 20 });
+      if (this.paddle2.position.y < (this.PADDLE_SIZE)) {
+        Matter.Body.setPosition(this.paddle2, { x: this.paddle2.position.x, y: this.PADDLE_SIZE });
       }
     }
 
@@ -238,6 +261,12 @@ export class PongComponent implements OnInit, OnDestroy {
         Matter.Body.setPosition(this.paddle1, { x: 400, y: this.paddle1.position.y });
       }
     }
+    if (this.rightArrowKeyRight) {
+      Matter.Body.setPosition(this.paddle2, { x: this.paddle2.position.x + 20, y: this.paddle2.position.y });
+      if (this.paddle2.position.x > this.GAME_WIDTH - this.PADDLE_SIZE) {
+        Matter.Body.setPosition(this.paddle2, { x: this.GAME_WIDTH - this.PADDLE_SIZE, y: this.paddle2.position.y });
+      }
+    }
     if (this.leftArrowKeyLeft) {
       Matter.Body.setPosition(this.paddle1, { x: this.paddle1.position.x - 20, y: this.paddle1.position.y });
 
@@ -245,17 +274,24 @@ export class PongComponent implements OnInit, OnDestroy {
         Matter.Body.setPosition(this.paddle1, { x: this.PADDLE_SIZE, y: this.paddle1.position.y });
       }
     }
+    if (this.rightArrowKeyLeft) {
+      Matter.Body.setPosition(this.paddle2, { x: this.paddle2.position.x - 20, y: this.paddle2.position.y });
+
+      if (this.paddle2.position.x < this.GAME_WIDTH - 400) {
+        Matter.Body.setPosition(this.paddle2, { x: this.GAME_WIDTH - 400, y: this.paddle1.position.y });
+      }
+    }
 
 
     const puck = this.puck;
 
     if (puck.velocity.x < 0 && this.puckDirection === 'right') {
-      Matter.Body.applyForce(puck, { x: puck.position.x, y: puck.position.y }, { x: -.05, y: 0 });
+      Matter.Body.applyForce(puck, { x: puck.position.x, y: puck.position.y }, { x: -this.PUCK_FORCE, y: 0 });
       this.puckDirection = 'left';
     }
 
     if (puck.velocity.x > 0 && this.puckDirection === 'left') {
-      Matter.Body.applyForce(puck, { x: puck.position.x, y: puck.position.y }, { x: .05, y: 0 });
+      Matter.Body.applyForce(puck, { x: puck.position.x, y: puck.position.y }, { x: this.PUCK_FORCE, y: 0 });
       this.puckDirection = 'right';
     }
 
@@ -281,7 +317,7 @@ export class PongComponent implements OnInit, OnDestroy {
       this.resetPuck((cb: any) => { console.log("pooof matter.js" + puck.position.y + " WTF " + this.GAME_HEIGHT + 200) });
     }
 
-    this.paddleone_ai(this.paddle2, 1);
+    //this.paddleone_ai(this.paddle2, 1);
   }
 
   resetPuck(cb: any) {
