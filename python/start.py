@@ -19,13 +19,31 @@ class MyServer(BaseHTTPRequestHandler):
         if self.path == "/exchange-updates":
             self.wfile.write(bytes(json.dumps(scores), "utf-8"))
             scores.clear()
+        elif self.path == '/turn-table-on':
+            turn_table_on()
+        elif self.path == '/turn-table-off':
+            turn_table_off()
+        elif self.path == '/favicon.ico':
+            print('')
         else:
+            turn_table_off()
             with open('template.html', 'r') as file:
                 contents = file.read()
 
             self.wfile.write(bytes(contents, "utf-8"))
 
 
+def turn_table_on():
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setwarnings(False)
+    GPIO.setup(23,GPIO.OUT)
+    GPIO.output(23,GPIO.HIGH)
+
+def turn_table_off():
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setwarnings(False)
+    GPIO.setup(23,GPIO.OUT)
+    GPIO.output(23,GPIO.LOW)
 
 def break_beam_callback(channel):
     if GPIO.input(BEAM_PIN):

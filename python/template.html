@@ -27,6 +27,15 @@
                 }
             });
         }, 500);
+        window.addEventListener('message',e=> {
+            const msg = JSON.parse(event.data);
+            console.log(msg);
+            if(msg.messageType === 'GAME_STARTED') {
+                fetch('/turn-table-on').then(()=> {});
+            } else if(msg.messageType === 'GAME_OVER') {
+                fetch('/turn-table-off').then(()=> {});
+            }
+        });
     </script>
 
 </body>
