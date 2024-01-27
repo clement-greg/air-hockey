@@ -27,7 +27,6 @@ export class Game {
         this.player2Score = 0;
         this.running = true;
         if (window.parent) {
-            console.log('sending game start');
             const msg: GameMessage = {
                 messageType: 'GAME_STARTED',
                 sender: 'Client'

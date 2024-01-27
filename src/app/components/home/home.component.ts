@@ -48,7 +48,6 @@ export class HomeComponent implements OnDestroy {
     });
 
     this.subscription = pubSub.subscription.subscribe(message => {
-      console.log(message)
       if (message.type === 'PLAYER_1_SCORED') {
 
         this.processGameMessage({
