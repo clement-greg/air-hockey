@@ -1,14 +1,16 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import RPi.GPIO as GPIO
 import json
+from urllib.request import urlopen
 
 
 hostName = "localhost"
-serverPort = 8080
+serverPort = 8081
 
 BEAM_PIN = 17
 BEAM_PIN_2 = 18
 scores = []
+APP_CLOUD_BASE_URL = "https://air-hockey.azurewebsites.net/"
 
 
 class MyServer(BaseHTTPRequestHandler):
@@ -29,9 +31,10 @@ class MyServer(BaseHTTPRequestHandler):
             print('')
         else:
             turn_table_off()
-            with open('/home/greg/repros/air-hockey/python/template.html', 'r') as file:
-                contents = file.read()
-
+            templateUrl = APP_CLOUD_BASE_URL + "assets/html/template.html"
+            output = urlopen(templateUrl).read()
+            contents = output.decode("utf-8")
+            contents = contents.replace("{{APP_CLOUD_BASE_URL}}", APP_CLOUD_BASE_URL)
             self.wfile.write(bytes(contents, "utf-8"))
 
 
@@ -51,21 +54,16 @@ def break_beam_callback(channel):
     if GPIO.input(BEAM_PIN):
         print("beam unbroken")
     else:
-        print(channel)
-        print("beam broken")
-
         msg = {
             "sender": "Server",
             "messageType": "PLAYER_1_SCORED"
         }
         scores.append(msg)
+
 def break_beam_callback_2(channel):
     if GPIO.input(BEAM_PIN_2):
         print("beam unbroken")
     else:
-        print(channel)
-        print("beam broken")
-
         msg = {
             "sender": "Server",
             "messageType": "PLAYER_2_SCORED"
