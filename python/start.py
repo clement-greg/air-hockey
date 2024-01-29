@@ -1,11 +1,7 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
-import time
 import RPi.GPIO as GPIO
 import json
-import webbrowser
-import asyncio
-import os
-import subprocess
+
 
 hostName = "localhost"
 serverPort = 8080
