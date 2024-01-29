@@ -17,11 +17,11 @@
     <script>
         function iFrameLoaded() {
             document.getElementById('the-frame').focus();
+            document.documentElement.requestFullscreen();
         }
 
         setInterval(()=> {
             fetch('/exchange-updates').then(value=> value.json()).then(value=> {
-                console.log(value);
                 for(const message of value) {
                     document.getElementById('the-frame').contentWindow.postMessage(JSON.stringify(message), '*');
                 }
@@ -29,7 +29,6 @@
         }, 500);
         window.addEventListener('message',e=> {
             const msg = JSON.parse(event.data);
-            console.log(msg);
             if(msg.messageType === 'GAME_STARTED') {
                 fetch('/turn-table-on').then(()=> {});
             } else if(msg.messageType === 'GAME_OVER') {
