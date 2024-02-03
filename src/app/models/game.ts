@@ -15,6 +15,36 @@ export class Game {
     isTie = false;
     settingsVisible = false;
     playPong = false;
+    musicFiles:string[] = [
+        'bleed-it-out',
+        'click-click-boom',
+        'enter-sandman',
+        'heavy',
+        'i-stand-alone',
+        'jump',
+        'ladies-and-gentlemen',
+        'natural',
+        'no-leaf-clover',
+        'radioactive',
+        'rocky-mountain-way',
+        'sail',
+        'seven-nation-army',
+        'sound-of-madness',
+        'viva-la-vida',
+        'take-on-me',
+        'rule-the-world',
+        'how-did-you-love',
+        'woo-hoo',
+        'wicked-garden',
+        'where-the-river-flows',
+        'teen-spirit',
+        'sabotage',
+        'rock-super-star',
+        'right-round',
+        'plush',
+        'machine-head'
+    ];
+    musicBaseUrl = 'https://gbcstorageaccount.blob.core.windows.net/public/music/';
 
     constructor(private duration: number) {
 
@@ -33,6 +63,14 @@ export class Game {
             };
             window.parent.postMessage(JSON.stringify(msg), '*');
         }
+        const bgAudio: any = document.getElementById('bg-music');
+        bgAudio.pause();
+        const gameAudio: any = document.getElementById('arcade-funk');
+        const index = this.getRandomNumber(0,this.musicFiles.length - 1);
+        gameAudio.src = `${this.musicBaseUrl}${this.musicFiles[index]}.mp3`;
+        gameAudio.volume = .05;
+        gameAudio.currentTime = 0;
+        gameAudio.play();
     }
 
     processGameMessage(message: GameMessage) {
@@ -74,6 +112,26 @@ export class Game {
 
     }
 
+
+    private fadeInterval:any;
+    fadeOutAudio(id: string) {
+        const audio:any = document.getElementById(id);
+
+        this.fadeInterval = setInterval(()=> {
+            if(audio.volume > 0) {
+                let volume = audio.volume;
+                volume -= 0.01;
+                if(volume < 0) {
+                    volume = 0;
+                }
+                audio.volume = volume;
+            }
+            if(audio.volume <= 0) {
+                clearInterval(this.fadeInterval);
+            }
+        }, 200);
+    }
+
     get secondsRemaining() {
         if (!this.startTime) {
             return '-';
@@ -82,6 +140,9 @@ export class Game {
         if (remaining < 0) {
             remaining = 0;
             if (this.running) {
+                // const gameAudio: any = document.getElementById('arcade-funk');
+                // gameAudio.pause();
+                this.fadeOutAudio('arcade-funk');
                 if (this.player1Score > this.player2Score) {
                     this.winner = this.config.player1;
                     this.playWin();
@@ -121,6 +182,9 @@ export class Game {
     }
 
     handleSpace() {
+        // if(this.running || this.gameSetup) {
+        //     return;
+        // }
         if (this.winner || this.introMode || this.isTie) {
             delete this.winner;
             this.startGame();
@@ -137,6 +201,7 @@ export class Game {
         this.config = new GameSetupConfig();
         this.config.player1 = defaultPlayer1;
         this.config.player2 = defaultPlayer2;
+
 
         this.gameSetup = true;
         const video: any = document.getElementById('bg-video');
@@ -156,24 +221,23 @@ export class Game {
     }
 
     private playWin() {
-        const gameAudio: any = document.getElementById('arcade-funk');
-        gameAudio.pause();
+
         const win: any = document.getElementById('win-soundfx');
 
         win.currentTime = 0;
         win.volume = .1;
         win.loop = false;
         win.play();
-
-        /*         setTimeout(()=> {
-                    delete this.winner;
-                },30000); */
     }
 
     private getSecondsBetweenDates(date1: Date, date2: Date): number {
         let diffInMilliseconds = date2.getTime() - date1.getTime();
         return Math.floor(diffInMilliseconds / 1000);
     }
+
+    private getRandomNumber(min: number, max: number): number {
+        return Math.floor(Math.random() * (max - min + 1) + min);
+      }
 }
 
 

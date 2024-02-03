@@ -23,7 +23,7 @@ import { JoystickState } from '../../models/player';
 })
 export class HomeComponent implements OnDestroy {
 
-  game = new Game(60);
+  game = new Game(5);
   interval: any;
   private subscription: Subscription;
   joystick1State = new JoystickState(0);
@@ -90,7 +90,8 @@ export class HomeComponent implements OnDestroy {
   keyPress(evt: KeyboardEvent) {
     switch (evt.key) {
       case ' ':
-        this.game?.handleSpace();
+          this.game?.handleSpace();
+
         break;
       case 'l':
         this.processGameMessage({
@@ -120,20 +121,16 @@ export class HomeComponent implements OnDestroy {
 
   processGameMessage(message: GameMessage) {
     this.game.processGameMessage(message);
-    if (message.messageType === 'GAME_STARTED') {
-      this.game.startGame();
-    }
+    // if (message.messageType === 'GAME_STARTED') {
+    //   console.log(message);
+    //   this.game.startGame();
+    // }
   }
 
   configChange() {
     this.game.gameSetup = false;
     this.game.restart();
-    const bgAudio: any = document.getElementById('bg-music');
-    bgAudio.pause();
-    const gameAudio: any = document.getElementById('arcade-funk');
-    gameAudio.volume = .05;
-    gameAudio.currentTime = 0;
-    gameAudio.play();
+
 
     clearInterval(this.interval);
     this.interval = setInterval(() => {
