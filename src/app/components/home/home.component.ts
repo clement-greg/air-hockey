@@ -23,7 +23,7 @@ import { JoystickState } from '../../models/player';
 })
 export class HomeComponent implements OnDestroy {
 
-  game = new Game(5);
+  game = new Game();
   interval: any;
   private subscription: Subscription;
   joystick1State = new JoystickState(0);

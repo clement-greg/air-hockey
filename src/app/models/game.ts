@@ -1,3 +1,4 @@
+import { getRandomNumber, getSecondsBetweenDates } from "../services/utilities";
 import { GameMessage } from "./game-message";
 import { GameSetupConfig } from "./game-setup-config";
 import { Player } from "./player";
@@ -11,11 +12,13 @@ export class Game {
     winner: Player;
     config: GameSetupConfig = new GameSetupConfig();
     introMode = true;
+    duration = 60;
     gameSetup = false;
     isTie = false;
     settingsVisible = false;
     playPong = false;
-    musicFiles:string[] = [
+    gameMenuMusicUrl = '../../assets/music/bg-music.mp3';
+    musicFiles: string[] = [
         'bleed-it-out',
         'click-click-boom',
         'enter-sandman',
@@ -46,31 +49,48 @@ export class Game {
     ];
     musicBaseUrl = 'https://gbcstorageaccount.blob.core.windows.net/public/music/';
 
-    constructor(private duration: number) {
-
+    constructor() {
+        this.config.gameType = 'Physical';
     }
 
 
     restart() {
+        this.duration = GameSettings.Instance.gameDuration;
+
         this.startTime = new Date();
         this.player1Score = 0;
         this.player2Score = 0;
         this.running = true;
         if (window.parent) {
-            const msg: GameMessage = {
-                messageType: 'GAME_STARTED',
-                sender: 'Client'
-            };
-            window.parent.postMessage(JSON.stringify(msg), '*');
+            if(this.config.gameType === 'Virtual') {
+
+                const msg: GameMessage = {
+                    messageType: 'VIRTUAL_GAME_STARTED',
+                    sender: 'Client'
+                };
+                window.parent.postMessage(JSON.stringify(msg), '*');
+            } else {
+                const msg: GameMessage = {
+                    messageType: 'GAME_STARTED',
+                    sender: 'Client'
+                };
+                window.parent.postMessage(JSON.stringify(msg), '*');
+            }
+
         }
-        const bgAudio: any = document.getElementById('bg-music');
-        bgAudio.pause();
-        const gameAudio: any = document.getElementById('arcade-funk');
-        const index = this.getRandomNumber(0,this.musicFiles.length - 1);
-        gameAudio.src = `${this.musicBaseUrl}${this.musicFiles[index]}.mp3`;
-        gameAudio.volume = .05;
-        gameAudio.currentTime = 0;
-        gameAudio.play();
+        if(this.config.gameType === 'Both' || this.config.gameType === 'Virtual') {
+            this.playPong = true;
+        } else {
+            this.playPong = false;
+        }
+        this.bgMusicElement.pause();
+        const index = getRandomNumber(0, this.musicFiles.length - 1);
+        this.bgMusicElement.src = `${this.musicBaseUrl}${this.musicFiles[index]}.mp3`;
+        this.bgMusicElement.volume = GameSettings.Instance.musicVolume;
+        this.bgMusicElement.currentTime = 0;
+        if (GameSettings.Instance.playBackgroundMusic) {
+            this.bgMusicElement.play();
+        }
     }
 
     processGameMessage(message: GameMessage) {
@@ -95,54 +115,66 @@ export class Game {
             const sound: any = document.getElementById('score-1');
             sound.pause();
             sound.currentTime = 0;
-            sound.volume = .1;
-            sound.play();
+            sound.volume = GameSettings.Instance.soundFxVolume;
+            if (GameSettings.Instance.playSoundFX) {
+                sound.play();
+            }
         }
     }
 
     get endTime(): Date {
-
         const dt = new Date(this.startTime);
 
         dt.setSeconds(dt.getSeconds() + this.duration);
         return dt;
     }
 
-    loop() {
-
-    }
+    loop() { }
 
 
-    private fadeInterval:any;
+    private fadeInterval: any;
     fadeOutAudio(id: string) {
-        const audio:any = document.getElementById(id);
+        const audio: any = document.getElementById(id);
 
-        this.fadeInterval = setInterval(()=> {
-            if(audio.volume > 0) {
+        this.fadeInterval = setInterval(() => {
+            if (audio.volume > 0) {
                 let volume = audio.volume;
                 volume -= 0.01;
-                if(volume < 0) {
+                if (volume < 0) {
                     volume = 0;
                 }
                 audio.volume = volume;
             }
-            if(audio.volume <= 0) {
+            if (audio.volume <= 0) {
                 clearInterval(this.fadeInterval);
             }
         }, 200);
+    }
+
+    get bgMusicElement(): HTMLAudioElement {
+        return document.getElementById('bg-music') as HTMLAudioElement;
     }
 
     get secondsRemaining() {
         if (!this.startTime) {
             return '-';
         }
-        let remaining = this.getSecondsBetweenDates(new Date(), this.endTime);
+        let remaining = getSecondsBetweenDates(new Date(), this.endTime);
         if (remaining < 0) {
             remaining = 0;
             if (this.running) {
-                // const gameAudio: any = document.getElementById('arcade-funk');
-                // gameAudio.pause();
-                this.fadeOutAudio('arcade-funk');
+                this.fadeOutAudio('bg-music');
+                this.bgMusicElement.src = this.gameMenuMusicUrl;
+
+                setTimeout(() => {
+                    if (GameSettings.Instance.playBackgroundMusic) {
+                        this.bgMusicElement.src = this.gameMenuMusicUrl;
+                        this.bgMusicElement.currentTime = 0;
+                        this.bgMusicElement.volume = GameSettings.Instance.musicVolume;
+                        this.bgMusicElement.play();
+
+                    }
+                }, 1000);
                 if (this.player1Score > this.player2Score) {
                     this.winner = this.config.player1;
                     this.playWin();
@@ -182,9 +214,6 @@ export class Game {
     }
 
     handleSpace() {
-        // if(this.running || this.gameSetup) {
-        //     return;
-        // }
         if (this.winner || this.introMode || this.isTie) {
             delete this.winner;
             this.startGame();
@@ -209,35 +238,26 @@ export class Game {
 
         const bgAudio: any = document.getElementById('bg-music');
         bgAudio.currentTime = 0;
-        bgAudio.volume = .05;
+        bgAudio.volume = GameSettings.Instance.musicVolume;
 
         if (GameSettings.Instance.playBackgroundMusic) {
             bgAudio.play();
         }
 
-        const gameAudio: any = document.getElementById('arcade-funk');
-        gameAudio.pause();
         this.introMode = false;
     }
 
     private playWin() {
-
         const win: any = document.getElementById('win-soundfx');
 
         win.currentTime = 0;
-        win.volume = .1;
+        win.volume = GameSettings.Instance.soundFxVolume;
         win.loop = false;
-        win.play();
+        if (GameSettings.Instance.playSoundFX) {
+            win.play();
+        }
     }
 
-    private getSecondsBetweenDates(date1: Date, date2: Date): number {
-        let diffInMilliseconds = date2.getTime() - date1.getTime();
-        return Math.floor(diffInMilliseconds / 1000);
-    }
-
-    private getRandomNumber(min: number, max: number): number {
-        return Math.floor(Math.random() * (max - min + 1) + min);
-      }
 }
 
 

@@ -1,8 +1,13 @@
-import { CUSTOM_ELEMENTS_SCHEMA, Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, EventEmitter, HostListener, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { getPlayerTypes } from '../../models/game';
 import { CommonModule } from '@angular/common';
 import { JoystickState, Player } from '../../models/player';
 import { GameSetupConfig } from '../../models/game-setup-config';
+
+class GameType {
+  type: 'Virtual' | 'Physical' | 'Both';
+  lottieUrl: string;
+}
 
 @Component({
   selector: 'app-game-setup',
@@ -12,17 +17,23 @@ import { GameSetupConfig } from '../../models/game-setup-config';
   styleUrl: './game-setup.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class GameSetupComponent {
+export class GameSetupComponent implements OnChanges {
   selectedItem: string;
 
   @Input() config: GameSetupConfig = new GameSetupConfig();
   @Output() configChange: EventEmitter<GameSetupConfig> = new EventEmitter();
   private joystick1 = new JoystickState(0);
   private joystick2 = new JoystickState(1);
-
+  gameTypeSelected = false;
+  gameTypes: GameType[] = [
+    { type: 'Virtual', lottieUrl: 'https://lottie.host/2624709a-b10c-43e1-af2a-623d1434c3b3/HhWUwa1d3c.json' },
+    { type: 'Physical', lottieUrl: 'https://lottie.host/063f9150-34fc-4bdc-92df-16318a0f3a79/xG6AAyhFbC.json' },
+    { type: 'Both', lottieUrl: 'https://lottie.host/a7044b1d-7b7c-4dbe-8c08-f8579798acd4/pnWDVXLTWJ.json' }
+  ];
 
   constructor() {
     this.selectedItem = this.playerTypes[11];
+
 
     this.joystick1.onLeftJoyStick = this.selectLeft.bind(this);
     this.joystick1.onRightJoyStick = this.selectRight.bind(this);
@@ -31,7 +42,12 @@ export class GameSetupComponent {
     this.joystick2.onLeftJoyStick = this.selectLeft.bind(this);
     this.joystick2.onRightJoyStick = this.selectRight.bind(this);
     this.joystick2.onButtonPress = this.buttonPress.bind(this);
+  }
+  ngOnChanges(changes: SimpleChanges): void {
 
+    if(changes['config'].currentValue) {
+      changes['config'].currentValue.gameType = 'Physical';
+    }
   }
 
   buttonPress(buttonNumber: number) {
@@ -64,6 +80,10 @@ export class GameSetupComponent {
   }
 
   back() {
+    if(this.config.player1 && this.config.player2 && this.gameTypeSelected) {
+      this.gameTypeSelected = false;
+      return;
+    }
     if (this.config.player2) {
       delete this.config.player2;
       return;
@@ -76,6 +96,17 @@ export class GameSetupComponent {
   }
 
   selectLeft() {
+    if (this.config.player1 && this.config.player2 && !this.gameTypeSelected) {
+      const type = this.gameTypes.find(i => i.type === this.config.gameType);
+      let index = this.gameTypes.indexOf(type);
+      index--;
+      if (index < 0) {
+        index = this.gameTypes.length - 1;
+      }
+      this.config.gameType = this.gameTypes[index].type;
+      return;
+    }
+
     let index = this.playerTypes.indexOf(this.selectedItem);
     if (index > 0) {
       index--;
@@ -88,19 +119,29 @@ export class GameSetupComponent {
     if (!this.config.player1) {
       this.config.player1 = new Player(1);
       this.config.player1.avatar = this.selectedItem;
-      //this.selectedItem = this.playerTypes[7];
-
-
     }
     else if (!this.config.player2) {
       this.config.player2 = new Player(2);
       this.config.player2.avatar = this.selectedItem;
+    } else if (!this.gameTypeSelected) {
+      this.gameTypeSelected = true;
     } else {
       this.configChange.emit(this.config);
     }
   }
 
   selectRight() {
+    if (this.config.player1 && this.config.player2 && !this.gameTypeSelected) {
+      const type = this.gameTypes.find(i => i.type === this.config.gameType);
+      let index = this.gameTypes.indexOf(type);
+      index++;
+      if (index >= this.gameTypes.length) {
+        index = 0;
+      }
+      this.config.gameType = this.gameTypes[index].type;
+      return;
+    }
+
     let index = this.playerTypes.indexOf(this.selectedItem);
     if (index < this.playerTypes.length - 1) {
       index++;
@@ -118,7 +159,6 @@ export class GameSetupComponent {
     }
 
     return this._playerTypes;
-
   }
 
   get scrollOffset() {
@@ -128,6 +168,5 @@ export class GameSetupComponent {
     const placesToScroll = index - nonsScrollCount;
 
     return `translateX(${placesToScroll > -1 ? '-' : ''}${Math.abs(placesToScroll) * 140}px)`;
-
   }
 }

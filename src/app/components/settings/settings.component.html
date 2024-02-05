@@ -1,6 +1,41 @@
+<mat-form-field appearance="outline">
+    <mat-label>Game Duration</mat-label>
+    <input matInput (ngModelChange)="saveSettings()" [(ngModel)]="settings.gameDuration" type="number">
+</mat-form-field>
 
-<mat-checkbox (ngModelChange)="saveSettings()" [(ngModel)]="settings.playBackgroundMusic">Play Background Music</mat-checkbox>
+
+<mat-checkbox (ngModelChange)="savePlayBackgroundMusic($event)" [(ngModel)]="settings.playBackgroundMusic">Play
+    Background Music</mat-checkbox>
+
+
 
 <div>
     <mat-checkbox (ngModelChange)="saveSettings()" [(ngModel)]="settings.playSoundFX">Play Sound Effects</mat-checkbox>
 </div>
+
+<div>
+    <div>Music Volume</div>
+    <mat-slider min="0" max="1" step=".05">
+        <input matSliderThumb (ngModelChange)="saveMusicSettings($event)" [(ngModel)]="settings.musicVolume">
+    </mat-slider>
+
+
+</div>
+
+<div>
+    <div>Sound FX Volume</div>
+    <mat-slider min="0" max="1" step=".05">
+        <input matSliderThumb (ngModelChange)="saveSoundFXSettings($event)" [(ngModel)]="settings.soundFxVolume">
+    </mat-slider>
+
+
+</div>
+
+<mat-form-field appearance="outline">
+    <mat-label>Puck Force</mat-label>
+    <input matInput (ngModelChange)="saveSettings()" [(ngModel)]="settings.puckForce" type="number">
+</mat-form-field>
+<mat-form-field appearance="outline">
+    <mat-label>Puck Reset Force</mat-label>
+    <input matInput (ngModelChange)="saveSettings()" [(ngModel)]="settings.puckResetForce" type="number">
+</mat-form-field>

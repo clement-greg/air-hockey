@@ -1,6 +1,7 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { PubSubService } from '../../services/pub-sub.service';
 import { JoystickState } from '../../models/player';
+import { GameSettings } from '../../models/settings';
 declare var Matter: any;
 
 
@@ -30,7 +31,6 @@ export class PongComponent implements OnInit, OnDestroy {
   engine: any;
   puckDirection: 'left' | 'right' = 'right';
   puckRotation = 0;
-  PUCK_FORCE = .1;
 
   PADDLE_SIZE = 80;
   runAnimationFrame: number;
@@ -136,39 +136,6 @@ export class PongComponent implements OnInit, OnDestroy {
     puck.style.transform = `rotate(${this.puck.angle}rad)`;
   }
 
-
-
-  // paddleone_ai(paddle: any, dis: any) {
-  //   const ball = this.puck;
-
-  //   if (ball.velocity.x > dis * ball.velocity.x) {
-  //     return true;
-  //   }
-
-  //   let x_dist = Math.abs(paddle.position.x - ball.position.x);
-  //   let time_dist = x_dist / ball.velocity.x;
-  //   let ball_finial_pos_y = (ball.position.y + (ball.velocity.y * time_dist));
-
-  //   if (Math.abs((ball_finial_pos_y - (paddle.position.y + paddle.height / 2)))) {
-
-  //   } else if (ball_finial_pos_y > paddle.position.y + 50) {
-  //     if (paddle.position.y < this.GAME_HEIGHT - 100) {
-
-  //       Matter.Body.setPosition(paddle, { x: paddle.position.x, y: paddle.position.y + 7 });
-  //     }
-  //   } else if (ball_finial_pos_y < paddle.position.y - 50) {
-  //     if (paddle.position.y > 100) {
-
-  //       Matter.Body.setPosition(paddle, { x: paddle.position.x, y: paddle.position.y - 7 });
-  //     }
-  //   } else {
-
-  //   }
-
-  //   return false;
-
-  // }
-
   leftArrowKeyDown = false;
   leftArrowKeyUp = false;
   leftArrowKeyLeft = false;
@@ -236,7 +203,7 @@ export class PongComponent implements OnInit, OnDestroy {
         Matter.Body.setPosition(this.paddle1, { x: this.paddle1.position.x, y: this.GAME_HEIGHT - this.PADDLE_SIZE });
       }
     }
-    if(this.rightArrowKeyDown) {
+    if (this.rightArrowKeyDown) {
       Matter.Body.setPosition(this.paddle2, { x: this.paddle2.position.x, y: this.paddle2.position.y + 20 });
       if (this.paddle2.position.y > this.GAME_HEIGHT - this.PADDLE_SIZE) {
         Matter.Body.setPosition(this.paddle2, { x: this.paddle2.position.x, y: this.GAME_HEIGHT - this.PADDLE_SIZE });
@@ -248,7 +215,7 @@ export class PongComponent implements OnInit, OnDestroy {
         Matter.Body.setPosition(this.paddle1, { x: this.paddle1.position.x, y: this.PADDLE_SIZE });
       }
     }
-    if(this.rightArrowKeyUp) {
+    if (this.rightArrowKeyUp) {
       Matter.Body.setPosition(this.paddle2, { x: this.paddle2.position.x, y: this.paddle2.position.y - 20 });
       if (this.paddle2.position.y < (this.PADDLE_SIZE)) {
         Matter.Body.setPosition(this.paddle2, { x: this.paddle2.position.x, y: this.PADDLE_SIZE });
@@ -286,12 +253,12 @@ export class PongComponent implements OnInit, OnDestroy {
     const puck = this.puck;
 
     if (puck.velocity.x < 0 && this.puckDirection === 'right') {
-      Matter.Body.applyForce(puck, { x: puck.position.x, y: puck.position.y }, { x: -this.PUCK_FORCE, y: 0 });
+      Matter.Body.applyForce(puck, { x: puck.position.x, y: puck.position.y }, { x: -GameSettings.Instance.puckForce, y: 0 });
       this.puckDirection = 'left';
     }
 
     if (puck.velocity.x > 0 && this.puckDirection === 'left') {
-      Matter.Body.applyForce(puck, { x: puck.position.x, y: puck.position.y }, { x: this.PUCK_FORCE, y: 0 });
+      Matter.Body.applyForce(puck, { x: puck.position.x, y: puck.position.y }, { x: GameSettings.Instance.puckForce, y: 0 });
       this.puckDirection = 'right';
     }
 
@@ -336,12 +303,17 @@ export class PongComponent implements OnInit, OnDestroy {
         x: 0,
         y: 0
       });
+      this.puck.force = { x: 0, y: 0 };
       this.puck.visible = true;
       Matter.Body.setPosition(this.puck, { x: this.BALL_START_POINT_X, y: this.BALL_START_POINT_Y });
       setTimeout(() => {
+        const xRand = Math.random();
+        const yRand = Math.random();
+        this.puckDirection = xRand > .5 ? 'right' : 'left';
+        const launchFactor = GameSettings.Instance.puckResetForce;
         Matter.Body.setVelocity(this.puck, {
-          x: ((Math.random() > 0.5) ? 1 : -1) * Math.floor((Math.random() * 7) + 6),
-          y: ((Math.random() > 0.5) ? 1 : -1) * Math.floor((Math.random() * 7) + 6)
+          x: ((xRand > 0.5) ? 1 : -1) * Math.floor((xRand * launchFactor) + launchFactor),
+          y: ((yRand > 0.5) ? 1 : -1) * Math.floor((yRand * launchFactor) + launchFactor)
         });
       }, 500);
       this.in_goal = false;
