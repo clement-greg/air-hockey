@@ -19,6 +19,17 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     font-family: "sporty-pro", sans-serif !important;
 }
 
+mat-form-field {
+    display: block !important;
+}
+h3 {
+    font-size: 35px !important;
+    line-height: 40px !important;
+    text-shadow: 4px 4px 14px rgba(0,0,0,0.6);
+    color: rgba(255,255,255,.8);
+    font-family: "sporty-pro", sans-serif !important;
+}
+
 .flex-container {
     display: flex;
 }

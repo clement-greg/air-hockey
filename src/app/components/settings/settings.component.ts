@@ -1,33 +1,57 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { GameSettings } from '../../models/settings';
 import { PubSubService } from '../../services/pub-sub.service';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import { MatInputModule} from '@angular/material/input';
-import {MatSliderModule} from '@angular/material/slider';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-settings',
   standalone: true,
-  imports: [MatCheckboxModule, CommonModule, FormsModule, MatFormFieldModule, MatInputModule, MatSliderModule],
+  imports: [MatCheckboxModule, CommonModule, FormsModule, MatIconModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatSliderModule, MatTabsModule],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.scss'
 })
-export class SettingsComponent  {
+export class SettingsComponent {
 
   settings: GameSettings = GameSettings.Instance;
+  newMusicUrl: string;
 
   constructor(private pubSub: PubSubService) {
 
-    
+
   }
 
-  
+  swallowKeyUp(keyEvent: KeyboardEvent) {
+    keyEvent.stopPropagation();
+  }
+
+  addMusicUrl() {
+    if (!this.settings.gameMusicUrls) {
+      this.settings.gameMusicUrls = [];
+    }
+    if (this.settings.gameMusicUrls.indexOf(this.newMusicUrl) === -1) {
+      this.settings.gameMusicUrls.push(this.newMusicUrl);
+    }
+
+    delete this.newMusicUrl;
+    this.saveSettings();
+  }
+
+  removeMusicUrl(url: string) {
+    this.settings.gameMusicUrls.splice(this.settings.gameMusicUrls.indexOf(url), 1);
+    this.saveSettings();
+  }
+
   savePlayBackgroundMusic(value: boolean) {
 
-    if(!value) {
+    if (!value) {
       (document.getElementById('bg-music') as any).pause();
     } else {
       (document.getElementById('bg-music') as any).play();
@@ -51,7 +75,7 @@ export class SettingsComponent  {
   }
 
   saveSettings() {
-    setTimeout(()=> {
+    setTimeout(() => {
       this.settings.save();
       this.pubSub.publish({
         type: 'SETTINGS-CHANGED',

@@ -18,39 +18,40 @@ export class Game {
     settingsVisible = false;
     playPong = false;
     gameMenuMusicUrl = '../../assets/music/bg-music.mp3';
-    musicFiles: string[] = [
-        'bleed-it-out',
-        'click-click-boom',
-        'enter-sandman',
-        'heavy',
-        'i-stand-alone',
-        'jump',
-        'ladies-and-gentlemen',
-        'natural',
-        'no-leaf-clover',
-        'radioactive',
-        'rocky-mountain-way',
-        'sail',
-        'seven-nation-army',
-        'sound-of-madness',
-        'viva-la-vida',
-        'take-on-me',
-        'rule-the-world',
-        'how-did-you-love',
-        'woo-hoo',
-        'wicked-garden',
-        'where-the-river-flows',
-        'teen-spirit',
-        'sabotage',
-        'rock-super-star',
-        'right-round',
-        'plush',
-        'machine-head'
-    ];
-    musicBaseUrl = 'https://gbcstorageaccount.blob.core.windows.net/public/music/';
+    // musicFiles: string[] = [
+    //     'bleed-it-out',
+    //     'click-click-boom',
+    //     'enter-sandman',
+    //     'heavy',
+    //     'i-stand-alone',
+    //     'jump',
+    //     'ladies-and-gentlemen',
+    //     'natural',
+    //     'no-leaf-clover',
+    //     'radioactive',
+    //     'rocky-mountain-way',
+    //     'sail',
+    //     'seven-nation-army',
+    //     'sound-of-madness',
+    //     'viva-la-vida',
+    //     'take-on-me',
+    //     'rule-the-world',
+    //     'how-did-you-love',
+    //     'woo-hoo',
+    //     'wicked-garden',
+    //     'where-the-river-flows',
+    //     'teen-spirit',
+    //     'sabotage',
+    //     'rock-super-star',
+    //     'right-round',
+    //     'plush',
+    //     'machine-head'
+    // ];
+    // musicBaseUrl = 'https://gbcstorageaccount.blob.core.windows.net/public/music/';
 
     constructor() {
         this.config.gameType = 'Physical';
+        this.setRandomBackgroundMusic();
     }
 
 
@@ -84,13 +85,24 @@ export class Game {
             this.playPong = false;
         }
         this.bgMusicElement.pause();
-        const index = getRandomNumber(0, this.musicFiles.length - 1);
-        this.bgMusicElement.src = `${this.musicBaseUrl}${this.musicFiles[index]}.mp3`;
+        this.setRandomBackgroundMusic();
         this.bgMusicElement.volume = GameSettings.Instance.musicVolume;
         this.bgMusicElement.currentTime = 0;
         if (GameSettings.Instance.playBackgroundMusic) {
             this.bgMusicElement.play();
         }
+    }
+
+    private setRandomBackgroundMusic() {
+        if(!this.bgMusicElement) {
+            setTimeout(()=> this.setRandomBackgroundMusic(), 100);
+            return;
+        }
+        if(!GameSettings.Instance.gameMusicUrls) {
+            GameSettings.Instance.gameMusicUrls = [this.gameMenuMusicUrl];
+        }
+        const index = getRandomNumber(0, GameSettings.Instance.gameMusicUrls.length - 1);
+        this.bgMusicElement.src = GameSettings.Instance.gameMusicUrls[index];
     }
 
     processGameMessage(message: GameMessage) {
@@ -164,11 +176,11 @@ export class Game {
             remaining = 0;
             if (this.running) {
                 this.fadeOutAudio('bg-music');
-                this.bgMusicElement.src = this.gameMenuMusicUrl;
+                this.setRandomBackgroundMusic();
 
                 setTimeout(() => {
                     if (GameSettings.Instance.playBackgroundMusic) {
-                        this.bgMusicElement.src = this.gameMenuMusicUrl;
+                        this.setRandomBackgroundMusic();
                         this.bgMusicElement.currentTime = 0;
                         this.bgMusicElement.volume = GameSettings.Instance.musicVolume;
                         this.bgMusicElement.play();
@@ -223,6 +235,7 @@ export class Game {
     startGame() {
         this.isTie = false;
         clearTimeout(this.eogTimeout);
+        const lastType = this.config.gameType;
         const defaultPlayer1 = this.config?.player1;
         const defaultPlayer2 = this.config?.player2;
 
@@ -230,6 +243,7 @@ export class Game {
         this.config = new GameSetupConfig();
         this.config.player1 = defaultPlayer1;
         this.config.player2 = defaultPlayer2;
+        this.config.gameType = lastType;
 
 
         this.gameSetup = true;

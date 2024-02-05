@@ -6,6 +6,7 @@ export class GameSettings {
     soundFxVolume: number;
     puckForce: number;
     puckResetForce: number;
+    gameMusicUrls:string[];
 
 
     save() {

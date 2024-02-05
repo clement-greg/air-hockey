@@ -16,6 +16,14 @@
             <br>
             Player 2
         </div>
+        <div *ngIf="selectedGameType && gameTypeSelected">
+            <lottie-player style="height: 132px;"
+            [src]="selectedGameType.lottieUrl" background="transparent"
+            speed="1" loop autoplay>
+        </lottie-player>
+        <br>
+        {{selectedGameType.type}}
+        </div>
     </div>
     <div class="avatar-selector" *ngIf="!config.player1 || !config.player2">
         <div [style.transform]="scrollOffset">

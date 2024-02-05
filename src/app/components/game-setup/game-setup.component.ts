@@ -48,12 +48,17 @@ export class GameSetupComponent implements OnChanges {
     if (changes['config'].currentValue) {
       const gc: GameSetupConfig = changes['config'].currentValue;
       if (!gc.gameType) {
+        console.log('setting physical')
         gc.gameType = 'Physical';
       }
-      if(gc.player1 && gc.player2 && gc.gameType) {
+      if (gc.player1 && gc.player2 && gc.gameType) {
         this.gameTypeSelected = true;
       }
     }
+  }
+
+  get selectedGameType() {
+    return this.gameTypes.find(i => i.type === this.config.gameType);
   }
 
   buttonPress(buttonNumber: number) {
