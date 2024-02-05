@@ -19,6 +19,12 @@
                 lottie-player {
                     transition: transform .5s ease;
                     border-radius: 50%;
+                    height: 65px;
+                    width: 65px;
+                }
+                .description {
+                    transition: transform .5s ease;
+                    
                 }
                 &.selected {
                     // background: linear-gradient(360deg, rgba(3, 121, 3, 1) 0%, rgba(80, 212, 137, 1) 100%);
@@ -32,6 +38,9 @@
                         box-shadow: 0px 0px 24px 0px rgb(255 255 40);
                         z-index: 2;
                         border-radius: 50%;
+                    }
+                    .description {
+                        transform: scale(2) translateY(10px);
                     }
                 }
             }

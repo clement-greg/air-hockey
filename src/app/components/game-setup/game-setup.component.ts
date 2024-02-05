@@ -45,8 +45,14 @@ export class GameSetupComponent implements OnChanges {
   }
   ngOnChanges(changes: SimpleChanges): void {
 
-    if(changes['config'].currentValue) {
-      changes['config'].currentValue.gameType = 'Physical';
+    if (changes['config'].currentValue) {
+      const gc: GameSetupConfig = changes['config'].currentValue;
+      if (!gc.gameType) {
+        gc.gameType = 'Physical';
+      }
+      if(gc.player1 && gc.player2 && gc.gameType) {
+        this.gameTypeSelected = true;
+      }
     }
   }
 
@@ -80,7 +86,7 @@ export class GameSetupComponent implements OnChanges {
   }
 
   back() {
-    if(this.config.player1 && this.config.player2 && this.gameTypeSelected) {
+    if (this.config.player1 && this.config.player2 && this.gameTypeSelected) {
       this.gameTypeSelected = false;
       return;
     }
