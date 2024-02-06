@@ -1,32 +1,43 @@
-<div class="white-box" style="min-height: 550px;">
+<div class="blur-box" style="min-height: 550px;">
 
     <div class="selected-players">
         <div>
-
+            <div class="top-text" *ngIf="!config.player1" [class.current-text]="!config.player1">Player 1</div>
+            <div class="top-text" *ngIf="config.player1" [class.current-text]="!config.player1">
+                {{config.player1.avatar.name}}</div>
             <img class="game-avatar" [class.current]="!config.player1" *ngIf="!config.player1"
-                src="../../assets/images/question-mark.jpg">
-            <img class="game-avatar" *ngIf="config.player1" src="../../assets/images/{{config.player1.avatar}}.jpg">
-            <br>
-            Player 1
+                src="../../assets/images/unknown-player.jpg">
+            <img class="game-avatar" *ngIf="config.player1"
+                src="../../assets/images/{{config.player1.avatar.baseUrl}}.jpg">
+
+
         </div>
         <div>
+            <div class="top-text" *ngIf="!config.player2" [class.current-text]="!config.player2 && config.player1">
+                Player 2</div>
+            <div class="top-text" *ngIf="config.player2" [class.current-text]="!config.player2 && config.player1"
+                style="font-size: 16px;">{{config.player2.avatar.name}}</div>
             <img class="game-avatar" [class.current]="!config.player2 && config.player1" *ngIf="!config.player2"
-                src="../../assets/images/question-mark.jpg">
-            <img class="game-avatar" *ngIf="config.player2" src="../../assets/images/{{config.player2.avatar}}.jpg">
-            <br>
-            Player 2
+                src="../../assets/images/unknown-player.jpg">
+            <img class="game-avatar" *ngIf="config.player2"
+                src="../../assets/images/{{config.player2.avatar.baseUrl}}.jpg">
+
         </div>
         <div *ngIf="selectedGameType && gameTypeSelected">
+
+            <div>{{selectedGameType.type}} </div>
+
             <lottie-player style="height: 132px;" [src]="selectedGameType.lottieUrl" background="transparent" speed="1"
                 loop autoplay>
             </lottie-player>
-            <br>
-            {{selectedGameType.type}}
+
         </div>
         <div *ngIf="!gameTypeSelected">
-            <img class="game-avatar" [class.current]="config.player2 && config.player1" 
-            src="../../assets/images/question-mark.jpg"><br>
-            Game Type
+            <div class="top-text" [class.current-text]="config.player2 && config.player1">Game Type</div>
+
+            <img class="game-avatar" [class.current]="config.player2 && config.player1"
+                src="../../assets/images/game-type-icon.jpg">
+
         </div>
     </div>
     <div class="avatar-selector" *ngIf="!config.player1 || !config.player2">
@@ -34,10 +45,18 @@
             <ul>
                 <li *ngFor="let playerType of playerTypes" [class.selected]="selectedItem === playerType">
 
-                    <img src="../../assets/images/{{playerType}}.jpg">
+                    <img src="../../assets/images/{{playerType.baseUrl}}.jpg">
                 </li>
             </ul>
         </div>
+    </div>
+    <div style="padding: 0;margin-top: -40px;font-size: 24px;"
+        *ngIf="!config.player1 && !config.player2 && selectedItem" class="fade-in-up center">
+        {{selectedItem.name}}
+    </div>
+    <div style="padding: 0;margin-top: -40px;font-size: 24px;" *ngIf="config.player1 && !config.player2 && selectedItem"
+        class="fade-in-up center">
+        {{selectedItem.name}}
     </div>
     <div class="avatar-selector" *ngIf="config.player1 && config.player2 && !gameTypeSelected"
         style="text-align: center;">
@@ -56,6 +75,8 @@
         <div class="fade-in-up center" style="padding: 0;margin-top: -40px;font-size: 24px;" *ngIf="selectedGameType">
             {{selectedGameType.description}}
         </div>
+
+
     </div>
 
     <div *ngIf="config.player1 && config.player2 && gameTypeSelected" style="text-align: center;">

@@ -28,6 +28,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     text-shadow: 4px 4px 14px rgba(0,0,0,0.6);
     color: rgba(255,255,255,.8);
     font-family: "sporty-pro", sans-serif !important;
+    line-height: 80px;
 }
 
 mat-form-field {
@@ -72,7 +73,7 @@ h3 {
     text-shadow: 1px 1px 1px #333;
 }
 
-@keyframes white-box-enter {
+@keyframes blur-box-enter {
     from {
         transform: translateY(-200px) scale(.5);
     }
@@ -80,7 +81,7 @@ h3 {
         transform: translateY(0) scale(1);
     }
 }
-.white-box {
+.blur-box {
     width: 100%;
     max-width: 350px;
     display: table;
@@ -88,8 +89,8 @@ h3 {
     box-shadow: 1px 1px 24px 1px #0000001a;
     border-radius: 17px;
     padding: 30px;
-    backdrop-filter: blur(10px);
-    animation: white-box-enter .5s ease;
+    backdrop-filter: blur(20px);
+    animation: blur-box-enter .5s ease;
 }
 
 .game-avatar {

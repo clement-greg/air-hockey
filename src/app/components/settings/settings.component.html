@@ -3,7 +3,7 @@
     <mat-label>Background Song URLs</mat-label>
     <textarea rows="5" matInput [(ngModel)]="settings.songUrls"></textarea>
 </mat-form-field> -->
-<div style="min-width: 900px;">
+<div style="width: 800px;height: 600px;">
     <h3 style="margin-top: -35px">GameSettings</h3>
     <mat-tab-group>
         <mat-tab label="General">
@@ -72,7 +72,7 @@
             </div>
         </form>
             <div class="url-container">
-                <div *ngFor="let url of settings.gameMusicUrls">
+                <div *ngFor="let url of settings.gameMusicUrls" style="font-size: 16px;">
                     <div>
                         {{url}}
                     </div>

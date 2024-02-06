@@ -10,11 +10,13 @@
         </div>
         <div class="flex-container">
             <div class="center player-score">
-                <img class="game-avatar" src="../../assets/images/{{game.config.player1.avatar}}.jpg">
+                {{game.config.player1.avatar.name}}<br>
+                <img class="game-avatar" src="../../assets/images/{{game.config.player1.avatar.baseUrl}}.jpg">
                 <h1>{{game.player1Score}}</h1>
             </div>
             <div class="center player-score">
-                <img class="game-avatar" src="../../assets/images/{{game.config.player2.avatar}}.jpg">
+                {{game.config.player2.avatar.name}}<br>
+                <img class="game-avatar" src="../../assets/images/{{game.config.player2.avatar.baseUrl}}.jpg">
                 <h1>{{game.player2Score}}</h1>
             </div>
         </div>
@@ -27,13 +29,13 @@
 </div>
 
 <div class="game-setup" *ngIf="game.winner">
-    <div class="white-box">
+    <div class="blur-box">
         <app-display-winner [winner]="game.winner"></app-display-winner>
     </div>
 </div>
 
-<div class="game-setup" *ngIf="game.settingsVisible">
-    <div class="white-box">
+<div class="game-setup" style="z-index: 200;" *ngIf="game.settingsVisible">
+    <div class="blur-box">
         <div class="flex-container">
             <div></div>
             <div class="no-grow">

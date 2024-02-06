@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { Player } from '../../models/player';
 import { GameSetupConfig } from '../../models/game-setup-config';
 import { GameType } from '../../models/game-type';
-import { getPlayerTypes } from '../../services/utilities';
 import { JoystickState } from '../../services/joystick-state';
+import { PlayerAvatar } from '../../models/player-avatar';
 
 
 
@@ -17,7 +17,7 @@ import { JoystickState } from '../../services/joystick-state';
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class GameSetupComponent implements OnChanges {
-  selectedItem: string;
+  selectedItem: PlayerAvatar;
 
   @Input() config: GameSetupConfig = new GameSetupConfig();
   @Output() configChange: EventEmitter<GameSetupConfig> = new EventEmitter();
@@ -121,7 +121,8 @@ export class GameSetupComponent implements OnChanges {
       index--;
     }
 
-    this.selectedItem = this.playerTypes[index];
+    delete this.selectedItem;
+    setTimeout(()=> this.selectedItem = this.playerTypes[index]);
   }
 
   selectAvatar() {
@@ -159,13 +160,14 @@ export class GameSetupComponent implements OnChanges {
       index++;
     }
 
-    this.selectedItem = this.playerTypes[index];
+    delete this.selectedItem;
+    setTimeout(()=> this.selectedItem = this.playerTypes[index]);
   }
 
-  private _playerTypes: string[] = [];
+  private _playerTypes: PlayerAvatar[] = [];
   get playerTypes() {
     if (this._playerTypes.length === 0) {
-      this._playerTypes = getPlayerTypes();
+      this._playerTypes = PlayerAvatar.getAll();
     }
 
     return this._playerTypes;

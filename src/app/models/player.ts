@@ -1,5 +1,7 @@
+import { PlayerAvatar } from "./player-avatar";
+
 export class Player {
-    avatar: string;
+    avatar: PlayerAvatar;
 
     constructor(playerNumber: number) { }
 }
