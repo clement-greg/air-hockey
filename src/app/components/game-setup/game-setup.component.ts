@@ -1,9 +1,10 @@
 import { CUSTOM_ELEMENTS_SCHEMA, Component, EventEmitter, HostListener, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { JoystickState, Player } from '../../models/player';
+import { Player } from '../../models/player';
 import { GameSetupConfig } from '../../models/game-setup-config';
 import { GameType } from '../../models/game-type';
 import { getPlayerTypes } from '../../services/utilities';
+import { JoystickState } from '../../services/joystick-state';
 
 
 

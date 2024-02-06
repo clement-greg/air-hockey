@@ -11,7 +11,7 @@ import { PubSubService } from '../../services/pub-sub.service';
 import { Subscription } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { PongComponent } from '../pong/pong.component';
-import { JoystickState } from '../../models/player';
+import { JoystickState } from '../../services/joystick-state';
 
 @Component({
   selector: 'app-home',

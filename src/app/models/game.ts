@@ -63,7 +63,6 @@ export class Game {
     }
 
     private getRandomBackgroundMusicUrl() {
-
         if (!GameSettings.Instance.gameMusicUrls) {
             GameSettings.Instance.gameMusicUrls = [this.gameMenuMusicUrl];
         }
@@ -177,10 +176,8 @@ export class Game {
         this.config.player1 = defaultPlayer1;
         this.config.player2 = defaultPlayer2;
         this.config.gameType = lastType;
-
-
         this.gameSetup = true;
-        playVideo('bg-video')
+        playVideo('bg-video');
 
 
         const src = this.getRandomBackgroundMusicUrl();
@@ -189,6 +186,3 @@ export class Game {
         this.introMode = false;
     }
 }
-
-
-

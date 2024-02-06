@@ -1,7 +1,7 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { PubSubService } from '../../services/pub-sub.service';
-import { JoystickState } from '../../models/player';
 import { GameSettings } from '../../models/settings';
+import { JoystickState } from '../../services/joystick-state';
 declare var Matter: any;
 
 

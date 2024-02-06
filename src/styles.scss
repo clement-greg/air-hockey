@@ -1,5 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
 
+:root {
+    --mdc-outlined-text-field-outline-color: #fff;
+    --mat-tab-header-active-hover-label-text-color:#fff;
+    --mat-tab-header-inactive-hover-label-text-color: #fff !important;
+
+}
+
+
+.mdc-tab__text-label {
+    color: #fff !important;
+}
 
 
 html, body { height: 100%; color: #fff}
@@ -28,6 +39,13 @@ h3 {
     text-shadow: 4px 4px 14px rgba(0,0,0,0.6);
     color: rgba(255,255,255,.8);
     font-family: "sporty-pro", sans-serif !important;
+}
+
+/* Change the border color */
+.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__leading,
+.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__notch,
+.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__trailing {
+  border-color: var(#fff) !important;
 }
 
 .flex-container {
