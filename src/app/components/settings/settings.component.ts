@@ -23,10 +23,7 @@ export class SettingsComponent {
   settings: GameSettings = GameSettings.Instance;
   newMusicUrl: string;
 
-  constructor(private pubSub: PubSubService) {
-
-
-  }
+  constructor(private pubSub: PubSubService) {  }
 
   swallowKeyUp(keyEvent: KeyboardEvent) {
     keyEvent.stopPropagation();
@@ -50,7 +47,6 @@ export class SettingsComponent {
   }
 
   savePlayBackgroundMusic(value: boolean) {
-
     if (!value) {
       (document.getElementById('bg-music') as any).pause();
     } else {
@@ -81,7 +77,6 @@ export class SettingsComponent {
         type: 'SETTINGS-CHANGED',
         messageBody: this.settings
       });
-
     });
   }
 }

@@ -1,13 +1,11 @@
 import { CUSTOM_ELEMENTS_SCHEMA, Component, EventEmitter, HostListener, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { getPlayerTypes } from '../../models/game';
 import { CommonModule } from '@angular/common';
 import { JoystickState, Player } from '../../models/player';
 import { GameSetupConfig } from '../../models/game-setup-config';
+import { GameType } from '../../models/game-type';
+import { getPlayerTypes } from '../../services/utilities';
 
-class GameType {
-  type: 'Virtual' | 'Physical' | 'Both';
-  lottieUrl: string;
-}
+
 
 @Component({
   selector: 'app-game-setup',
@@ -26,9 +24,9 @@ export class GameSetupComponent implements OnChanges {
   private joystick2 = new JoystickState(1);
   gameTypeSelected = false;
   gameTypes: GameType[] = [
-    { type: 'Virtual', lottieUrl: 'https://lottie.host/2624709a-b10c-43e1-af2a-623d1434c3b3/HhWUwa1d3c.json' },
-    { type: 'Physical', lottieUrl: 'https://lottie.host/063f9150-34fc-4bdc-92df-16318a0f3a79/xG6AAyhFbC.json' },
-    { type: 'Both', lottieUrl: 'https://lottie.host/a7044b1d-7b7c-4dbe-8c08-f8579798acd4/pnWDVXLTWJ.json' }
+    { type: 'Virtual', lottieUrl: 'https://lottie.host/2624709a-b10c-43e1-af2a-623d1434c3b3/HhWUwa1d3c.json', description: 'Play pong using the joystick' },
+    { type: 'Physical', lottieUrl: 'https://lottie.host/063f9150-34fc-4bdc-92df-16318a0f3a79/xG6AAyhFbC.json', description: 'Play air hockey on the real table' },
+    { type: 'Both', lottieUrl: 'https://lottie.host/a7044b1d-7b7c-4dbe-8c08-f8579798acd4/pnWDVXLTWJ.json', description: 'Both pong and the real table simultaneously' }
   ];
 
   constructor() {
@@ -114,7 +112,11 @@ export class GameSetupComponent implements OnChanges {
       if (index < 0) {
         index = this.gameTypes.length - 1;
       }
-      this.config.gameType = this.gameTypes[index].type;
+      delete this.config.gameType;
+      setTimeout(() => {
+        this.config.gameType = this.gameTypes[index].type;
+        
+      });
       return;
     }
 
@@ -149,7 +151,10 @@ export class GameSetupComponent implements OnChanges {
       if (index >= this.gameTypes.length) {
         index = 0;
       }
-      this.config.gameType = this.gameTypes[index].type;
+      delete this.config.gameType;
+      setTimeout(()=> {
+        this.config.gameType = this.gameTypes[index].type;
+      });
       return;
     }
 

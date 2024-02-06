@@ -17,12 +17,16 @@
             Player 2
         </div>
         <div *ngIf="selectedGameType && gameTypeSelected">
-            <lottie-player style="height: 132px;"
-            [src]="selectedGameType.lottieUrl" background="transparent"
-            speed="1" loop autoplay>
-        </lottie-player>
-        <br>
-        {{selectedGameType.type}}
+            <lottie-player style="height: 132px;" [src]="selectedGameType.lottieUrl" background="transparent" speed="1"
+                loop autoplay>
+            </lottie-player>
+            <br>
+            {{selectedGameType.type}}
+        </div>
+        <div *ngIf="!gameTypeSelected">
+            <img class="game-avatar" [class.current]="config.player2 && config.player1" 
+            src="../../assets/images/question-mark.jpg"><br>
+            Game Type
         </div>
     </div>
     <div class="avatar-selector" *ngIf="!config.player1 || !config.player2">
@@ -40,13 +44,17 @@
         <div>
             <ul>
                 <li *ngFor="let gameType of gameTypes" [class.selected]="config.gameType ===  gameType.type ">
+
+                    <div class="description">
+                        {{gameType.type}}</div><br>
                     <lottie-player style="height: 65px;" [src]="gameType.lottieUrl" background="transparent" speed="1"
                         loop autoplay>
-                    </lottie-player><br>
-                    <div class="description">
-                    {{gameType.type}}</div>
+                    </lottie-player>
                 </li>
             </ul>
+        </div>
+        <div class="fade-in-up center" style="padding: 0;margin-top: -40px;" *ngIf="selectedGameType">
+            {{selectedGameType.description}}
         </div>
     </div>
 

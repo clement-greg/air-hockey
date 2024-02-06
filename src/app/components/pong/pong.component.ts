@@ -25,7 +25,7 @@ export class PongComponent implements OnInit, OnDestroy {
   BALL_SIZE = 60;
   paddle1: any;
   paddle2: any;
-  in_goal = false;
+  inGoal = false;
   BALL_START_POINT_X: number;
   BALL_START_POINT_Y: number;
   engine: any;
@@ -38,13 +38,9 @@ export class PongComponent implements OnInit, OnDestroy {
   joystick1 = new JoystickState(0);
   joystick2 = new JoystickState(1);
 
-  constructor(private pubSub: PubSubService) {
-
-  }
+  constructor(private pubSub: PubSubService) { }
 
   ngOnInit(): void {
-
-
     this.initialize();
   }
 
@@ -157,7 +153,6 @@ export class PongComponent implements OnInit, OnDestroy {
       case 'ArrowLeft':
         this.leftArrowKeyLeft = true;
         break;
-
     }
   }
 
@@ -262,7 +257,7 @@ export class PongComponent implements OnInit, OnDestroy {
       this.puckDirection = 'right';
     }
 
-    if (puck.position.x > this.GAME_WIDTH - this.BORDER && !this.in_goal) {
+    if (puck.position.x > this.GAME_WIDTH - this.BORDER && !this.inGoal) {
       this.resetPuck(() => {
         this.score.playerOne++;
         this.pubSub.publish({
@@ -270,7 +265,7 @@ export class PongComponent implements OnInit, OnDestroy {
           messageBody: null,
         });
       });
-    } else if (puck.position.x < this.BORDER && !this.in_goal) {
+    } else if (puck.position.x < this.BORDER && !this.inGoal) {
       this.resetPuck(() => {
         this.score.playerTwo++;
         this.pubSub.publish({
@@ -283,12 +278,10 @@ export class PongComponent implements OnInit, OnDestroy {
     if ((puck.position.y > this.GAME_HEIGHT + 200) || (puck.position.y < -200)) {
       this.resetPuck((cb: any) => { console.log("pooof matter.js" + puck.position.y + " WTF " + this.GAME_HEIGHT + 200) });
     }
-
-    //this.paddleone_ai(this.paddle2, 1);
   }
 
   resetPuck(cb: any) {
-    this.in_goal = true;
+    this.inGoal = true;
     this.puck.visible = false;
     setTimeout(() => {
       Matter.Body.setPosition(this.paddle1, {
@@ -316,10 +309,8 @@ export class PongComponent implements OnInit, OnDestroy {
           y: ((yRand > 0.5) ? 1 : -1) * Math.floor((yRand * launchFactor) + launchFactor)
         });
       }, 500);
-      this.in_goal = false;
+      this.inGoal = false;
       cb();
     }, 500);
-
   }
-
 }

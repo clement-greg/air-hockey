@@ -36,7 +36,6 @@ export class HomeComponent implements OnDestroy {
       const gameMessage: GameMessage = JSON.parse(event.data);
 
       zone.run(() => {
-
         // Prevent the same event from processing twice
         const miliseconds = new Date().getTime() - this.lastMessageReceived.getTime();
         if (miliseconds > 2000) {
@@ -121,10 +120,6 @@ export class HomeComponent implements OnDestroy {
 
   processGameMessage(message: GameMessage) {
     this.game.processGameMessage(message);
-    // if (message.messageType === 'GAME_STARTED') {
-    //   console.log(message);
-    //   this.game.startGame();
-    // }
   }
 
   configChange() {
