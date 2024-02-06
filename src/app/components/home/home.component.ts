@@ -12,11 +12,12 @@ import { Subscription } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { PongComponent } from '../pong/pong.component';
 import { JoystickState } from '../../services/joystick-state';
+import { CountDownComponent } from '../../count-down/count-down.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [MatButtonModule, GameSetupComponent, MatIconModule, CommonModule, DisplayWinnerComponent, DisplayTieComponent, SettingsComponent, PongComponent],
+  imports: [MatButtonModule, GameSetupComponent, CountDownComponent, MatIconModule, CommonModule, DisplayWinnerComponent, DisplayTieComponent, SettingsComponent, PongComponent],
   templateUrl: './home.component.html',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   styleUrl: './home.component.scss'
@@ -69,6 +70,13 @@ export class HomeComponent implements OnDestroy {
     if (index === 0) {
       this.game?.handleSpace();
     }
+  }
+
+  get isFlashing() {
+    if(typeof this.game.secondsRemaining != 'number'){
+      return false;
+    }
+    return this.game.secondsRemaining <=10 && this.game.secondsRemaining >0;
   }
 
   gamepads: any = {};

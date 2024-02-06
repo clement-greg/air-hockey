@@ -6,7 +6,7 @@
 
         <div class="center">
             Time Remaining
-            <h1>{{game.secondsRemaining}}</h1>
+            <h1 [class.flashing]="isFlashing">{{game.secondsRemaining}}</h1>
         </div>
         <div class="flex-container">
             <div class="center player-score">
@@ -71,3 +71,5 @@
     <audio src="../../assets/music/warning.mp3" id="warning"></audio>
     <audio src="../../assets/music/tie-game.mp3" id="tie-game"></audio>
 </div>
+
+<app-count-down *ngIf="game.countdown"></app-count-down>

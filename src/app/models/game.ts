@@ -12,6 +12,7 @@ export class Game {
     winner: Player;
     config: GameSetupConfig = new GameSetupConfig();
     introMode = true;
+    countdown = false;
     duration = 60;
     gameSetup = false;
     isTie = false;
@@ -25,14 +26,26 @@ export class Game {
         this.config.gameType = 'Physical';
     }
 
+    private doCountdown() {
+        return new Promise((resolve,reject)=> {
 
-    restart() {
+            this.countdown = true;
+            setTimeout(()=> {
+
+                this.countdown = false;
+                resolve(true);
+            }, 4000);
+        });
+    }
+
+    async restart() {
         this.duration = GameSettings.Instance.gameDuration;
 
-        this.startTime = new Date();
         this.player1Score = 0;
         this.player2Score = 0;
         this.warningPlayed = false;
+        await this.doCountdown();
+        this.startTime = new Date();
         this.running = true;
         if (window.parent) {
             if (this.config.gameType === 'Virtual') {
@@ -108,8 +121,11 @@ export class Game {
         }
         if (remaining < 0) {
             remaining = 0;
-            this.handleEndOfGame();
 
+        }
+        if(remaining === 0) {
+            this.handleEndOfGame();
+            return '-';
         }
 
         return remaining;
