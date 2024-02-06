@@ -43,9 +43,9 @@ export class Game {
 
         this.player1Score = 0;
         this.player2Score = 0;
-        this.warningPlayed = false;
         await this.doCountdown();
         this.startTime = new Date();
+        this.warningPlayed = false;
         this.running = true;
         if (window.parent) {
             if (this.config.gameType === 'Virtual') {
