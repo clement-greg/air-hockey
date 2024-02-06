@@ -1,4 +1,4 @@
-<div class="white-box" style="min-height: 500px;">
+<div class="white-box" style="min-height: 550px;">
 
     <div class="selected-players">
         <div>
@@ -45,15 +45,15 @@
             <ul>
                 <li *ngFor="let gameType of gameTypes" [class.selected]="config.gameType ===  gameType.type ">
 
-                    <div class="description">
-                        {{gameType.type}}</div><br>
+                    <!-- <div class="description">
+                        {{gameType.type}}</div><br> -->
                     <lottie-player style="height: 65px;" [src]="gameType.lottieUrl" background="transparent" speed="1"
                         loop autoplay>
                     </lottie-player>
                 </li>
             </ul>
         </div>
-        <div class="fade-in-up center" style="padding: 0;margin-top: -40px;" *ngIf="selectedGameType">
+        <div class="fade-in-up center" style="padding: 0;margin-top: -40px;font-size: 24px;" *ngIf="selectedGameType">
             {{selectedGameType.description}}
         </div>
     </div>

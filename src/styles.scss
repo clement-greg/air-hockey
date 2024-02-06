@@ -66,6 +66,11 @@ h3 {
 .mat-mdc-checkbox .mdc-form-field {
     color: #fff !important;
 }
+.mat-body, .mat-body-2, .mat-typography .mat-body, .mat-typography .mat-body-2, .mat-typography {
+    font-size: 28px;
+    line-height: 32px;
+    text-shadow: 1px 1px 1px #333;
+}
 
 @keyframes white-box-enter {
     from {
