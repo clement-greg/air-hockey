@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { PongComponent } from '../pong/pong.component';
 import { JoystickState } from '../../services/joystick-state';
-import { CountDownComponent } from '../../count-down/count-down.component';
+import { CountDownComponent } from '../count-down/count-down.component';
 
 @Component({
   selector: 'app-home',
@@ -73,10 +73,10 @@ export class HomeComponent implements OnDestroy {
   }
 
   get isFlashing() {
-    if(typeof this.game.secondsRemaining != 'number'){
+    if (typeof this.game.secondsRemaining != 'number') {
       return false;
     }
-    return this.game.secondsRemaining <=10 && this.game.secondsRemaining >0;
+    return this.game.secondsRemaining <= 10 && this.game.secondsRemaining > 0;
   }
 
   gamepads: any = {};
@@ -97,7 +97,7 @@ export class HomeComponent implements OnDestroy {
   keyPress(evt: KeyboardEvent) {
     switch (evt.key) {
       case ' ':
-          this.game?.handleSpace();
+        this.game?.handleSpace();
 
         break;
       case 'l':
@@ -113,7 +113,9 @@ export class HomeComponent implements OnDestroy {
         });
         break;
       case 's':
-        this.game.settingsVisible = true;
+        if (!this.game.running) {
+          this.game.settingsVisible = true;
+        }
         break;
       case 'b':
         this.game.settingsVisible = false;

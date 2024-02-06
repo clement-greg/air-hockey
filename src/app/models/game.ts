@@ -115,7 +115,7 @@ export class Game {
             return '-';
         }
         let remaining = getSecondsBetweenDates(new Date(), this.endTime);
-        if (remaining < 10 && !this.warningPlayed) {
+        if (remaining <= 10 && !this.warningPlayed) {
             this.warningPlayed = true;
             playMusic('warning', 'SOUND-EFFECT');
         }

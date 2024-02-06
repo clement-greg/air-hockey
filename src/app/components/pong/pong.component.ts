@@ -22,12 +22,12 @@ export class PongComponent implements OnInit, OnDestroy {
     playerTwo: 0
   };
   BORDER = 30;
-  BALL_SIZE = 60;
+  PUCK_SIZE = 60;
   paddle1: any;
   paddle2: any;
   inGoal = false;
-  BALL_START_POINT_X: number;
-  BALL_START_POINT_Y: number;
+  PUCK_START_POINT_X: number;
+  PUCK_START_POINT_Y: number;
   engine: any;
   puckDirection: 'left' | 'right' = 'right';
   puckRotation = 0;
@@ -37,6 +37,7 @@ export class PongComponent implements OnInit, OnDestroy {
   renderAnimationFrame: number;
   joystick1 = new JoystickState(0);
   joystick2 = new JoystickState(1);
+  pressedKeys: any = {};
 
   constructor(private pubSub: PubSubService) { }
 
@@ -57,19 +58,19 @@ export class PongComponent implements OnInit, OnDestroy {
       World = Matter.World,
       Bodies = Matter.Bodies;
     this.engine = Engine.create();
-    this.BALL_START_POINT_X = this.GAME_WIDTH / 2 - this.BALL_SIZE;
-    this.BALL_START_POINT_Y = this.GAME_HEIGHT / 2;
+    this.PUCK_START_POINT_X = this.GAME_WIDTH / 2 - this.PUCK_SIZE;
+    this.PUCK_START_POINT_Y = this.GAME_HEIGHT / 2;
 
     this.puck = Matter.Bodies.circle(
-      this.BALL_START_POINT_X,
-      this.BALL_START_POINT_Y,
-      this.BALL_SIZE, {
+      this.PUCK_START_POINT_X,
+      this.PUCK_START_POINT_Y,
+      this.PUCK_SIZE, {
       inertia: 0,
       friction: 0,
       frictionStatic: 0,
       frictionAir: 0,
       restitution: 1.05,
-      label: "ball"
+      label: 'puck'
     }
     );
     this.puck.velocity.x = 1;
@@ -127,8 +128,8 @@ export class PongComponent implements OnInit, OnDestroy {
     paddle2.style.left = `${this.paddle2.position.x - 82}px`;
 
     const puck: HTMLElement = document.querySelector('.puck');
-    puck.style.top = `${this.puck.position.y - (this.BALL_SIZE)}px`;
-    puck.style.left = `${this.puck.position.x - (this.BALL_SIZE)}px`;
+    puck.style.top = `${this.puck.position.y - (this.PUCK_SIZE)}px`;
+    puck.style.left = `${this.puck.position.x - (this.PUCK_SIZE)}px`;
     puck.style.transform = `rotate(${this.puck.angle}rad)`;
   }
 
@@ -139,39 +140,14 @@ export class PongComponent implements OnInit, OnDestroy {
 
   @HostListener('document:keydown', ['$event'])
   keyDown(evt: KeyboardEvent) {
-    switch (evt.key) {
-      case 'ArrowUp':
-        this.leftArrowKeyUp = true;
-        break;
-      case 'ArrowDown':
-        //this.player1Down();
-        this.leftArrowKeyDown = true;
-        break;
-      case 'ArrowRight':
-        this.leftArrowKeyRight = true;
-        break;
-      case 'ArrowLeft':
-        this.leftArrowKeyLeft = true;
-        break;
-    }
+    this.pressedKeys[evt.key] = true;
+    evt.stopPropagation();
   }
 
   @HostListener('document:keyup', ['$event'])
   keyUp(evt: KeyboardEvent) {
-    switch (evt.key) {
-      case 'ArrowUp':
-        this.leftArrowKeyUp = false;
-        break;
-      case 'ArrowDown':
-        this.leftArrowKeyDown = false;
-        break;
-      case 'ArrowRight':
-        this.leftArrowKeyRight = false;
-        break;
-      case 'ArrowLeft':
-        this.leftArrowKeyLeft = false;
-        break;
-    }
+    delete this.pressedKeys[evt.key];
+    evt.stopPropagation();
   }
 
   rightArrowKeyDown = false;
@@ -182,15 +158,15 @@ export class PongComponent implements OnInit, OnDestroy {
   update() {
 
     Matter.Engine.update(this.engine);
-    this.leftArrowKeyDown = this.joystick1.isDown;
-    this.leftArrowKeyLeft = this.joystick1.isLeft;
-    this.leftArrowKeyRight = this.joystick1.isRight;
-    this.leftArrowKeyUp = this.joystick1.isUp;
+    this.leftArrowKeyDown = this.joystick1.isDown || this.pressedKeys['s'];
+    this.leftArrowKeyLeft = this.joystick1.isLeft || this.pressedKeys['a'];
+    this.leftArrowKeyRight = this.joystick1.isRight || this.pressedKeys['d'];
+    this.leftArrowKeyUp = this.joystick1.isUp || this.pressedKeys['w'];
 
-    this.rightArrowKeyDown = this.joystick2.isDown;
-    this.rightArrowKeyLeft = this.joystick2.isLeft;
-    this.rightArrowKeyRight = this.joystick2.isRight;
-    this.rightArrowKeyUp = this.joystick2.isUp;
+    this.rightArrowKeyDown = this.joystick2.isDown || this.pressedKeys['ArrowDown'];
+    this.rightArrowKeyLeft = this.joystick2.isLeft || this.pressedKeys['ArrowLeft'];
+    this.rightArrowKeyRight = this.joystick2.isRight || this.pressedKeys['ArrowRight'];
+    this.rightArrowKeyUp = this.joystick2.isUp || this.pressedKeys['ArrowUp'];
 
     if (this.leftArrowKeyDown) {
       Matter.Body.setPosition(this.paddle1, { x: this.paddle1.position.x, y: this.paddle1.position.y + 20 });
@@ -298,7 +274,7 @@ export class PongComponent implements OnInit, OnDestroy {
       });
       this.puck.force = { x: 0, y: 0 };
       this.puck.visible = true;
-      Matter.Body.setPosition(this.puck, { x: this.BALL_START_POINT_X, y: this.BALL_START_POINT_Y });
+      Matter.Body.setPosition(this.puck, { x: this.PUCK_START_POINT_X, y: this.PUCK_START_POINT_Y });
       setTimeout(() => {
         const xRand = Math.random();
         const yRand = Math.random();

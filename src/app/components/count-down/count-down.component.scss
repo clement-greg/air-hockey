@@ -4,23 +4,24 @@ div.container {
     height: 100vh;
     top: 0;
     left: 0;
+
     div:first-child {
         display: grid;
         align-items: center;
         height: 100%;
         text-align: center;
-
     }
 }
 
 @keyframes h1-fade {
     from {
         transform: scale(30);
-        opacity: .2;
+        opacity: 0;
     }
+
     to {
         transform: scale(1);
-        opacity: 1;
+        opacity: .5;
     }
 }
 

@@ -32,22 +32,18 @@ export class GameSetupComponent implements OnChanges {
 
   constructor() {
     this.selectedItem = this.playerTypes[11];
-
-
     this.joystick1.onLeftJoyStick = this.selectLeft.bind(this);
     this.joystick1.onRightJoyStick = this.selectRight.bind(this);
     this.joystick1.onButtonPress = this.buttonPress.bind(this);
-
     this.joystick2.onLeftJoyStick = this.selectLeft.bind(this);
     this.joystick2.onRightJoyStick = this.selectRight.bind(this);
     this.joystick2.onButtonPress = this.buttonPress.bind(this);
   }
-  ngOnChanges(changes: SimpleChanges): void {
 
+  ngOnChanges(changes: SimpleChanges): void {
     if (changes['config'].currentValue) {
       const gc: GameSetupConfig = changes['config'].currentValue;
       if (!gc.gameType) {
-        console.log('setting physical')
         gc.gameType = 'Physical';
       }
       if (gc.player1 && gc.player2 && gc.gameType) {
@@ -99,7 +95,6 @@ export class GameSetupComponent implements OnChanges {
       return;
     }
     if (this.config.player1) {
-
       delete this.config.player1;
       return;
     }
@@ -170,9 +165,7 @@ export class GameSetupComponent implements OnChanges {
   private _playerTypes: string[] = [];
   get playerTypes() {
     if (this._playerTypes.length === 0) {
-
       this._playerTypes = getPlayerTypes();
-
     }
 
     return this._playerTypes;
