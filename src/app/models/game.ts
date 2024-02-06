@@ -137,6 +137,7 @@ export class Game {
         else if (this.player1Score === this.player2Score) {
             this.isTie = true;
             this.running = false;
+            playMusic('tie-game', 'SOUND-EFFECT');
         }
 
         this.running = false;
@@ -150,7 +151,11 @@ export class Game {
         this.playPong = false;
 
         // Wait 30 seconds and then show the intro screen
+        clearTimeout(this.eogTimeout);
         this.eogTimeout = setTimeout(() => {
+            // if(this.running) {
+            //     return;
+            // }
             delete this.winner;
             this.isTie = false;
             this.introMode = true;
