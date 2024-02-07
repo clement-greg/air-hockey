@@ -51,7 +51,7 @@ export function fadeOutAudio(id: string) {
                 clearInterval(fadeInterval);
                 resolve(true);
             }
-        }, 200);
+        }, 50);
     });
 
 }

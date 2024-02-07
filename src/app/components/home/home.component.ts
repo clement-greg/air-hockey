@@ -17,7 +17,7 @@ import { DisplayGameResultComponent } from '../display-game-result/display-game-
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [MatButtonModule, GameSetupComponent, CountDownComponent, MatIconModule, DisplayGameResultComponent, CommonModule,  SettingsComponent, PongComponent],
+  imports: [MatButtonModule, GameSetupComponent, CountDownComponent, MatIconModule, DisplayGameResultComponent, CommonModule, SettingsComponent, PongComponent],
   templateUrl: './home.component.html',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   styleUrl: './home.component.scss'
@@ -29,8 +29,9 @@ export class HomeComponent implements OnDestroy {
   private subscription: Subscription;
   joystick1State = new JoystickState(0);
   joystick2State = new JoystickState(1);
+  private messageDates: any = {};
 
-  private lastMessageReceived: Date = new Date();
+  //private lastMessageReceived: Date = new Date();
 
   constructor(zone: NgZone,
     pubSub: PubSubService,
@@ -42,10 +43,14 @@ export class HomeComponent implements OnDestroy {
 
       zone.run(() => {
         // Prevent the same event from processing twice
-        const miliseconds = new Date().getTime() - this.lastMessageReceived.getTime();
+        let lastMessageReceived: Date = this.messageDates[gameMessage.messageType];
+        if (!lastMessageReceived) {
+          lastMessageReceived = new Date(2000, 1, 1);
+        }
+        const miliseconds = new Date().getTime() - lastMessageReceived.getTime();
         if (miliseconds > 2000) {
           this.processGameMessage(gameMessage);
-          this.lastMessageReceived = new Date();
+          this.messageDates[gameMessage.messageType] = new Date();
         }
       });
     });

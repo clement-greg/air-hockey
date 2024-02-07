@@ -8,22 +8,19 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatTabsModule } from '@angular/material/tabs';
+import {MatSelectModule} from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { LeaderBoardRepositoryService } from '../../services/leader-board-repository.service';
 import {
   MatSnackBar,
-  MatSnackBarAction,
-  MatSnackBarActions,
-  MatSnackBarLabel,
   MatSnackBarModule,
-  MatSnackBarRef,
 } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-settings',
   standalone: true,
-  imports: [MatCheckboxModule, CommonModule, FormsModule, MatIconModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatSliderModule, MatTabsModule, MatSnackBarModule],
+  imports: [MatCheckboxModule, CommonModule, MatSelectModule, FormsModule, MatIconModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatSliderModule, MatTabsModule, MatSnackBarModule],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.scss'
 })

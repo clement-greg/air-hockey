@@ -13,36 +13,7 @@
             </mat-form-field>
 
 
-            <mat-checkbox (ngModelChange)="savePlayBackgroundMusic($event)"
-                [(ngModel)]="settings.playBackgroundMusic">Play
-                Background Music</mat-checkbox>
 
-
-
-            <div>
-                <mat-checkbox (ngModelChange)="saveSettings()" [(ngModel)]="settings.playSoundFX">Play Sound
-                    Effects</mat-checkbox>
-            </div>
-
-            <div>
-                <div>Music Volume</div>
-                <mat-slider min="0" max="1" step=".05">
-                    <input matSliderThumb (ngModelChange)="saveMusicSettings($event)"
-                        [(ngModel)]="settings.musicVolume">
-                </mat-slider>
-
-
-            </div>
-
-            <div>
-                <div>Sound FX Volume</div>
-                <mat-slider min="0" max="1" step=".05">
-                    <input matSliderThumb (ngModelChange)="saveSoundFXSettings($event)"
-                        [(ngModel)]="settings.soundFxVolume">
-                </mat-slider>
-
-
-            </div>
 
             <mat-form-field appearance="outline" style="max-width: 250px;">
                 <mat-label>Puck Force</mat-label>
@@ -52,8 +23,9 @@
                 <mat-label>Puck Reset Force</mat-label>
                 <input matInput (ngModelChange)="saveSettings()" [(ngModel)]="settings.puckResetForce" type="number">
             </mat-form-field>
+
         </mat-tab>
-        <mat-tab label="Music">
+        <mat-tab label="Music Files">
 
             <form>
                 <div style="display: flex;margin-top: 20px;">
@@ -84,6 +56,56 @@
                     </div>
                 </div>
             </div>
+        </mat-tab>
+
+        <mat-tab label="Music Config">
+            <mat-checkbox (ngModelChange)="savePlayBackgroundMusic($event)"
+                [(ngModel)]="settings.playBackgroundMusic">Play
+                Background Music</mat-checkbox>
+
+
+
+            <div>
+                <mat-checkbox (ngModelChange)="saveSettings()" [(ngModel)]="settings.playSoundFX">Play Sound
+                    Effects</mat-checkbox>
+            </div>
+
+            <div>
+                <div>Music Volume</div>
+                <mat-slider min="0" max="1" step=".05">
+                    <input matSliderThumb (ngModelChange)="saveMusicSettings($event)"
+                        [(ngModel)]="settings.musicVolume">
+                </mat-slider>
+
+
+            </div>
+
+            <div>
+                <div>Sound FX Volume</div>
+                <mat-slider min="0" max="1" step=".05">
+                    <input matSliderThumb (ngModelChange)="saveSoundFXSettings($event)"
+                        [(ngModel)]="settings.soundFxVolume">
+                </mat-slider>
+
+
+            </div>
+            
+
+            <mat-form-field appearance="outline">
+                <mat-label>Intro Screen Music</mat-label>
+                <mat-select [(ngModel)]="settings.introScreenMusic" (ngModelChange)="saveSettings()">
+                    <mat-option *ngFor="let url of settings.gameMusicUrls" [value]="url">{{url}}</mat-option>
+                    <mat-option value="">None</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>End of Game Music</mat-label>
+                <mat-select [(ngModel)]="settings.gameDoneMusic" (ngModelChange)="saveSettings()">
+                    <mat-option *ngFor="let url of settings.gameMusicUrls" [value]="url">{{url}}</mat-option>
+                    <mat-option value="">None</mat-option>
+                </mat-select>
+            </mat-form-field>
         </mat-tab>
 
         <mat-tab label="Other">

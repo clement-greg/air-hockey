@@ -7,6 +7,8 @@ export class GameSettings {
     puckForce: number;
     puckResetForce: number;
     gameMusicUrls:string[];
+    introScreenMusic: string;
+    gameDoneMusic: string;
 
 
     save() {
