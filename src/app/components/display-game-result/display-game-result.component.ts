@@ -20,6 +20,9 @@ export class DisplayGameResultComponent {
   constructor(leaderboardRepository: LeaderBoardRepositoryService) {
 
     this.leaderBoard = leaderboardRepository.leaderBoard;
+    for(const item of this.leaderBoard) {
+      item.shown = false;
+    }
     setTimeout(()=> this.showLeaderboardItem(), 2000);
   }
 
