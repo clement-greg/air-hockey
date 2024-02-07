@@ -5,7 +5,7 @@ export class PlayerAvatar {
     static getAll(): PlayerAvatar[] {
         return [
             { baseUrl: 'mouse', name: 'Merton Cheezmuncher' },
-            { baseUrl: 'bear', name: 'Techno Bear' },
+            { baseUrl: 'bear', name: 'Fractal Bear' },
             { baseUrl: 'cat', name: 'Pretty Kitty' },
             { baseUrl: 'chicken', name: 'KFC' },
             { baseUrl: 'dog', name: 'Kojack' },
@@ -26,9 +26,9 @@ export class PlayerAvatar {
             { baseUrl: 'moose', name: 'Wally' },
             { baseUrl: 'eagle', name: 'Merica' },
             { baseUrl: 'rabbit', name: '4x Lucky' },
-            { baseUrl: 'witch', name: 'Sheri' },
+            { baseUrl: 'witch', name: 'Witchy Woman' },
             { baseUrl: 'tiger', name: 'Stripe' },
-            { baseUrl: 'troll', name: 'Really Sheri' },
+            { baseUrl: 'troll', name: 'Very Sheri' },
             { baseUrl: 'construction-worker', name: 'Bill The Builder' },
             { baseUrl: 'unicorn', name: 'Candy' },
             { baseUrl: 'werewolf', name: 'Alex' },

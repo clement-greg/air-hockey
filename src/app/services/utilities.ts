@@ -20,22 +20,22 @@ export function playMusic(elementId: string, type: 'BACKGROUND-MUSIC' | 'SOUND-E
 
     audioElement.currentTime = 0;
 
-    if(src) {
+    if (src) {
         audioElement.src = src;
     }
-    if(type === 'BACKGROUND-MUSIC' && GameSettings.Instance.playBackgroundMusic) {
+    if (type === 'BACKGROUND-MUSIC' && GameSettings.Instance.playBackgroundMusic) {
         audioElement.volume = GameSettings.Instance.musicVolume;
         audioElement.play();
     }
 
-    if(type === 'SOUND-EFFECT' && GameSettings.Instance.playSoundFX) {
+    if (type === 'SOUND-EFFECT' && GameSettings.Instance.playSoundFX) {
         audioElement.volume = GameSettings.Instance.soundFxVolume;
         audioElement.play();
     }
 }
 
-export function  fadeOutAudio(id: string) {
-    return new Promise((resolve, reject)=> {
+export function fadeOutAudio(id: string) {
+    return new Promise((resolve, reject) => {
         const audio: any = document.getElementById(id);
 
         const fadeInterval = setInterval(() => {
@@ -54,6 +54,27 @@ export function  fadeOutAudio(id: string) {
         }, 200);
     });
 
+}
+
+
+export function copyObject(source: any, typeCreator: () => any = null) {
+
+    let destination: any;
+    if (typeCreator) {
+        destination = typeCreator();
+    } else {
+        destination = {};
+    }
+
+    for (const property in source) {
+        if (source.hasOwnProperty(property)) {
+            try {
+                destination[property] = source[property];
+            } catch (e) { }
+        }
+    }
+
+    return destination;
 }
 
 export function pauseMusic(elementId: string) {
