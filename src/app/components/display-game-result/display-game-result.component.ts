@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { GameResult, LeaderBoardRepositoryService } from '../../services/leader-board-repository.service';
+import { LeaderBoardRepositoryService } from '../../services/leader-board-repository.service';
 import { LeaderBoard } from '../../models/leader-board';
+import { GameResult } from '../../models/game-result';
 
 
 @Component({

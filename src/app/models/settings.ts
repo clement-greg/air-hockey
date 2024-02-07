@@ -6,7 +6,7 @@ export class GameSettings {
     soundFxVolume: number;
     puckForce: number;
     puckResetForce: number;
-    gameMusicUrls:string[];
+    gameMusicUrls: string[];
     introScreenMusic: string;
     gameDoneMusic: string;
 
@@ -18,28 +18,28 @@ export class GameSettings {
 
     private static instance: GameSettings;
     static get Instance() {
-        if(!GameSettings.instance) {
+        if (!GameSettings.instance) {
             let instance = new GameSettings();
             const json = localStorage.getItem('settings');
-            if(json) {
+            if (json) {
                 const storedInstance = JSON.parse(json);
-                for(const key in storedInstance) {
+                for (const key in storedInstance) {
                     (instance as any)[key] = storedInstance[key];
                 }
             }
-            if(!instance.gameDuration || instance.gameDuration < 5) {
+            if (!instance.gameDuration || instance.gameDuration < 5) {
                 instance.gameDuration = 60;
             }
-            if(!instance.musicVolume ) {
+            if (!instance.musicVolume) {
                 instance.musicVolume = 0.5;
             }
-            if(!instance.soundFxVolume) {
+            if (!instance.soundFxVolume) {
                 instance.soundFxVolume = 0.5;
             }
-            if(!instance.puckForce) {
+            if (!instance.puckForce) {
                 instance.puckForce = .1;
             }
-            if(!instance.puckResetForce) {
+            if (!instance.puckResetForce) {
                 instance.puckResetForce = 3;
             }
 

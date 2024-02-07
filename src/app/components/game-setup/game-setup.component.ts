@@ -111,7 +111,7 @@ export class GameSetupComponent implements OnChanges {
       delete this.config.gameType;
       setTimeout(() => {
         this.config.gameType = this.gameTypes[index].type;
-        
+
       });
       return;
     }
@@ -122,22 +122,16 @@ export class GameSetupComponent implements OnChanges {
     }
 
     delete this.selectedItem;
-    setTimeout(()=> this.selectedItem = this.playerTypes[index]);
-  }
-
-  selectAvatar() {
-    if (!this.config.player1) {
-      this.config.player1 = new Player(1);
-      this.config.player1.avatar = this.selectedItem;
-    }
-    else if (!this.config.player2) {
-      this.config.player2 = new Player(2);
-      this.config.player2.avatar = this.selectedItem;
-    } else if (!this.gameTypeSelected) {
-      this.gameTypeSelected = true;
-    } else {
-      this.configChange.emit(this.config);
-    }
+    setTimeout(() => {
+      this.selectedItem = this.playerTypes[index];
+      if (this.isPlayerSelected(this.selectedItem)) {
+        if (this.playerTypes.indexOf(this.selectedItem) === 0) {
+          this.selectRight();
+        } else {
+          this.selectLeft();
+        }
+      }
+    });
   }
 
   selectRight() {
@@ -149,7 +143,7 @@ export class GameSetupComponent implements OnChanges {
         index = 0;
       }
       delete this.config.gameType;
-      setTimeout(()=> {
+      setTimeout(() => {
         this.config.gameType = this.gameTypes[index].type;
       });
       return;
@@ -161,9 +155,52 @@ export class GameSetupComponent implements OnChanges {
     }
 
     delete this.selectedItem;
-    setTimeout(()=> this.selectedItem = this.playerTypes[index]);
+    setTimeout(() => {
+      this.selectedItem = this.playerTypes[index];
+      if (this.isPlayerSelected(this.selectedItem)) {
+        const selectedIndex = this.playerTypes.indexOf(this.selectedItem);
+        if (selectedIndex === this.playerTypes.length - 1) {
+          this.selectLeft();
+        } else {
+          this.selectRight();
+        }
+      }
+    });
   }
 
+
+  selectAvatar() {
+    if (!this.config.player1) {
+      this.config.player1 = new Player(1);
+      this.config.player1.avatar = this.selectedItem;
+      const index = this.playerTypes.indexOf(this.selectedItem);
+      if (index < this.playerTypes.length - 1) {
+        this.selectRight();
+      } else {
+        this.selectLeft();
+      }
+    }
+    else if (!this.config.player2) {
+      if (this.config.player1.avatar.baseUrl === this.selectedItem.baseUrl) {
+        return;
+      }
+      this.config.player2 = new Player(2);
+      this.config.player2.avatar = this.selectedItem;
+
+    } else if (!this.gameTypeSelected) {
+      this.gameTypeSelected = true;
+    } else {
+      this.configChange.emit(this.config);
+    }
+  }
+
+  isPlayerSelected(playerType: PlayerAvatar) {
+    if (this.config.player1 && !this.config.player2) {
+      return this.config.player1.avatar.baseUrl === playerType.baseUrl;
+    }
+
+    return false;
+  }
   private _playerTypes: PlayerAvatar[] = [];
   get playerTypes() {
     if (this._playerTypes.length === 0) {

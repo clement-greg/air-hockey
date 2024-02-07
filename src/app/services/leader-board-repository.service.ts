@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { LeaderBoard } from '../models/leader-board';
 import { copyObject } from './utilities';
 import { PlayerAvatar } from '../models/player-avatar';
+import { GameResult } from '../models/game-result';
 
 @Injectable({
   providedIn: 'root'
@@ -10,8 +11,10 @@ export class LeaderBoardRepositoryService {
 
   private leaderboardItems: LeaderBoard[];
   private storageKey = 'leader-board';
+
   constructor() { }
 
+  // returns an array of leaderBoard items
   get leaderBoard(): LeaderBoard[] {
 
     if (!this.leaderboardItems) {
@@ -57,22 +60,26 @@ export class LeaderBoardRepositoryService {
     return this.leaderboardItems;
   }
 
+  //saves the current list of leaderBoard items
   save() {
     const json = JSON.stringify(this.leaderBoard);
 
     localStorage.setItem(this.storageKey, json);
   }
 
+  //clears the leaderBoard items and leaves a new list
   clearLeaderboard() {
     delete this.leaderboardItems;
     localStorage.removeItem(this.storageKey);
   }
 
+  //Restores previously cleared leaderBoard items
   restoreLeaderboard(leaderBoard: LeaderBoard[]) {
     this.leaderboardItems = leaderBoard;
     this.save();
   }
 
+  //Records the result of a game to the leaderBoard
   recordGameResult(result: GameResult) {
     let items = this.leaderBoard;
     const player1 = items.find(i => i.avatar.baseUrl === result.player1.baseUrl);
@@ -99,10 +106,3 @@ export class LeaderBoardRepositoryService {
   }
 }
 
-export class GameResult {
-  player1: PlayerAvatar;
-  player2: PlayerAvatar;
-
-  player1Score: number;
-  player2Score: number;
-}

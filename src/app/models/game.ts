@@ -1,6 +1,7 @@
-import { GameResult, LeaderBoardRepositoryService } from "../services/leader-board-repository.service";
-import { fadeOutAudio, getRandomNumber, getSecondsBetweenDates, pauseMusic, playMusic, playVideo } from "../services/utilities";
+import {  LeaderBoardRepositoryService } from "../services/leader-board-repository.service";
+import { getRandomNumber, getSecondsBetweenDates, playMusic, playVideo, switchMusic } from "../services/utilities";
 import { GameMessage } from "./game-message";
+import { GameResult } from "./game-result";
 import { GameSetupConfig } from "./game-setup-config";
 import { GameSettings } from "./settings";
 
@@ -12,7 +13,6 @@ export class Game {
     config: GameSetupConfig = new GameSetupConfig();
     introMode = true;
     countdown = false;
-    duration = 60;
     gameSetup = false;
     settingsVisible = false;
     playPong = false;
@@ -25,12 +25,11 @@ export class Game {
         this.config.gameType = 'Physical';
     }
 
+    // show the countdown screen for 4s
     private doCountdown() {
         return new Promise((resolve, reject) => {
-
             this.countdown = true;
             setTimeout(() => {
-
                 this.countdown = false;
                 resolve(true);
             }, 4000);
@@ -38,7 +37,6 @@ export class Game {
     }
 
     async restart() {
-        this.duration = GameSettings.Instance.gameDuration;
 
         this.player1Score = 0;
         this.player2Score = 0;
@@ -68,14 +66,9 @@ export class Game {
         } else {
             this.playPong = false;
         }
-
-
     }
 
-    async switchMusic(newSrc: string) {
-        await fadeOutAudio('bg-music');
-        playMusic('bg-music', 'BACKGROUND-MUSIC', newSrc);
-    }
+
 
     private getRandomBackgroundMusicUrl() {
         if (!GameSettings.Instance.gameMusicUrls) {
@@ -89,7 +82,6 @@ export class Game {
             urls.splice(urls.indexOf(GameSettings.Instance.introScreenMusic));
         }
         const index = getRandomNumber(0, urls.length - 1);
-        console.log(urls);
         return GameSettings.Instance.gameMusicUrls[index];
     }
 
@@ -114,7 +106,7 @@ export class Game {
     get endTime(): Date {
         const dt = new Date(this.startTime);
 
-        dt.setSeconds(dt.getSeconds() + this.duration);
+        dt.setSeconds(dt.getSeconds() + GameSettings.Instance.gameDuration);
         return dt;
     }
 
@@ -157,14 +149,10 @@ export class Game {
         };
 
         if (this.running) {
-
             this.leaderboard.recordGameResult(gameResult);
-
-
-            this.switchMusic(GameSettings.Instance.gameDoneMusic ? GameSettings.Instance.gameDoneMusic : this.getRandomBackgroundMusicUrl());
-
-
+            switchMusic(GameSettings.Instance.gameDoneMusic ? GameSettings.Instance.gameDoneMusic : this.getRandomBackgroundMusicUrl());
             this.gameResult = gameResult;
+
             if (this.player1Score > this.player2Score) {
                 playMusic('win-soundfx', 'SOUND-EFFECT');
 
@@ -192,7 +180,6 @@ export class Game {
                 delete this.gameResult
                 this.introMode = true;
             }, 60000);
-
         }
     }
 
@@ -216,11 +203,8 @@ export class Game {
         this.config.gameType = lastType;
         this.gameSetup = true;
         playVideo('bg-video');
-
-
         const src = GameSettings.Instance.introScreenMusic ? GameSettings.Instance.introScreenMusic : this.getRandomBackgroundMusicUrl();
         playMusic('bg-music', 'BACKGROUND-MUSIC', src);
-
         this.introMode = false;
     }
 }

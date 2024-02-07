@@ -3,42 +3,59 @@
     overflow: hidden;
     white-space: nowrap;
     margin-left: 10px;
+
     >div {
         transition: transform .5s ease;
         padding: 40px;
+
         ul {
             list-style: none;
             padding: 0;
+
             li {
                 display: inline-block;
                 padding: 30px;
+
                 img {
                     height: 80px;
                     transition: transform .5s ease;
                     border-radius: 50%;
                 }
+
                 lottie-player {
                     transition: transform .5s ease;
                     border-radius: 50%;
                     height: 65px;
                     width: 65px;
                 }
+
                 .description {
                     transition: transform .5s ease;
                 }
-                &.selected {
-                    // background: linear-gradient(360deg, rgba(3, 121, 3, 1) 0%, rgba(80, 212, 137, 1) 100%);
+                &.greyscale {
                     img {
-                        transform: scale(2);
-                        box-shadow: 0px 0px 24px 0px rgb(255 255 40);
-                        z-index: 2;
+                        filter: grayscale(1);
                     }
-                    lottie-player {
-                        transform: scale(2);
-                        box-shadow: 0px 0px 24px 0px rgb(255 255 40);
-                        z-index: 2;
-                        border-radius: 50%;
+                }
+
+                &.selected {
+
+                    // background: linear-gradient(360deg, rgba(3, 121, 3, 1) 0%, rgba(80, 212, 137, 1) 100%);
+                    &:not(.greyscale) {
+                        img {
+                            transform: scale(2);
+                            box-shadow: 0px 0px 24px 0px rgb(255 255 40);
+                            z-index: 2;
+                        }
+
+                        lottie-player {
+                            transform: scale(2);
+                            box-shadow: 0px 0px 24px 0px rgb(255 255 40);
+                            z-index: 2;
+                            border-radius: 50%;
+                        }
                     }
+
                     .description {
                         transform: scale(2) translateY(-15px);
                     }
@@ -53,6 +70,7 @@
     align-items: center;
     justify-content: center;
     width: 800px;
+
     >div {
         text-align: center;
         padding: 30px;
@@ -69,6 +87,7 @@
         box-shadow: 0px 0px 24px 0px rgb(255 255 40);
         transform: scale(.85);
     }
+
     to {
         box-shadow: 0px 0px 96px 0px rgb(255 255 40);
         transform: scale(1);
@@ -77,9 +96,11 @@
 
 .game-avatar {
     transition: box-shadow 1s ease;
+
     &:not(.current) {
         transform: scale(.7);
     }
+
     &.current {
         box-shadow: 0px 0px 24px 0px rgb(255 255 40);
         animation: box-shadow-pulse;
@@ -89,4 +110,3 @@
         animation-direction: alternate;
     }
 }
-
