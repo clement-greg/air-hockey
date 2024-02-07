@@ -5,6 +5,7 @@ export class LeaderBoard {
     wins: number;
     loses: number;
     ties: number;
+    shown = false;
 
     get total() {
         return (this.wins * 2) + this.ties;

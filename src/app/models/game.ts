@@ -1,3 +1,4 @@
+import { GameResult, LeaderBoardRepositoryService } from "../services/leader-board-repository.service";
 import { fadeOutAudio, getRandomNumber, getSecondsBetweenDates, pauseMusic, playMusic, playVideo } from "../services/utilities";
 import { GameMessage } from "./game-message";
 import { GameSetupConfig } from "./game-setup-config";
@@ -9,20 +10,21 @@ export class Game {
     player1Score = 0;
     player2Score = 0;
     running = false;
-    winner: Player;
+    //winner: Player;
     config: GameSetupConfig = new GameSetupConfig();
     introMode = true;
     countdown = false;
     duration = 60;
     gameSetup = false;
-    isTie = false;
+    //isTie = false;
     settingsVisible = false;
     playPong = false;
     warningPlayed = false;
+    gameResult: GameResult;
     gameMenuMusicUrl = '../../assets/music/bg-music.mp3';
 
 
-    constructor() {
+    constructor(private leaderboard: LeaderBoardRepositoryService) {
         this.config.gameType = 'Physical';
     }
 
@@ -138,21 +140,32 @@ export class Game {
         }
         await fadeOutAudio('bg-music');
 
+        const gameResult: GameResult = {
+            player1: this.config.player1.avatar,
+            player2: this.config.player2.avatar,
+            player1Score: this.player1Score,
+            player2Score: this.player2Score
+        };
+
+        if(this.running) {
+            
+            this.leaderboard.recordGameResult(gameResult);
+        }
+
         setTimeout(() => {
             const src = this.getRandomBackgroundMusicUrl();
             playMusic('bg-music', 'BACKGROUND-MUSIC', src);
         }, 1000);
+
+        this.gameResult = gameResult;
         if (this.player1Score > this.player2Score) {
-            this.winner = this.config.player1;
             playMusic('win-soundfx', 'SOUND-EFFECT');
+
         }
         if (this.player2Score > this.player1Score) {
-            this.winner = this.config.player2;
             playMusic('win-soundfx', 'SOUND-EFFECT');
         }
         else if (this.player1Score === this.player2Score) {
-            this.isTie = true;
-            this.running = false;
             playMusic('tie-game', 'SOUND-EFFECT');
         }
 
@@ -166,33 +179,28 @@ export class Game {
         }
         this.playPong = false;
 
-        // Wait 30 seconds and then show the intro screen
+        // Wait 60 seconds and then show the intro screen
         clearTimeout(this.eogTimeout);
         this.eogTimeout = setTimeout(() => {
-            // if(this.running) {
-            //     return;
-            // }
-            delete this.winner;
-            this.isTie = false;
+            delete this.gameResult
             this.introMode = true;
-        }, 30000);
+        }, 60000);
     }
 
     handleSpace() {
-        if (this.winner || this.introMode || this.isTie) {
-            delete this.winner;
+        if (this.gameResult || this.introMode ) {
+            delete this.gameResult;
             this.startGame();
         }
     }
 
     startGame() {
-        this.isTie = false;
         clearTimeout(this.eogTimeout);
         const lastType = this.config.gameType;
         const defaultPlayer1 = this.config?.player1;
         const defaultPlayer2 = this.config?.player2;
 
-        delete this.winner;
+        delete this.gameResult;
         this.config = new GameSetupConfig();
         this.config.player1 = defaultPlayer1;
         this.config.player2 = defaultPlayer2;

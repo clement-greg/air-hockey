@@ -1,0 +1,48 @@
+
+<div class="center" *ngIf="winner">
+    <div style="margin-top: 30px;">{{winner.name}} </div>
+    <h2  class="expand-title">Wins!!!</h2>
+    <img src="../../assets/images/{{winner.baseUrl}}.jpg" class="game-avatar  player-winner">
+</div>
+
+<div *ngIf="isTie">
+    <div class="center">
+        <h2 class="expand-title" style="margin-bottom: 40px;">Tie Game</h2>
+    </div>
+    <img src="../../assets/images/{{result.player1.baseUrl}}.jpg" class="game-avatar player-1">
+    <img src="../../assets/images/{{result.player2.baseUrl}}.jpg" class="game-avatar player-2">
+</div>
+
+<h3 *ngIf="leaderBoardShown?.length" style="margin-top: -40px;">The Standings</h3>
+<div class="leader-board-table" *ngIf="leaderBoardShown?.length">
+    <div>
+        <div style="border-bottom: none;"></div>
+        <div>Player</div>
+        <div>Wins</div>
+        <div>Loses</div>
+        <div>Ties</div>
+        <div>Total</div>
+    </div>
+
+
+    <div *ngFor="let item of leaderBoardShown" class="fade-in-up">
+        <div>
+            <img src="../../assets/images/{{item.avatar.baseUrl}}.jpg"  class="game-avatar">
+        </div>
+        <div>
+            {{item.avatar.name}}
+        </div>
+        <div>
+            {{item.wins}}
+        </div>
+        <div>
+            {{item.loses}}
+        </div>
+        <div>
+            {{item.ties}}
+        </div>
+        <div>
+            {{item.total}}
+        </div>
+    </div>
+</div>

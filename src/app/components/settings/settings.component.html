@@ -56,21 +56,22 @@
         <mat-tab label="Music">
 
             <form>
-            <div style="display: flex;margin-top: 20px;">
-                <div style="flex: auto;">
+                <div style="display: flex;margin-top: 20px;">
+                    <div style="flex: auto;">
 
-                    <mat-form-field style="display: block;" appearance="outline">
-                        <mat-label>URL</mat-label>
-                        <input matInput name="newMusicUrl" (keyup)="swallowKeyUp($event)" [(ngModel)]="newMusicUrl" type="url">
+                        <mat-form-field style="display: block;" appearance="outline">
+                            <mat-label>URL</mat-label>
+                            <input matInput name="newMusicUrl" (keyup)="swallowKeyUp($event)" [(ngModel)]="newMusicUrl"
+                                type="url">
 
-                        <button mat-button style="margin-right: 10px;" matSuffix mat-raised-button color="primary" (click)="addMusicUrl()"
-                            [disabled]="!newMusicUrl">
-                            Add
-                        </button>
-                    </mat-form-field>
+                            <button mat-button style="margin-right: 10px;" matSuffix mat-raised-button color="primary"
+                                (click)="addMusicUrl()" [disabled]="!newMusicUrl">
+                                Add
+                            </button>
+                        </mat-form-field>
+                    </div>
                 </div>
-            </div>
-        </form>
+            </form>
             <div class="url-container">
                 <div *ngFor="let url of settings.gameMusicUrls" style="font-size: 16px;">
                     <div>
@@ -82,6 +83,15 @@
                         </button>
                     </div>
                 </div>
+            </div>
+        </mat-tab>
+
+        <mat-tab label="Other">
+
+            <div style="padding: 30px">
+                <button mat-button mat-raised-button color="primary" (click)="deleteStandings()">
+                    Delete Standings
+                </button>
             </div>
         </mat-tab>
     </mat-tab-group>

@@ -4,8 +4,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { GameMessage } from '../../models/game-message';
 import { GameSetupComponent } from '../game-setup/game-setup.component';
 import { CommonModule } from '@angular/common';
-import { DisplayWinnerComponent } from '../display-winner/display-winner.component';
-import { DisplayTieComponent } from '../display-tie/display-tie.component';
 import { SettingsComponent } from '../settings/settings.component';
 import { PubSubService } from '../../services/pub-sub.service';
 import { Subscription } from 'rxjs';
@@ -13,18 +11,20 @@ import { MatIconModule } from '@angular/material/icon';
 import { PongComponent } from '../pong/pong.component';
 import { JoystickState } from '../../services/joystick-state';
 import { CountDownComponent } from '../count-down/count-down.component';
+import { LeaderBoardRepositoryService } from '../../services/leader-board-repository.service';
+import { DisplayGameResultComponent } from '../display-game-result/display-game-result.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [MatButtonModule, GameSetupComponent, CountDownComponent, MatIconModule, CommonModule, DisplayWinnerComponent, DisplayTieComponent, SettingsComponent, PongComponent],
+  imports: [MatButtonModule, GameSetupComponent, CountDownComponent, MatIconModule, DisplayGameResultComponent, CommonModule,  SettingsComponent, PongComponent],
   templateUrl: './home.component.html',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnDestroy {
 
-  game = new Game();
+  game: Game;
   interval: any;
   private subscription: Subscription;
   joystick1State = new JoystickState(0);
@@ -32,7 +32,11 @@ export class HomeComponent implements OnDestroy {
 
   private lastMessageReceived: Date = new Date();
 
-  constructor(zone: NgZone, private pubSub: PubSubService) {
+  constructor(zone: NgZone,
+    pubSub: PubSubService,
+    leaderboard: LeaderBoardRepositoryService) {
+
+    this.game = new Game(leaderboard);
     window.addEventListener('message', event => {
       const gameMessage: GameMessage = JSON.parse(event.data);
 
@@ -44,7 +48,6 @@ export class HomeComponent implements OnDestroy {
           this.lastMessageReceived = new Date();
         }
       });
-
     });
 
     this.subscription = pubSub.subscription.subscribe(message => {

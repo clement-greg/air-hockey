@@ -10,11 +10,20 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { LeaderBoardRepositoryService } from '../../services/leader-board-repository.service';
+import {
+  MatSnackBar,
+  MatSnackBarAction,
+  MatSnackBarActions,
+  MatSnackBarLabel,
+  MatSnackBarModule,
+  MatSnackBarRef,
+} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-settings',
   standalone: true,
-  imports: [MatCheckboxModule, CommonModule, FormsModule, MatIconModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatSliderModule, MatTabsModule],
+  imports: [MatCheckboxModule, CommonModule, FormsModule, MatIconModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatSliderModule, MatTabsModule, MatSnackBarModule],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.scss'
 })
@@ -23,7 +32,9 @@ export class SettingsComponent {
   settings: GameSettings = GameSettings.Instance;
   newMusicUrl: string;
 
-  constructor(private pubSub: PubSubService) {  }
+  constructor(private pubSub: PubSubService,
+    private snackbar: MatSnackBar,
+    private leaderboardReposition: LeaderBoardRepositoryService) { }
 
   swallowKeyUp(keyEvent: KeyboardEvent) {
     keyEvent.stopPropagation();
@@ -39,6 +50,21 @@ export class SettingsComponent {
 
     delete this.newMusicUrl;
     this.saveSettings();
+  }
+
+  deleteStandings() {
+    const items = this.leaderboardReposition.leaderBoard;
+
+    this.leaderboardReposition.clearLeaderboard();
+
+    const ref = this.snackbar.open('Standings Cleared', 'Undo', { duration: 10000 });
+    ref.onAction().subscribe(action => {
+      this.leaderboardReposition.restoreLeaderboard(items);
+
+      this.snackbar.open('Standings Restored', null, { duration: 3000 });
+    });
+
+
   }
 
   removeMusicUrl(url: string) {
