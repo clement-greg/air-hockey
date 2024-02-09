@@ -25,14 +25,7 @@
 
 <div class="game-setup" *ngIf="game.gameSetup">
     <app-game-setup [(config)]="game.config" (configChange)="configChange()"></app-game-setup>
-
 </div>
-
-<!-- <div class="game-setup" *ngIf="game.winner">
-    <div class="blur-box">
-        <app-display-winner [winner]="game.winner"></app-display-winner>
-    </div>
-</div> -->
 
 <div class="game-setup" style="z-index: 200;" *ngIf="game.settingsVisible">
     <div class="blur-box">
@@ -63,18 +56,13 @@
     </div>
 </div>
 
-<!-- <div class="game-setup" *ngIf="game.isTie">
-    <app-display-tie [game]="game"></app-display-tie>
-
-</div> -->
-
 <div class="game-setup" style="z-index: 10000;" *ngIf="game.playPong">
     <app-pong></app-pong>
 </div>
 
 <div style="display: none;">
     <audio src="../../assets/music/score-1.mp3" id="score-1"></audio>
-    <audio src="../../assets/music/bg-music.mp3" loop id="bg-music"></audio>
+    <audio src="../../assets/music/bg-music.mp3"  id="bg-music"></audio>
     <audio src="../../assets/music/win.mp3" id="win-soundfx"></audio>
     <audio src="../../assets/music/warning.mp3" id="warning"></audio>
     <audio src="../../assets/music/tie-game.mp3" id="tie-game"></audio>
