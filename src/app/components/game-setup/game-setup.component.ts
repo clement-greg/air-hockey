@@ -22,6 +22,8 @@ export class GameSetupComponent implements OnChanges {
 
   @Input() config: GameSetupConfig = new GameSetupConfig();
   @Output() configChange: EventEmitter<GameSetupConfig> = new EventEmitter();
+
+  @Output() setupCancelled: EventEmitter<boolean> = new EventEmitter();
   private joystick1 = new JoystickState(0);
   private joystick2 = new JoystickState(1);
   gameTypeSelected = false;
@@ -100,6 +102,8 @@ export class GameSetupComponent implements OnChanges {
       delete this.config.player1;
       return;
     }
+    
+    this.setupCancelled.emit(true);
   }
 
   selectLeft() {

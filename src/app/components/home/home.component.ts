@@ -87,6 +87,11 @@ export class HomeComponent implements OnDestroy {
     return this.game.secondsRemaining <= 10 && this.game.secondsRemaining > 0;
   }
 
+  setupCancelled() {
+    this.game.gameSetup = false; 
+    this.game.introMode = true; 
+  }
+
   gamepads: any = {};
   gamepadHandler(event: any, connected: boolean) {
     const gamepad = event.gamepad;

@@ -24,7 +24,7 @@
 </div>
 
 <div class="game-setup" *ngIf="game.gameSetup">
-    <app-game-setup [(config)]="game.config" (configChange)="configChange()"></app-game-setup>
+    <app-game-setup [(config)]="game.config" (setupCancelled)="setupCancelled()" (configChange)="configChange()"></app-game-setup>
 </div>
 
 <div class="game-setup" style="z-index: 200;" *ngIf="game.settingsVisible">
