@@ -5,6 +5,7 @@ import { GameSetupConfig } from '../../models/game-setup-config';
 import { GameType } from '../../models/game-type';
 import { JoystickState } from '../../services/joystick-state';
 import { PlayerAvatar } from '../../models/player-avatar';
+import { playMusic } from '../../services/utilities';
 
 
 
@@ -86,6 +87,7 @@ export class GameSetupComponent implements OnChanges {
   }
 
   back() {
+    playMusic('back-click', 'SOUND-EFFECT');
     if (this.config.player1 && this.config.player2 && this.gameTypeSelected) {
       this.gameTypeSelected = false;
       return;
@@ -173,6 +175,7 @@ export class GameSetupComponent implements OnChanges {
     if (!this.config.player1) {
       this.config.player1 = new Player(1);
       this.config.player1.avatar = this.selectedItem;
+      playMusic('click', 'SOUND-EFFECT');
       const index = this.playerTypes.indexOf(this.selectedItem);
       if (index < this.playerTypes.length - 1) {
         this.selectRight();
@@ -186,11 +189,14 @@ export class GameSetupComponent implements OnChanges {
       }
       this.config.player2 = new Player(2);
       this.config.player2.avatar = this.selectedItem;
+      playMusic('click', 'SOUND-EFFECT');
 
     } else if (!this.gameTypeSelected) {
       this.gameTypeSelected = true;
+      playMusic('click', 'SOUND-EFFECT');
     } else {
       this.configChange.emit(this.config);
+      playMusic('click', 'SOUND-EFFECT');
     }
   }
 

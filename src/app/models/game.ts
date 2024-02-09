@@ -195,7 +195,7 @@ export class Game {
         const lastType = this.config.gameType;
         const defaultPlayer1 = this.config?.player1;
         const defaultPlayer2 = this.config?.player2;
-
+ 
         delete this.gameResult;
         this.config = new GameSetupConfig();
         this.config.player1 = defaultPlayer1;
@@ -205,6 +205,7 @@ export class Game {
         playVideo('bg-video');
         const src = GameSettings.Instance.introScreenMusic ? GameSettings.Instance.introScreenMusic : this.getRandomBackgroundMusicUrl();
         playMusic('bg-music', 'BACKGROUND-MUSIC', src);
+        playMusic('click', 'SOUND-EFFECT'); 
         this.introMode = false;
     }
 }
