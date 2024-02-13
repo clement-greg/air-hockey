@@ -43,6 +43,7 @@
                 <li *ngFor="let playerType of playerTypes" [class.greyscale]="isPlayerSelected(playerType)" [class.selected]="selectedItem === playerType">
 
                     <img src="../../assets/images/{{playerType.baseUrl}}.jpg">
+                    <span class="rank">{{playerType.points }}</span>
                 </li>
             </ul>
         </div>

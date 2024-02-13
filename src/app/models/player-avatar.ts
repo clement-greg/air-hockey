@@ -1,9 +1,11 @@
 export class PlayerAvatar {
     baseUrl: string;
     name?: string;
+    points?: number;
+    totalPlays?: number;
 
     static getAll(): PlayerAvatar[] {
-        return [
+        const items = [
             { baseUrl: 'mouse', name: 'Merton Cheezmuncher' },
             { baseUrl: 'bear', name: 'Fractal Bear' },
             { baseUrl: 'cat', name: 'Pretty Kitty' },
@@ -33,6 +35,9 @@ export class PlayerAvatar {
             { baseUrl: 'unicorn', name: 'Candy' },
             { baseUrl: 'werewolf', name: 'Alex' },
             { baseUrl: 'wizard', name: 'Gildorf' }
-        ]
+        ];
+
+
+        return items;
     }
 }

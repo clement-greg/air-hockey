@@ -15,11 +15,19 @@
             li {
                 display: inline-block;
                 padding: 30px;
-
+                position: relative;
                 img {
                     height: 80px;
                     transition: transform .5s ease;
                     border-radius: 50%;
+                }
+
+                .rank {
+                    transition: transform .5s ease;
+                    right: unset;
+                    top: unset;
+                    left: calc(50% - 12px);
+                    bottom: 20px ;
                 }
 
                 lottie-player {
@@ -51,6 +59,9 @@
                             box-shadow: 0px 0px 24px 0px rgb(255 255 40);
                             z-index: 2;
                             border-radius: 50%;
+                        }
+                        .rank {
+                            transform: translateY(15px) scale(1.5); 
                         }
                     }
 

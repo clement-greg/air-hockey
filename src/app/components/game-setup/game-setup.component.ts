@@ -6,6 +6,7 @@ import { GameType } from '../../models/game-type';
 import { JoystickState } from '../../services/joystick-state';
 import { PlayerAvatar } from '../../models/player-avatar';
 import { playMusic } from '../../services/utilities';
+import { LeaderBoardRepositoryService } from '../../services/leader-board-repository.service';
 
 
 
@@ -33,8 +34,8 @@ export class GameSetupComponent implements OnChanges {
     { type: 'Both', lottieUrl: 'https://lottie.host/a7044b1d-7b7c-4dbe-8c08-f8579798acd4/pnWDVXLTWJ.json', description: 'Play both pong and the real table simultaneously' }
   ];
 
-  constructor() {
-    this.selectedItem = this.playerTypes[11];
+  constructor(private leaderboardRepository: LeaderBoardRepositoryService) {
+    this.selectedItem = this.playerTypes[14];
     this.joystick1.onLeftJoyStick = this.selectLeft.bind(this);
     this.joystick1.onRightJoyStick = this.selectRight.bind(this);
     this.joystick1.onButtonPress = this.buttonPress.bind(this);
@@ -215,6 +216,31 @@ export class GameSetupComponent implements OnChanges {
   get playerTypes() {
     if (this._playerTypes.length === 0) {
       this._playerTypes = PlayerAvatar.getAll();
+      const leaders = this.leaderboardRepository.leaderBoard;
+      for(const item of this._playerTypes) {
+        const leaderboard = leaders.find(i=>i.avatar.baseUrl === item.baseUrl);
+        if(leaderboard) {
+          item.points = leaderboard.total;
+          item.totalPlays = leaderboard.wins + leaderboard.loses + leaderboard.ties;
+        } else {
+          item.points = 0;
+        }
+      }
+
+      // Sort the players according to popularity
+      const sortedPlayerTypes = this._playerTypes.sort((a,b)=>a.totalPlays > b.totalPlays ? -1: 1);
+      const altSortPlayerTypes = [];
+      let alt = false;
+      for(const item of sortedPlayerTypes) {
+
+        if(alt) {
+          altSortPlayerTypes.push(item);
+        } else {
+          altSortPlayerTypes.unshift(item);
+        }
+        alt = !alt;
+      }
+      this._playerTypes = altSortPlayerTypes;
     }
 
     return this._playerTypes;
