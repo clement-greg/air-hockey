@@ -60,8 +60,6 @@ export class SettingsComponent {
 
       this.snackbar.open('Standings Restored', null, { duration: 3000 });
     });
-
-
   }
 
   removeMusicUrl(url: string) {

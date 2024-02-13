@@ -45,6 +45,8 @@ export class PongComponent implements OnInit, OnDestroy {
     this.initialize();
   }
 
+  
+  // Clean up matter.js resources and cancel annimation frames
   ngOnDestroy(): void {
     Matter.World.clear(this.engine.world);
     Matter.Engine.clear(this.engine);
@@ -71,22 +73,20 @@ export class PongComponent implements OnInit, OnDestroy {
       frictionAir: 0,
       restitution: 1.05,
       label: 'puck'
-    }
-    );
+    });
+
     this.puck.velocity.x = 1;
     this.paddle1 = Bodies.circle(
       this.PADDLE_SIZE,
       this.GAME_HEIGHT / 2,
       this.PADDLE_SIZE,
-      { isStatic: true, label: 'plankOne' }
-    )
+      { isStatic: true, label: 'paddleOne' } );
 
     this.paddle2 = Bodies.circle(
       this.GAME_WIDTH - this.PADDLE_SIZE,
       this.GAME_HEIGHT / 2,
       this.PADDLE_SIZE,
-      { isStatic: true, label: 'plankTwo' }
-    );
+      { isStatic: true, label: 'paddleTwo' });
 
 
     const top = Bodies.rectangle(
@@ -156,7 +156,6 @@ export class PongComponent implements OnInit, OnDestroy {
   rightArrowKeyUp = false;
 
   update() {
-
     Matter.Engine.update(this.engine);
     this.leftArrowKeyDown = this.joystick1.isDown || this.pressedKeys['s'];
     this.leftArrowKeyLeft = this.joystick1.isLeft || this.pressedKeys['a'];
@@ -219,8 +218,6 @@ export class PongComponent implements OnInit, OnDestroy {
         Matter.Body.setPosition(this.paddle2, { x: this.GAME_WIDTH - 400, y: this.paddle1.position.y });
       }
     }
-
-
     const puck = this.puck;
 
     if (puck.velocity.x < 0 && this.puckDirection === 'right') {

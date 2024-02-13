@@ -14,16 +14,15 @@ export class CountDownComponent {
   showH1 = true;
 
   constructor() {
-
-    setInterval(()=> {
+    setInterval(() => {
       this.showH1 = false;
       this.count--;
-      setTimeout(()=> this.showH1 = true);
-    }, 1000)
+      setTimeout(() => this.showH1 = true);
+    }, 1000);
   }
 
   get display() {
-    if(this.count > 0) {
+    if (this.count > 0) {
       return this.count;
     }
 

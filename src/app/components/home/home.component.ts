@@ -31,8 +31,6 @@ export class HomeComponent implements OnDestroy {
   joystick2State = new JoystickState(1);
   private messageDates: any = {};
 
-  //private lastMessageReceived: Date = new Date();
-
   constructor(zone: NgZone,
     pubSub: PubSubService,
     leaderboard: LeaderBoardRepositoryService) {
@@ -42,7 +40,7 @@ export class HomeComponent implements OnDestroy {
       const gameMessage: GameMessage = JSON.parse(event.data);
 
       zone.run(() => {
-        // Prevent the same event from processing twice
+        // Prevent the same event from signaling twice
         let lastMessageReceived: Date = this.messageDates[gameMessage.messageType];
         if (!lastMessageReceived) {
           lastMessageReceived = new Date(2000, 1, 1);
