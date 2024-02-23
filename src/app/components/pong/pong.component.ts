@@ -2,6 +2,7 @@ import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { PubSubService } from '../../services/pub-sub.service';
 import { GameSettings } from '../../models/settings';
 import { JoystickState } from '../../services/joystick-state';
+import { getRandomNumber } from '../../services/utilities';
 declare var Matter: any;
 
 
@@ -106,7 +107,10 @@ export class PongComponent implements OnInit, OnDestroy {
     this.engine.world.gravity.y = 0;
     this.engine.world.gravity.x = 0;
     this.run();
-    Matter.Body.applyForce(this.puck, { x: this.puck.position.x, y: this.puck.position.y }, { x: .2, y: .1 });
+    const xDir = getRandomNumber(-1, 1);
+    const yDir = getRandomNumber(-1, 1);
+    
+    Matter.Body.applyForce(this.puck, { x: this.puck.position.x, y: this.puck.position.y }, { x: xDir > 0 ? .2 : -.2, y: yDir > 0 ? .1 : -.1 });
   }
 
   private run() {

@@ -15,6 +15,7 @@ export class Game {
     countdown = false;
     gameSetup = false;
     settingsVisible = false;
+    showLeaderboard = false;
     playPong = false;
     warningPlayed = false;
     gameResult: GameResult;
@@ -184,6 +185,7 @@ export class Game {
     }
 
     handleSpace() {
+        this.showLeaderboard = false;
         if (this.gameResult || this.introMode) {
             delete this.gameResult;
             this.startGame();

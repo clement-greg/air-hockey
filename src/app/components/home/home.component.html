@@ -23,11 +23,11 @@
     </div>
 </div>
 
-<div class="game-setup" *ngIf="game.gameSetup">
+<div class="modal-box" *ngIf="game.gameSetup">
     <app-game-setup [(config)]="game.config" (setupCancelled)="setupCancelled()" (configChange)="configChange()"></app-game-setup>
 </div>
 
-<div class="game-setup" style="z-index: 200;" *ngIf="game.settingsVisible">
+<div class="modal-box" style="z-index: 200;" *ngIf="game.settingsVisible">
     <div class="blur-box">
         <div class="flex-container">
             <div></div>
@@ -50,13 +50,19 @@
 
 </div>
 
-<div class="game-setup " *ngIf="game.gameResult">
+<div class="modal-box " *ngIf="game.gameResult">
     <div class="blur-box game-result">
         <app-display-game-result [result]="game.gameResult"></app-display-game-result>
     </div>
 </div>
 
-<div class="game-setup" style="z-index: 10000;" *ngIf="game.playPong">
+<div class="modal-box" *ngIf="game.showLeaderboard">
+    <div class="blur-box game-result">
+        <app-leader-board></app-leader-board>
+    </div>
+</div>
+
+<div class="modal-box" style="z-index: 10000;" *ngIf="game.playPong">
     <app-pong></app-pong>
 </div>
 

@@ -4,6 +4,7 @@
     --mdc-outlined-text-field-outline-color: #fff;
     --mat-tab-header-active-hover-label-text-color:#fff;
     --mat-tab-header-inactive-hover-label-text-color: #fff !important;
+    --mat-select-enabled-trigger-text-color: #fff;
 
 }
 
@@ -41,6 +42,11 @@ h3 {
     color: rgba(255,255,255,.8);
     font-family: "sporty-pro", sans-serif !important;
 }
+
+mat-option, mat-select, mat-tab-header, mat-label {
+    text-shadow: none;
+}
+
 
 .rank {
     position: absolute;

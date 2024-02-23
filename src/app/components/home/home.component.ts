@@ -13,11 +13,12 @@ import { JoystickState } from '../../services/joystick-state';
 import { CountDownComponent } from '../count-down/count-down.component';
 import { LeaderBoardRepositoryService } from '../../services/leader-board-repository.service';
 import { DisplayGameResultComponent } from '../display-game-result/display-game-result.component';
+import { LeaderBoardComponent } from '../leader-board/leader-board.component';
 
-@Component({
+@Component({ 
   selector: 'app-home',
   standalone: true,
-  imports: [MatButtonModule, GameSetupComponent, CountDownComponent, MatIconModule, DisplayGameResultComponent, CommonModule, SettingsComponent, PongComponent],
+  imports: [MatButtonModule, GameSetupComponent, CountDownComponent, MatIconModule, DisplayGameResultComponent, CommonModule, SettingsComponent, PongComponent, LeaderBoardComponent],
   templateUrl: './home.component.html',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   styleUrl: './home.component.scss'
@@ -86,8 +87,8 @@ export class HomeComponent implements OnDestroy {
   }
 
   setupCancelled() {
-    this.game.gameSetup = false; 
-    this.game.introMode = true; 
+    this.game.gameSetup = false;
+    this.game.introMode = true;
   }
 
   gamepads: any = {};
@@ -129,7 +130,11 @@ export class HomeComponent implements OnDestroy {
         }
         break;
       case 'b':
-        this.game.settingsVisible = false;
+        if (this.game.introMode) { 
+          this.game.showLeaderboard = !this.game.showLeaderboard;
+        } else {
+          this.game.settingsVisible = false;
+        }
         break;
       case 'p':
         if (this.game.running) {

@@ -30,9 +30,8 @@ export class PlayerAvatar {
             { baseUrl: 'rabbit', name: '4x Lucky' },
             { baseUrl: 'witch', name: 'Witchy Woman' },
             { baseUrl: 'tiger', name: 'Stripe' },
-            { baseUrl: 'troll', name: 'Very Sheri' },
+            { baseUrl: 'troll', name: 'Sheri' },
             { baseUrl: 'construction-worker', name: 'Bill The Builder' },
-            { baseUrl: 'unicorn', name: 'Candy' },
             { baseUrl: 'werewolf', name: 'Alex' },
             { baseUrl: 'wizard', name: 'Gildorf' },
             { baseUrl: 'baseball-squirrel', name: 'The Natural'}
