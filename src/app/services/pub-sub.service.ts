@@ -8,12 +8,14 @@ export class PubSubService {
 
   private subscriptionSource = new Subject<PubSubMessage>();
   subscription = this.subscriptionSource.asObservable();
+  
   constructor() { }
 
 
-    publish(message: PubSubMessage) {
-        this.subscriptionSource.next(message);
-    }
+  //Publishes a message to any current subscribers
+  publish(message: PubSubMessage) {
+    this.subscriptionSource.next(message);
+  }
 }
 
 export class PubSubMessage {

@@ -1,6 +1,8 @@
+import {  LeaderBoardRepositoryService } from "../services/leader-board-repository.service";
+import { getRandomNumber, getSecondsBetweenDates, playMusic, playVideo, switchMusic } from "../services/utilities";
 import { GameMessage } from "./game-message";
+import { GameResult } from "./game-result";
 import { GameSetupConfig } from "./game-setup-config";
-import { Player } from "./player";
 import { GameSettings } from "./settings";
 
 export class Game {
@@ -8,31 +10,80 @@ export class Game {
     player1Score = 0;
     player2Score = 0;
     running = false;
-    winner: Player;
     config: GameSetupConfig = new GameSetupConfig();
     introMode = true;
+    countdown = false;
     gameSetup = false;
-    isTie = false;
     settingsVisible = false;
+    showLeaderboard = false;
     playPong = false;
+    warningPlayed = false;
+    gameResult: GameResult;
+    gameMenuMusicUrl = '../../assets/music/bg-music.mp3';
 
-    constructor(private duration: number) {
 
+    constructor(private leaderboard: LeaderBoardRepositoryService) {
+        this.config.gameType = 'Physical';
+    }
+
+    // show the countdown screen for 4s
+    private doCountdown() {
+        return new Promise((resolve, reject) => {
+            this.countdown = true;
+            setTimeout(() => {
+                this.countdown = false;
+                resolve(true);
+            }, 4000);
+        });
+    }
+
+    async restart() {
+
+        this.player1Score = 0;
+        this.player2Score = 0;
+        playMusic('bg-music', 'BACKGROUND-MUSIC', this.getRandomBackgroundMusicUrl());
+        await this.doCountdown();
+        this.startTime = new Date();
+        this.warningPlayed = false;
+        this.running = true;
+        if (window.parent) {
+            if (this.config.gameType === 'Virtual') {
+                const msg: GameMessage = {
+                    messageType: 'VIRTUAL_GAME_STARTED',
+                    sender: 'Client'
+                };
+                window.parent.postMessage(JSON.stringify(msg), '*');
+            } else {
+                const msg: GameMessage = {
+                    messageType: 'GAME_STARTED',
+                    sender: 'Client'
+                };
+                window.parent.postMessage(JSON.stringify(msg), '*');
+            }
+
+        }
+        if (this.config.gameType === 'Both' || this.config.gameType === 'Virtual') {
+            this.playPong = true;
+        } else {
+            this.playPong = false;
+        }
     }
 
 
-    restart() {
-        this.startTime = new Date();
-        this.player1Score = 0;
-        this.player2Score = 0;
-        this.running = true;
-        if (window.parent) {
-            const msg: GameMessage = {
-                messageType: 'GAME_STARTED',
-                sender: 'Client'
-            };
-            window.parent.postMessage(JSON.stringify(msg), '*');
+
+    private getRandomBackgroundMusicUrl() {
+        if (!GameSettings.Instance.gameMusicUrls) {
+            GameSettings.Instance.gameMusicUrls = [this.gameMenuMusicUrl];
         }
+        const urls = [...GameSettings.Instance.gameMusicUrls];
+        if(GameSettings.Instance.gameDoneMusic) {
+            urls.splice(urls.indexOf(GameSettings.Instance.gameDoneMusic));
+        }
+        if(GameSettings.Instance.introScreenMusic) {
+            urls.splice(urls.indexOf(GameSettings.Instance.introScreenMusic));
+        }
+        const index = getRandomNumber(0, urls.length - 1);
+        return GameSettings.Instance.gameMusicUrls[index];
     }
 
     processGameMessage(message: GameMessage) {
@@ -40,174 +91,123 @@ export class Game {
             case 'PLAYER_1_SCORED':
                 if (this.running) {
                     this.player1Score++;
-                    this.playScoreSound();
+                    playMusic('score-1', 'SOUND-EFFECT');
                 }
                 break;
             case 'PLAYER_2_SCORED':
                 if (this.running) {
                     this.player2Score++;
-                    this.playScoreSound();
+                    playMusic('score-1', 'SOUND-EFFECT');
                 }
                 break;
         }
     }
 
-    private playScoreSound() {
-        if (GameSettings.Instance.playSoundFX) {
-            const sound: any = document.getElementById('score-1');
-            sound.pause();
-            sound.currentTime = 0;
-            sound.volume = .1;
-            sound.play();
-        }
-    }
 
     get endTime(): Date {
-
         const dt = new Date(this.startTime);
 
-        dt.setSeconds(dt.getSeconds() + this.duration);
+        dt.setSeconds(dt.getSeconds() + GameSettings.Instance.gameDuration);
         return dt;
     }
 
     loop() {
-
+        // Intentionally blank
     }
 
     get secondsRemaining() {
         if (!this.startTime) {
             return '-';
         }
-        let remaining = this.getSecondsBetweenDates(new Date(), this.endTime);
+        let remaining = getSecondsBetweenDates(new Date(), this.endTime);
+        if (remaining <= 10 && !this.warningPlayed) {
+            this.warningPlayed = true;
+            playMusic('warning', 'SOUND-EFFECT');
+        }
         if (remaining < 0) {
             remaining = 0;
-            if (this.running) {
-                if (this.player1Score > this.player2Score) {
-                    this.winner = this.config.player1;
-                    this.playWin();
-                }
-                if (this.player2Score > this.player1Score) {
-                    this.winner = this.config.player2;
-                    this.playWin();
-                }
-                else if (this.player1Score === this.player2Score) {
-                    this.isTie = true;
-                    this.running = false;
-                }
-                this.handleEndOfGame();
-            }
+
+        }
+        if (remaining === 0) {
+            this.handleEndOfGame();
+            return '-';
         }
 
         return remaining;
     }
 
     private eogTimeout: any = null;
-    handleEndOfGame() {
-
-        this.running = false;
-        if (window.parent) {
-            const msg: GameMessage = {
-                messageType: 'GAME_OVER',
-                sender: 'Client'
-            };
-            window.parent.postMessage(JSON.stringify(msg), '*');
+    async handleEndOfGame() {
+        if (!this.running) {
+            return;
         }
-        this.playPong = false;
-        this.eogTimeout = setTimeout(() => {
-            delete this.winner;
-            this.isTie = false;
-            this.introMode = true;
-        }, 30000);
+
+        const gameResult: GameResult = {
+            player1: this.config.player1.avatar,
+            player2: this.config.player2.avatar,
+            player1Score: this.player1Score,
+            player2Score: this.player2Score
+        };
+
+        if (this.running) {
+            this.leaderboard.recordGameResult(gameResult);
+            switchMusic(GameSettings.Instance.gameDoneMusic ? GameSettings.Instance.gameDoneMusic : this.getRandomBackgroundMusicUrl());
+            this.gameResult = gameResult;
+
+            if (this.player1Score > this.player2Score) {
+                playMusic('win-soundfx', 'SOUND-EFFECT');
+
+            }
+            if (this.player2Score > this.player1Score) {
+                playMusic('win-soundfx', 'SOUND-EFFECT');
+            }
+            else if (this.player1Score === this.player2Score) {
+                playMusic('tie-game', 'SOUND-EFFECT');
+            }
+
+            this.running = false;
+            if (window.parent) {
+                const msg: GameMessage = {
+                    messageType: 'GAME_OVER',
+                    sender: 'Client'
+                };
+                window.parent.postMessage(JSON.stringify(msg), '*');
+            }
+            this.playPong = false;
+
+            // Wait 60 seconds and then show the intro screen
+            clearTimeout(this.eogTimeout);
+            this.eogTimeout = setTimeout(() => {
+                delete this.gameResult
+                this.introMode = true;
+            }, 60000);
+        }
     }
 
     handleSpace() {
-        if (this.winner || this.introMode || this.isTie) {
-            delete this.winner;
+        this.showLeaderboard = false;
+        if (this.gameResult || this.introMode) {
+            delete this.gameResult;
             this.startGame();
         }
     }
 
     startGame() {
-        this.isTie = false;
         clearTimeout(this.eogTimeout);
+        const lastType = this.config.gameType;
         const defaultPlayer1 = this.config?.player1;
         const defaultPlayer2 = this.config?.player2;
-
-        delete this.winner;
+ 
+        delete this.gameResult;
         this.config = new GameSetupConfig();
         this.config.player1 = defaultPlayer1;
         this.config.player2 = defaultPlayer2;
-
+        this.config.gameType = lastType;
         this.gameSetup = true;
-        const video: any = document.getElementById('bg-video');
-        video.play();
-
-        const bgAudio: any = document.getElementById('bg-music');
-        bgAudio.currentTime = 0;
-        bgAudio.volume = .05;
-
-        if (GameSettings.Instance.playBackgroundMusic) {
-            bgAudio.play();
-        }
-
-        const gameAudio: any = document.getElementById('arcade-funk');
-        gameAudio.pause();
+        playVideo('bg-video');
+        const src = GameSettings.Instance.introScreenMusic ? GameSettings.Instance.introScreenMusic : this.getRandomBackgroundMusicUrl();
+        playMusic('bg-music', 'BACKGROUND-MUSIC', src);
+        playMusic('click', 'SOUND-EFFECT'); 
         this.introMode = false;
     }
-
-    private playWin() {
-        const gameAudio: any = document.getElementById('arcade-funk');
-        gameAudio.pause();
-        const win: any = document.getElementById('win-soundfx');
-
-        win.currentTime = 0;
-        win.volume = .1;
-        win.loop = false;
-        win.play();
-
-        /*         setTimeout(()=> {
-                    delete this.winner;
-                },30000); */
-    }
-
-    private getSecondsBetweenDates(date1: Date, date2: Date): number {
-        let diffInMilliseconds = date2.getTime() - date1.getTime();
-        return Math.floor(diffInMilliseconds / 1000);
-    }
-}
-
-
-
-export function getPlayerTypes() {
-    return [
-        'mouse',
-        'bear',
-        'cat',
-        'chicken',
-        'dog',
-        'dragon',
-        'duck',
-        'knight',
-        'llama',
-        'lion',
-        'monkey',
-        'hockey-player',
-        'monster-1',
-        'tank',
-        'monster-truck',
-        'fairy',
-        'snake',
-        'ape',
-        'monster-2',
-        'moose',
-        'eagle',
-        'rabbit',
-        'witch',
-        'tiger',
-        'troll',
-        'construction-worker',
-        'unicorn',
-        'werewolf',
-        'wizard',
-    ];
 }

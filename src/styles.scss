@@ -1,5 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
 
+:root {
+    --mdc-outlined-text-field-outline-color: #fff;
+    --mat-tab-header-active-hover-label-text-color:#fff;
+    --mat-tab-header-inactive-hover-label-text-color: #fff !important;
+    --mat-select-enabled-trigger-text-color: #fff;
+
+}
+
+
+.mdc-tab__text-label {
+    color: #fff !important;
+}
 
 
 html, body { height: 100%; color: #fff}
@@ -17,6 +29,44 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     text-shadow: 4px 4px 14px rgba(0,0,0,0.6);
     color: rgba(255,255,255,.8);
     font-family: "sporty-pro", sans-serif !important;
+    line-height: 80px;
+}
+
+mat-form-field {
+    display: block !important;
+}
+h3 {
+    font-size: 35px !important;
+    line-height: 40px !important;
+    text-shadow: 4px 4px 14px rgba(0,0,0,0.6);
+    color: rgba(255,255,255,.8);
+    font-family: "sporty-pro", sans-serif !important;
+}
+
+mat-option, mat-select, mat-tab-header, mat-label {
+    text-shadow: none;
+}
+
+
+.rank {
+    position: absolute;
+    background-color: #6c80f0;
+    padding: 1px 8px;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 14px;
+    z-index: 1;
+    top: 0;
+    right: 6px;
+    text-shadow: none;
+    line-height: 13px;
+}
+
+/* Change the border color */
+.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__leading,
+.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__notch,
+.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__trailing {
+  border-color: var(#fff) !important;
 }
 
 .flex-container {
@@ -37,8 +87,13 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .mat-mdc-checkbox .mdc-form-field {
     color: #fff !important;
 }
+.mat-body, .mat-body-2, .mat-typography .mat-body, .mat-typography .mat-body-2, .mat-typography {
+    font-size: 28px;
+    line-height: 32px;
+    text-shadow: 1px 1px 1px #333;
+}
 
-@keyframes white-box-enter {
+@keyframes blur-box-enter {
     from {
         transform: translateY(-200px) scale(.5);
     }
@@ -46,7 +101,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
         transform: translateY(0) scale(1);
     }
 }
-.white-box {
+.blur-box {
     width: 100%;
     max-width: 350px;
     display: table;
@@ -54,8 +109,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     box-shadow: 1px 1px 24px 1px #0000001a;
     border-radius: 17px;
     padding: 30px;
-    backdrop-filter: blur(10px);
-    animation: white-box-enter .5s ease;
+    backdrop-filter: blur(20px);
+    animation: blur-box-enter .5s ease;
 }
 
 .game-avatar {
@@ -65,4 +120,18 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 button mat-icon {
     color: #fff !important;
+}
+
+@keyframes fade-in-up {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.fade-in-up {
+    animation: fade-in-up .7s ease;
 }

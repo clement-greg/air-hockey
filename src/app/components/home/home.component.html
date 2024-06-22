@@ -4,36 +4,31 @@
 <div class="game-surface">
     <div *ngIf="game?.config?.player1 && game?.config?.player2">
 
-        <div class="center">
+        <div class="center" [class.hidden]="!game.running">
             Time Remaining
-            <h1>{{game.secondsRemaining}}</h1>
+            <h1 [class.flashing]="isFlashing">{{game.secondsRemaining}}</h1>
         </div>
         <div class="flex-container">
             <div class="center player-score">
-                <img class="game-avatar" src="../../assets/images/{{game.config.player1.avatar}}.jpg">
+                {{game.config.player1.avatar.name}}<br>
+                <img class="game-avatar" src="../../assets/images/{{game.config.player1.avatar.baseUrl}}.jpg">
                 <h1>{{game.player1Score}}</h1>
             </div>
             <div class="center player-score">
-                <img class="game-avatar" src="../../assets/images/{{game.config.player2.avatar}}.jpg">
+                {{game.config.player2.avatar.name}}<br>
+                <img class="game-avatar" src="../../assets/images/{{game.config.player2.avatar.baseUrl}}.jpg">
                 <h1>{{game.player2Score}}</h1>
             </div>
         </div>
     </div>
 </div>
 
-<div class="game-setup" *ngIf="game.gameSetup">
-    <app-game-setup [(config)]="game.config" (configChange)="configChange()"></app-game-setup>
-
+<div class="modal-box" *ngIf="game.gameSetup">
+    <app-game-setup [(config)]="game.config" (setupCancelled)="setupCancelled()" (configChange)="configChange()"></app-game-setup>
 </div>
 
-<div class="game-setup" *ngIf="game.winner">
-    <div class="white-box">
-        <app-display-winner [winner]="game.winner"></app-display-winner>
-    </div>
-</div>
-
-<div class="game-setup" *ngIf="game.settingsVisible">
-    <div class="white-box">
+<div class="modal-box" style="z-index: 200;" *ngIf="game.settingsVisible">
+    <div class="blur-box">
         <div class="flex-container">
             <div></div>
             <div class="no-grow">
@@ -55,21 +50,30 @@
 
 </div>
 
-<div class="game-setup" *ngIf="game.isTie">
-    <app-display-tie [game]="game"></app-display-tie>
-
+<div class="modal-box " *ngIf="game.gameResult">
+    <div class="blur-box game-result">
+        <app-display-game-result [result]="game.gameResult"></app-display-game-result>
+    </div>
 </div>
 
-<div class="game-setup" style="z-index: 10000;" *ngIf="game.playPong">
+<div class="modal-box" *ngIf="game.showLeaderboard">
+    <div class="blur-box game-result">
+        <app-leader-board></app-leader-board>
+    </div>
+</div>
 
-
-        <app-pong></app-pong>
-
+<div class="modal-box" style="z-index: 10000;" *ngIf="game.playPong">
+    <app-pong></app-pong>
 </div>
 
 <div style="display: none;">
     <audio src="../../assets/music/score-1.mp3" id="score-1"></audio>
-    <audio src="../../assets/music/bg-music.mp3" loop id="bg-music"></audio>
-    <audio src="../../assets/music/arcade_funk.mp3" loop id="arcade-funk"></audio>
-    <audio src="../../assets/music/win.mp3" loop="false" id="win-soundfx"></audio>
+    <audio src="../../assets/music/bg-music.mp3"  id="bg-music"></audio>
+    <audio src="../../assets/music/win.mp3" id="win-soundfx"></audio>
+    <audio src="../../assets/music/warning.mp3" id="warning"></audio>
+    <audio src="../../assets/music/tie-game.mp3" id="tie-game"></audio>
+    <audio src="../../assets/music/click.mp3" id="click"></audio>
+    <audio src="../../assets/music/back.mp3" id="back-click"></audio>
 </div>
+
+<app-count-down *ngIf="game.countdown"></app-count-down>

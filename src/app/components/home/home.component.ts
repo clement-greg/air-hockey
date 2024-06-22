@@ -4,47 +4,54 @@ import { MatButtonModule } from '@angular/material/button';
 import { GameMessage } from '../../models/game-message';
 import { GameSetupComponent } from '../game-setup/game-setup.component';
 import { CommonModule } from '@angular/common';
-import { DisplayWinnerComponent } from '../display-winner/display-winner.component';
-import { DisplayTieComponent } from '../display-tie/display-tie.component';
 import { SettingsComponent } from '../settings/settings.component';
 import { PubSubService } from '../../services/pub-sub.service';
 import { Subscription } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { PongComponent } from '../pong/pong.component';
-import { JoystickState } from '../../models/player';
+import { JoystickState } from '../../services/joystick-state';
+import { CountDownComponent } from '../count-down/count-down.component';
+import { LeaderBoardRepositoryService } from '../../services/leader-board-repository.service';
+import { DisplayGameResultComponent } from '../display-game-result/display-game-result.component';
+import { LeaderBoardComponent } from '../leader-board/leader-board.component';
 
-@Component({
+@Component({ 
   selector: 'app-home',
   standalone: true,
-  imports: [MatButtonModule, GameSetupComponent, MatIconModule, CommonModule, DisplayWinnerComponent, DisplayTieComponent, SettingsComponent, PongComponent],
+  imports: [MatButtonModule, GameSetupComponent, CountDownComponent, MatIconModule, DisplayGameResultComponent, CommonModule, SettingsComponent, PongComponent, LeaderBoardComponent],
   templateUrl: './home.component.html',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnDestroy {
 
-  game = new Game(60);
+  game: Game;
   interval: any;
   private subscription: Subscription;
   joystick1State = new JoystickState(0);
   joystick2State = new JoystickState(1);
+  private messageDates: any = {};
 
-  private lastMessageReceived: Date = new Date();
+  constructor(zone: NgZone,
+    pubSub: PubSubService,
+    leaderboard: LeaderBoardRepositoryService) {
 
-  constructor(zone: NgZone, private pubSub: PubSubService) {
+    this.game = new Game(leaderboard);
     window.addEventListener('message', event => {
       const gameMessage: GameMessage = JSON.parse(event.data);
 
       zone.run(() => {
-
-        // Prevent the same event from processing twice
-        const miliseconds = new Date().getTime() - this.lastMessageReceived.getTime();
+        // Prevent the same event from signaling twice
+        let lastMessageReceived: Date = this.messageDates[gameMessage.messageType];
+        if (!lastMessageReceived) {
+          lastMessageReceived = new Date(2000, 1, 1);
+        }
+        const miliseconds = new Date().getTime() - lastMessageReceived.getTime();
         if (miliseconds > 2000) {
           this.processGameMessage(gameMessage);
-          this.lastMessageReceived = new Date();
+          this.messageDates[gameMessage.messageType] = new Date();
         }
       });
-
     });
 
     this.subscription = pubSub.subscription.subscribe(message => {
@@ -72,6 +79,18 @@ export class HomeComponent implements OnDestroy {
     }
   }
 
+  get isFlashing() {
+    if (typeof this.game.secondsRemaining != 'number') {
+      return false;
+    }
+    return this.game.secondsRemaining <= 10 && this.game.secondsRemaining > 0;
+  }
+
+  setupCancelled() {
+    this.game.gameSetup = false;
+    this.game.introMode = true;
+  }
+
   gamepads: any = {};
   gamepadHandler(event: any, connected: boolean) {
     const gamepad = event.gamepad;
@@ -91,6 +110,7 @@ export class HomeComponent implements OnDestroy {
     switch (evt.key) {
       case ' ':
         this.game?.handleSpace();
+
         break;
       case 'l':
         this.processGameMessage({
@@ -105,10 +125,16 @@ export class HomeComponent implements OnDestroy {
         });
         break;
       case 's':
-        this.game.settingsVisible = true;
+        if (!this.game.running) {
+          this.game.settingsVisible = true;
+        }
         break;
       case 'b':
-        this.game.settingsVisible = false;
+        if (this.game.introMode) { 
+          this.game.showLeaderboard = !this.game.showLeaderboard;
+        } else {
+          this.game.settingsVisible = false;
+        }
         break;
       case 'p':
         if (this.game.running) {
@@ -120,20 +146,12 @@ export class HomeComponent implements OnDestroy {
 
   processGameMessage(message: GameMessage) {
     this.game.processGameMessage(message);
-    if (message.messageType === 'GAME_STARTED') {
-      this.game.startGame();
-    }
   }
 
   configChange() {
     this.game.gameSetup = false;
     this.game.restart();
-    const bgAudio: any = document.getElementById('bg-music');
-    bgAudio.pause();
-    const gameAudio: any = document.getElementById('arcade-funk');
-    gameAudio.volume = .05;
-    gameAudio.currentTime = 0;
-    gameAudio.play();
+
 
     clearInterval(this.interval);
     this.interval = setInterval(() => {

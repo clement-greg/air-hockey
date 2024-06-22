@@ -1,0 +1,20 @@
+input, mat-label {
+    color: #fff !important;
+}
+
+.url-container {
+    overflow-y: auto;
+    overflow-x: hidden;
+    white-space: nowrap;
+    height: 300px;
+
+    >div {
+        display: flex;
+        :first-child {
+            flex: 1;
+        }
+        :last-child {
+            flex: none;
+        }
+    }
+}

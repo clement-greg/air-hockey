@@ -1,8 +1,14 @@
-import { CUSTOM_ELEMENTS_SCHEMA, Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
-import { getPlayerTypes } from '../../models/game';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, EventEmitter, HostListener, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { JoystickState, Player } from '../../models/player';
+import { Player } from '../../models/player';
 import { GameSetupConfig } from '../../models/game-setup-config';
+import { GameType } from '../../models/game-type';
+import { JoystickState } from '../../services/joystick-state';
+import { PlayerAvatar } from '../../models/player-avatar';
+import { playMusic } from '../../services/utilities';
+import { LeaderBoardRepositoryService } from '../../services/leader-board-repository.service';
+
+
 
 @Component({
   selector: 'app-game-setup',
@@ -12,26 +18,46 @@ import { GameSetupConfig } from '../../models/game-setup-config';
   styleUrl: './game-setup.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class GameSetupComponent {
-  selectedItem: string;
+export class GameSetupComponent implements OnChanges {
+  selectedItem: PlayerAvatar;
 
   @Input() config: GameSetupConfig = new GameSetupConfig();
   @Output() configChange: EventEmitter<GameSetupConfig> = new EventEmitter();
+
+  @Output() setupCancelled: EventEmitter<boolean> = new EventEmitter();
   private joystick1 = new JoystickState(0);
   private joystick2 = new JoystickState(1);
+  gameTypeSelected = false;
+  gameTypes: GameType[] = [
+    { type: 'Virtual', lottieUrl: 'https://lottie.host/2624709a-b10c-43e1-af2a-623d1434c3b3/HhWUwa1d3c.json', description: 'Play pong using the joysticks' },
+    { type: 'Physical', lottieUrl: 'https://lottie.host/063f9150-34fc-4bdc-92df-16318a0f3a79/xG6AAyhFbC.json', description: 'Play air hockey on the real table' },
+    { type: 'Both', lottieUrl: 'https://lottie.host/a7044b1d-7b7c-4dbe-8c08-f8579798acd4/pnWDVXLTWJ.json', description: 'Play both pong and the real table simultaneously' }
+  ];
 
-
-  constructor() {
-    this.selectedItem = this.playerTypes[11];
-
+  constructor(private leaderboardRepository: LeaderBoardRepositoryService) {
+    this.selectedItem = this.playerTypes[14];
     this.joystick1.onLeftJoyStick = this.selectLeft.bind(this);
     this.joystick1.onRightJoyStick = this.selectRight.bind(this);
     this.joystick1.onButtonPress = this.buttonPress.bind(this);
-
     this.joystick2.onLeftJoyStick = this.selectLeft.bind(this);
     this.joystick2.onRightJoyStick = this.selectRight.bind(this);
     this.joystick2.onButtonPress = this.buttonPress.bind(this);
+  }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['config'].currentValue) {
+      const gc: GameSetupConfig = changes['config'].currentValue;
+      if (!gc.gameType) {
+        gc.gameType = 'Physical';
+      }
+      if (gc.player1 && gc.player2 && gc.gameType) {
+        this.gameTypeSelected = true;
+      }
+    }
+  }
+
+  get selectedGameType() {
+    return this.gameTypes.find(i => i.type === this.config.gameType);
   }
 
   buttonPress(buttonNumber: number) {
@@ -64,61 +90,160 @@ export class GameSetupComponent {
   }
 
   back() {
+    playMusic('back-click', 'SOUND-EFFECT');
+    if (this.config.player1 && this.config.player2 && this.gameTypeSelected) {
+      this.gameTypeSelected = false;
+      return;
+    }
     if (this.config.player2) {
       delete this.config.player2;
       return;
     }
     if (this.config.player1) {
-
       delete this.config.player1;
       return;
     }
+    
+    this.setupCancelled.emit(true);
   }
 
   selectLeft() {
+    if (this.config.player1 && this.config.player2 && !this.gameTypeSelected) {
+      const type = this.gameTypes.find(i => i.type === this.config.gameType);
+      let index = this.gameTypes.indexOf(type);
+      index--;
+      if (index < 0) {
+        index = this.gameTypes.length - 1;
+      }
+      delete this.config.gameType;
+      setTimeout(() => {
+        this.config.gameType = this.gameTypes[index].type;
+
+      });
+      return;
+    }
+
     let index = this.playerTypes.indexOf(this.selectedItem);
     if (index > 0) {
       index--;
     }
 
-    this.selectedItem = this.playerTypes[index];
-  }
-
-  selectAvatar() {
-    if (!this.config.player1) {
-      this.config.player1 = new Player(1);
-      this.config.player1.avatar = this.selectedItem;
-      //this.selectedItem = this.playerTypes[7];
-
-
-    }
-    else if (!this.config.player2) {
-      this.config.player2 = new Player(2);
-      this.config.player2.avatar = this.selectedItem;
-    } else {
-      this.configChange.emit(this.config);
-    }
+    delete this.selectedItem;
+    setTimeout(() => {
+      this.selectedItem = this.playerTypes[index];
+      if (this.isPlayerSelected(this.selectedItem)) {
+        if (this.playerTypes.indexOf(this.selectedItem) === 0) {
+          this.selectRight();
+        } else {
+          this.selectLeft();
+        }
+      }
+    });
   }
 
   selectRight() {
+    if (this.config.player1 && this.config.player2 && !this.gameTypeSelected) {
+      const type = this.gameTypes.find(i => i.type === this.config.gameType);
+      let index = this.gameTypes.indexOf(type);
+      index++;
+      if (index >= this.gameTypes.length) {
+        index = 0;
+      }
+      delete this.config.gameType;
+      setTimeout(() => {
+        this.config.gameType = this.gameTypes[index].type;
+      });
+      return;
+    }
+
     let index = this.playerTypes.indexOf(this.selectedItem);
     if (index < this.playerTypes.length - 1) {
       index++;
     }
 
-    this.selectedItem = this.playerTypes[index];
+    delete this.selectedItem;
+    setTimeout(() => {
+      this.selectedItem = this.playerTypes[index];
+      if (this.isPlayerSelected(this.selectedItem)) {
+        const selectedIndex = this.playerTypes.indexOf(this.selectedItem);
+        if (selectedIndex === this.playerTypes.length - 1) {
+          this.selectLeft();
+        } else {
+          this.selectRight();
+        }
+      }
+    });
   }
 
-  private _playerTypes: string[] = [];
+
+  selectAvatar() {
+    if (!this.config.player1) {
+      this.config.player1 = new Player(1);
+      this.config.player1.avatar = this.selectedItem;
+      playMusic('click', 'SOUND-EFFECT');
+      const index = this.playerTypes.indexOf(this.selectedItem);
+      if (index < this.playerTypes.length - 1) {
+        this.selectRight();
+      } else {
+        this.selectLeft();
+      }
+    }
+    else if (!this.config.player2) {
+      if (this.config.player1.avatar.baseUrl === this.selectedItem.baseUrl) {
+        return;
+      }
+      this.config.player2 = new Player(2);
+      this.config.player2.avatar = this.selectedItem;
+      playMusic('click', 'SOUND-EFFECT');
+
+    } else if (!this.gameTypeSelected) {
+      this.gameTypeSelected = true;
+      playMusic('click', 'SOUND-EFFECT');
+    } else {
+      this.configChange.emit(this.config);
+      playMusic('click', 'SOUND-EFFECT');
+    }
+  }
+
+  isPlayerSelected(playerType: PlayerAvatar) {
+    if (this.config.player1 && !this.config.player2) {
+      return this.config.player1.avatar.baseUrl === playerType.baseUrl;
+    }
+
+    return false;
+  }
+  private _playerTypes: PlayerAvatar[] = [];
   get playerTypes() {
     if (this._playerTypes.length === 0) {
+      this._playerTypes = PlayerAvatar.getAll();
+      const leaders = this.leaderboardRepository.leaderBoard;
+      for(const item of this._playerTypes) {
+        const leaderboard = leaders.find(i=>i.avatar.baseUrl === item.baseUrl);
+        if(leaderboard) {
+          item.points = leaderboard.total;
+          item.totalPlays = leaderboard.wins + leaderboard.loses + leaderboard.ties;
+        } else {
+          item.points = 0;
+        }
+      }
 
-      this._playerTypes = getPlayerTypes();
+      // Sort the players according to popularity
+      const sortedPlayerTypes = this._playerTypes.sort((a,b)=>a.totalPlays > b.totalPlays ? -1: 1);
+      const altSortPlayerTypes = [];
+      let alt = false;
+      for(const item of sortedPlayerTypes) {
 
+        if(alt) {
+          altSortPlayerTypes.push(item);
+        } else {
+          altSortPlayerTypes.unshift(item);
+        }
+        alt = !alt;
+      }
+      this._playerTypes = altSortPlayerTypes;
     }
 
     return this._playerTypes;
-
   }
 
   get scrollOffset() {
@@ -128,6 +253,5 @@ export class GameSetupComponent {
     const placesToScroll = index - nonsScrollCount;
 
     return `translateX(${placesToScroll > -1 ? '-' : ''}${Math.abs(placesToScroll) * 140}px)`;
-
   }
 }
