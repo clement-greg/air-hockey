@@ -1,4 +1,4 @@
-<video loop muted [autoplay]="'autoplay'" id="bg-video">
+<video loop muted [autoplay]="true"  [muted]="true" id="bg-video">
     <source src="../../assets/video/hockey-background.mp4" type="video/mp4">
 </video>
 <div class="game-surface">
@@ -10,13 +10,15 @@
         </div>
         <div class="flex-container">
             <div class="center player-score">
+                <h1 class="plus-one" *ngIf="game.showPlayerOneScore">+1</h1>
                 {{game.config.player1.avatar.name}}<br>
-                <img class="game-avatar" src="../../assets/images/{{game.config.player1.avatar.baseUrl}}.jpg">
+                <img class="game-avatar" [class.pulsing]="game.showPlayerOneScore" src="../../assets/images/{{game.config.player1.avatar.baseUrl}}.jpg">
                 <h1>{{game.player1Score}}</h1>
             </div>
             <div class="center player-score">
+                <h1 class="plus-one" *ngIf="game.showPlayerTwoScore">+1</h1>
                 {{game.config.player2.avatar.name}}<br>
-                <img class="game-avatar" src="../../assets/images/{{game.config.player2.avatar.baseUrl}}.jpg">
+                <img class="game-avatar" [class.pulsing]="game.showPlayerTwoScore" src="../../assets/images/{{game.config.player2.avatar.baseUrl}}.jpg">
                 <h1>{{game.player2Score}}</h1>
             </div>
         </div>

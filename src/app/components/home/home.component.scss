@@ -20,15 +20,17 @@ video {
         opacity: 0;
 
     }
+
     to {
         opacity: 1;
     }
 }
+
 .flashing {
     color: red;
     animation-name: flash;
     animation-duration: .5s;
-    animation-timing-function:  ease;
+    animation-timing-function: ease;
     animation-iteration-count: infinite;
     animation-direction: alternate;
 }
@@ -51,10 +53,53 @@ video {
     max-width: unset;
     margin-top: 0;
 }
+
 .player-score {
     padding-left: 150px;
     padding-right: 150px;
+    position: relative;
 }
+
+@keyframes player-pulsing {
+    25% {
+        transform: scale(1.05);
+    }
+    50% {
+        
+        transform: scale(1.0);
+        box-shadow: 0px 0px 70px 0px rgba(255,244,33,1);
+    }
+    75% {
+        
+        transform: scale(1.05);
+    }
+    100% {
+        
+        transform: scale(1.0);
+        box-shadow: 0px 0px 10px 0px rgba(255,244,33,1);
+    }
+}
+
+.pulsing {
+    animation: player-pulsing 1s ease;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    transform-origin: 50% 50%;
+}
+
+@keyframes plus-one-up {
+    to {
+        transform: translateY(-100px) scale(3);
+        opacity: 0;
+    }
+}
+
+.plus-one {
+    position: absolute;
+
+    animation: plus-one-up 1s ease;
+}
+
 
 .game-intro {
     height: 100vh;

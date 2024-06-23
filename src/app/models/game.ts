@@ -1,4 +1,4 @@
-import {  LeaderBoardRepositoryService } from "../services/leader-board-repository.service";
+import { LeaderBoardRepositoryService } from "../services/leader-board-repository.service";
 import { getRandomNumber, getSecondsBetweenDates, playMusic, playVideo, switchMusic } from "../services/utilities";
 import { GameMessage } from "./game-message";
 import { GameResult } from "./game-result";
@@ -20,6 +20,9 @@ export class Game {
     warningPlayed = false;
     gameResult: GameResult;
     gameMenuMusicUrl = '../../assets/music/bg-music.mp3';
+
+    showPlayerOneScore = false;
+    showPlayerTwoScore = false;
 
 
     constructor(private leaderboard: LeaderBoardRepositoryService) {
@@ -76,10 +79,10 @@ export class Game {
             GameSettings.Instance.gameMusicUrls = [this.gameMenuMusicUrl];
         }
         const urls = [...GameSettings.Instance.gameMusicUrls];
-        if(GameSettings.Instance.gameDoneMusic) {
+        if (GameSettings.Instance.gameDoneMusic) {
             urls.splice(urls.indexOf(GameSettings.Instance.gameDoneMusic));
         }
-        if(GameSettings.Instance.introScreenMusic) {
+        if (GameSettings.Instance.introScreenMusic) {
             urls.splice(urls.indexOf(GameSettings.Instance.introScreenMusic));
         }
         const index = getRandomNumber(0, urls.length - 1);
@@ -92,12 +95,16 @@ export class Game {
                 if (this.running) {
                     this.player1Score++;
                     playMusic('score-1', 'SOUND-EFFECT');
+                    this.showPlayerOneScore = true;
+                    setTimeout(() => this.showPlayerOneScore = false, 1000);
                 }
                 break;
             case 'PLAYER_2_SCORED':
                 if (this.running) {
                     this.player2Score++;
                     playMusic('score-1', 'SOUND-EFFECT');
+                    this.showPlayerTwoScore = true;
+                    setTimeout(() => this.showPlayerTwoScore = false, 1000);
                 }
                 break;
         }
@@ -197,7 +204,7 @@ export class Game {
         const lastType = this.config.gameType;
         const defaultPlayer1 = this.config?.player1;
         const defaultPlayer2 = this.config?.player2;
- 
+
         delete this.gameResult;
         this.config = new GameSetupConfig();
         this.config.player1 = defaultPlayer1;
@@ -207,7 +214,7 @@ export class Game {
         playVideo('bg-video');
         const src = GameSettings.Instance.introScreenMusic ? GameSettings.Instance.introScreenMusic : this.getRandomBackgroundMusicUrl();
         playMusic('bg-music', 'BACKGROUND-MUSIC', src);
-        playMusic('click', 'SOUND-EFFECT'); 
+        playMusic('click', 'SOUND-EFFECT');
         this.introMode = false;
     }
 }

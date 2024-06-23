@@ -32,6 +32,7 @@ export class HomeComponent implements OnDestroy {
   joystick2State = new JoystickState(1);
   private messageDates: any = {};
 
+
   constructor(zone: NgZone,
     pubSub: PubSubService,
     leaderboard: LeaderBoardRepositoryService) {
