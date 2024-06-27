@@ -34,7 +34,8 @@ export class PlayerAvatar {
             { baseUrl: 'construction-worker', name: 'Bill The Builder' },
             { baseUrl: 'werewolf', name: 'Alex' },
             { baseUrl: 'wizard', name: 'Gildorf' },
-            { baseUrl: 'baseball-squirrel', name: 'The Natural'}
+            { baseUrl: 'baseball-squirrel', name: 'The Natural' },
+            { baseUrl: 'wiz1', name: 'The Wiz' }
         ];
 
 
