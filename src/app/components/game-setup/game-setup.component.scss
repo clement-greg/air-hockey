@@ -16,6 +16,7 @@
                 display: inline-block;
                 padding: 30px;
                 position: relative;
+
                 img {
                     height: 80px;
                     transition: transform .5s ease;
@@ -27,7 +28,7 @@
                     right: unset;
                     top: unset;
                     left: calc(50% - 12px);
-                    bottom: 20px ;
+                    bottom: 20px;
                 }
 
                 lottie-player {
@@ -40,6 +41,7 @@
                 .description {
                     transition: transform .5s ease;
                 }
+
                 &.greyscale {
                     img {
                         filter: grayscale(1);
@@ -60,8 +62,9 @@
                             z-index: 2;
                             border-radius: 50%;
                         }
+
                         .rank {
-                            transform: translateY(15px) scale(1.5); 
+                            transform: translateY(15px) scale(1.5);
                         }
                     }
 
@@ -97,9 +100,9 @@
         transform: scale(.75);
     }
 
-    to { 
+    to {
         box-shadow: 0px 0px 96px 0px rgb(255 255 40);
-        transform: scale(1.0 );
+        transform: scale(1.0);
     }
 }
 
@@ -107,7 +110,7 @@
     transition: box-shadow 1s ease;
 
     &:not(.current) {
-        transform: scale(.6 );
+        transform: scale(.6);
     }
 
     &.current {
@@ -121,14 +124,21 @@
 }
 
 .player-bar {
-    height: 30px;
-    border-radius: 6px;
+    width: 0px;
+    height: 0px;
+    border-style: solid;
+    border-width: 0 50.5px 52px 50.5px;
+    transform: rotate(0deg);
+    position: absolute;
+    bottom: 0;
+    left: calc(50% - 50.5px);
+
 }
 
 .player-bar.blue {
-    background-color: #89CFF0;
+    border-color: transparent transparent #89CFF0 transparent;
 }
 
 .player-bar.red {
-    background-color: #e01249;
+    border-color: transparent transparent #e01249 transparent;
 }

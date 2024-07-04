@@ -143,7 +143,7 @@ export class GameSetupComponent implements OnChanges {
   }
 
   player2SelectRight() {
-    if (this.config.player1) {
+    if (!this.config.player1) {
       return;
     }
     this.selectRight();

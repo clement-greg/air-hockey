@@ -1,6 +1,6 @@
 <div class="blur-box" style="min-height: 550px;">
     <div class="selected-players">
-        <div>
+        <div style="position: relative;">
             <div class="top-text" *ngIf="!config.player1" [class.current-text]="!config.player1">Player 1</div>
             <div class="top-text" *ngIf="config.player1" [class.current-text]="!config.player1">
                 {{config.player1.avatar.name}}</div>
@@ -10,7 +10,7 @@
                 src="../../assets/images/{{config.player1.avatar.baseUrl}}.jpg">
             <div class="player-bar red" *ngIf="!config.player1"></div>
         </div>
-        <div>
+        <div style="position: relative;">
             <div class="top-text" *ngIf="!config.player2" [class.current-text]="!config.player2 && config.player1">
                 Player 2</div>
             <div class="top-text" *ngIf="config.player2" [class.current-text]="!config.player2 && config.player1"
