@@ -61,14 +61,14 @@ export class GameSetupComponent implements OnChanges {
   }
 
   player1ButtonPress(buttonNumber: number) {
-    if (this.config.player1 && !this.config.player2) {
+    if (this.config.player1 && !this.config.player2 && buttonNumber === 0) {
       return;
     }
     this.buttonPress(buttonNumber);
   }
 
   player2ButtonPress(buttonNumber: number) {
-    if (!this.config.player1) {
+    if (!this.config.player1 && buttonNumber === 0) {
       return;
     }
     this.buttonPress(buttonNumber);
