@@ -36,12 +36,12 @@ export class GameSetupComponent implements OnChanges {
 
   constructor(private leaderboardRepository: LeaderBoardRepositoryService) {
     this.selectedItem = this.playerTypes[14];
-    this.joystick1.onLeftJoyStick = this.selectLeft.bind(this);
-    this.joystick1.onRightJoyStick = this.selectRight.bind(this);
-    this.joystick1.onButtonPress = this.buttonPress.bind(this);
-    this.joystick2.onLeftJoyStick = this.selectLeft.bind(this);
-    this.joystick2.onRightJoyStick = this.selectRight.bind(this);
-    this.joystick2.onButtonPress = this.buttonPress.bind(this);
+    this.joystick1.onLeftJoyStick = this.player1SelectLeft.bind(this);
+    this.joystick1.onRightJoyStick = this.player1SelectRight.bind(this);
+    this.joystick1.onButtonPress = this.player1ButtonPress.bind(this);
+    this.joystick2.onLeftJoyStick = this.player2SelectLeft.bind(this);
+    this.joystick2.onRightJoyStick = this.player2SelectRight.bind(this);
+    this.joystick2.onButtonPress = this.player2ButtonPress.bind(this);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -58,6 +58,20 @@ export class GameSetupComponent implements OnChanges {
 
   get selectedGameType() {
     return this.gameTypes.find(i => i.type === this.config.gameType);
+  }
+
+  player1ButtonPress(buttonNumber: number) {
+    if (this.config.player1 && !this.config.player2) {
+      return;
+    }
+    this.buttonPress(buttonNumber);
+  }
+
+  player2ButtonPress(buttonNumber: number) {
+    if (!this.config.player1) {
+      return;
+    }
+    this.buttonPress(buttonNumber);
   }
 
   buttonPress(buttonNumber: number) {
@@ -103,8 +117,36 @@ export class GameSetupComponent implements OnChanges {
       delete this.config.player1;
       return;
     }
-    
+
     this.setupCancelled.emit(true);
+  }
+
+  player1SelectLeft() {
+    if (this.config.player1 && !this.config.player2) {
+      return;
+    }
+    this.selectLeft();
+  }
+
+  player1SelectRight() {
+    if (this.config.player1 && !this.config.player2) {
+      return;
+    }
+    this.selectRight();
+  }
+
+  player2SelectLeft() {
+    if (!this.config.player1) {
+      return;
+    }
+    this.selectLeft();
+  }
+
+  player2SelectRight() {
+    if (this.config.player1) {
+      return;
+    }
+    this.selectRight();
   }
 
   selectLeft() {
@@ -118,7 +160,6 @@ export class GameSetupComponent implements OnChanges {
       delete this.config.gameType;
       setTimeout(() => {
         this.config.gameType = this.gameTypes[index].type;
-
       });
       return;
     }
@@ -217,9 +258,9 @@ export class GameSetupComponent implements OnChanges {
     if (this._playerTypes.length === 0) {
       this._playerTypes = PlayerAvatar.getAll();
       const leaders = this.leaderboardRepository.leaderBoard;
-      for(const item of this._playerTypes) {
-        const leaderboard = leaders.find(i=>i.avatar.baseUrl === item.baseUrl);
-        if(leaderboard) {
+      for (const item of this._playerTypes) {
+        const leaderboard = leaders.find(i => i.avatar.baseUrl === item.baseUrl);
+        if (leaderboard) {
           item.points = leaderboard.total;
           item.totalPlays = leaderboard.wins + leaderboard.loses + leaderboard.ties;
         } else {
@@ -228,12 +269,12 @@ export class GameSetupComponent implements OnChanges {
       }
 
       // Sort the players according to popularity
-      const sortedPlayerTypes = this._playerTypes.sort((a,b)=>a.totalPlays > b.totalPlays ? -1: 1);
+      const sortedPlayerTypes = this._playerTypes.sort((a, b) => a.totalPlays > b.totalPlays ? -1 : 1);
       const altSortPlayerTypes = [];
       let alt = false;
-      for(const item of sortedPlayerTypes) {
+      for (const item of sortedPlayerTypes) {
 
-        if(alt) {
+        if (alt) {
           altSortPlayerTypes.push(item);
         } else {
           altSortPlayerTypes.unshift(item);

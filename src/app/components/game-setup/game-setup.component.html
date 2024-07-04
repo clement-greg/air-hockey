@@ -8,6 +8,7 @@
                 src="../../assets/images/unknown-player.jpg">
             <img class="game-avatar" *ngIf="config.player1"
                 src="../../assets/images/{{config.player1.avatar.baseUrl}}.jpg">
+            <div class="player-bar red" *ngIf="!config.player1"></div>
         </div>
         <div>
             <div class="top-text" *ngIf="!config.player2" [class.current-text]="!config.player2 && config.player1">
@@ -18,6 +19,7 @@
                 src="../../assets/images/unknown-player.jpg">
             <img class="game-avatar" *ngIf="config.player2"
                 src="../../assets/images/{{config.player2.avatar.baseUrl}}.jpg">
+            <div class="player-bar blue" *ngIf="!config.player2 && config.player1"></div>
 
         </div>
         <div *ngIf="selectedGameType && gameTypeSelected">
@@ -40,7 +42,8 @@
     <div class="avatar-selector" *ngIf="!config.player1 || !config.player2">
         <div [style.transform]="scrollOffset">
             <ul>
-                <li *ngFor="let playerType of playerTypes" [class.greyscale]="isPlayerSelected(playerType)" [class.selected]="selectedItem === playerType">
+                <li *ngFor="let playerType of playerTypes" [class.greyscale]="isPlayerSelected(playerType)"
+                    [class.selected]="selectedItem === playerType">
 
                     <img src="../../assets/images/{{playerType.baseUrl}}.jpg">
                     <!-- <span class="rank">{{playerType.points }}</span> -->

@@ -119,3 +119,16 @@
         animation-direction: alternate;
     }
 }
+
+.player-bar {
+    height: 30px;
+    border-radius: 6px;
+}
+
+.player-bar.blue {
+    background-color: #89CFF0;
+}
+
+.player-bar.red {
+    background-color: #e01249;
+}
