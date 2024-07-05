@@ -1,5 +1,4 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
-# import RPi.GPIO as GPIO
 from gpiozero import LED
 from gpiozero import Button
 import json
@@ -27,15 +26,19 @@ class MyServer(BaseHTTPRequestHandler):
         self.end_headers()
 
         if self.path == "/exchange-updates":
+            # Client app is requested any updated scores recorded from the break beam sensors
             self.wfile.write(bytes(json.dumps(scores), "utf-8"))
             scores.clear()
         elif self.path == '/turn-table-on':
+            # Client app is signalling that the game has started and the table needs to be turned on
             turn_table_on()
         elif self.path == '/turn-table-off':
+            # Client app is signalling that the game is over and the table needs to be turned off
             turn_table_off()
         elif self.path == '/favicon.ico':
             print('')
         else:
+            #Turn off the table (in case it is on) and load the application in the user's browser
             turn_table_off()
             templateUrl = APP_CLOUD_BASE_URL + "assets/html/template.html"
             output = urlopen(templateUrl).read()

@@ -1,3 +1,6 @@
+//Angular service that allows for sending inner app messages
+//between components
+
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 

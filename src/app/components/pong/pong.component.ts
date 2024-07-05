@@ -3,6 +3,7 @@ import { PubSubService } from '../../services/pub-sub.service';
 import { GameSettings } from '../../models/settings';
 import { JoystickState } from '../../services/joystick-state';
 import { getRandomNumber } from '../../services/utilities';
+import { SettingsRepositoryService } from '../../services/settings-repository.service';
 declare var Matter: any;
 
 
@@ -225,12 +226,12 @@ export class PongComponent implements OnInit, OnDestroy {
     const puck = this.puck;
 
     if (puck.velocity.x < 0 && this.puckDirection === 'right') {
-      Matter.Body.applyForce(puck, { x: puck.position.x, y: puck.position.y }, { x: -GameSettings.Instance.puckForce, y: 0 });
+      Matter.Body.applyForce(puck, { x: puck.position.x, y: puck.position.y }, { x: -SettingsRepositoryService.Instance.puckForce, y: 0 });
       this.puckDirection = 'left';
     }
 
     if (puck.velocity.x > 0 && this.puckDirection === 'left') {
-      Matter.Body.applyForce(puck, { x: puck.position.x, y: puck.position.y }, { x: GameSettings.Instance.puckForce, y: 0 });
+      Matter.Body.applyForce(puck, { x: puck.position.x, y: puck.position.y }, { x: SettingsRepositoryService.Instance.puckForce, y: 0 });
       this.puckDirection = 'right';
     }
 
@@ -280,7 +281,7 @@ export class PongComponent implements OnInit, OnDestroy {
         const xRand = Math.random();
         const yRand = Math.random();
         this.puckDirection = xRand > .5 ? 'right' : 'left';
-        const launchFactor = GameSettings.Instance.puckResetForce;
+        const launchFactor = SettingsRepositoryService.Instance.puckResetForce;
         Matter.Body.setVelocity(this.puck, {
           x: ((xRand > 0.5) ? 1 : -1) * Math.floor((xRand * launchFactor) + launchFactor),
           y: ((yRand > 0.5) ? 1 : -1) * Math.floor((yRand * launchFactor) + launchFactor)

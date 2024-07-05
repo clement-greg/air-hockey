@@ -1,8 +1,12 @@
+// Simple Anguler service for CRUD operations storing leaderboard information
+// All information is stored in localStorage
+
 import { Injectable } from '@angular/core';
 import { LeaderBoard } from '../models/leader-board';
 import { copyObject } from './utilities';
 import { PlayerAvatar } from '../models/player-avatar';
 import { GameResult } from '../models/game-result';
+import { PlayerRepository } from './player-repository.service';
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +34,7 @@ export class LeaderBoardRepositoryService {
       if(!results) {
         results = [];
       }
-      for (const avatar of PlayerAvatar.getAll()) {
+      for (const avatar of PlayerRepository.getAll()) {
         let leaderBoardItem = results.find(i => i.avatar.baseUrl === avatar.baseUrl);
         if (!leaderBoardItem) {
           leaderBoardItem = new LeaderBoard();

@@ -8,6 +8,7 @@ import { PlayerAvatar } from '../../models/player-avatar';
 import { playMusic } from '../../services/utilities';
 import { LeaderBoardRepositoryService } from '../../services/leader-board-repository.service';
 import { LottiePlayerComponent } from '../lottie-player/lottie-player.component';
+import { PlayerRepository } from '../../services/player-repository.service';
 
 
 
@@ -255,7 +256,7 @@ export class GameSetupComponent implements OnChanges {
   private _playerTypes: PlayerAvatar[] = [];
   get playerTypes() {
     if (this._playerTypes.length === 0) {
-      this._playerTypes = PlayerAvatar.getAll();
+      this._playerTypes = PlayerRepository.getAll();
       const leaders = this.leaderboardRepository.leaderBoard;
       for (const item of this._playerTypes) {
         const leaderboard = leaders.find(i => i.avatar.baseUrl === item.baseUrl);

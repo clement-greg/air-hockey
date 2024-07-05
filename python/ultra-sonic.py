@@ -1,3 +1,5 @@
+# Couldn't get this to work the way I needed
+
 from gpiozero import DistanceSensor
 ultrasonic = DistanceSensor(echo=17, trigger=4)
 

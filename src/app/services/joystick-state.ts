@@ -1,3 +1,5 @@
+// Simple wrapper around the browser GamePad API to expose
+// a more event driven API
 export class JoystickState {
     private left = false;
     private up = false;

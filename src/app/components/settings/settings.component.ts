@@ -16,6 +16,7 @@ import {
   MatSnackBar,
   MatSnackBarModule,
 } from '@angular/material/snack-bar';
+import { SettingsRepositoryService } from '../../services/settings-repository.service';
 
 @Component({
   selector: 'app-settings',
@@ -26,7 +27,7 @@ import {
 })
 export class SettingsComponent {
 
-  settings: GameSettings = GameSettings.Instance;
+  settings: GameSettings = SettingsRepositoryService.Instance;
   newMusicUrl: string;
 
   constructor(private pubSub: PubSubService,
@@ -93,7 +94,7 @@ export class SettingsComponent {
 
   saveSettings() {
     setTimeout(() => {
-      this.settings.save();
+      SettingsRepositoryService.save();
       this.pubSub.publish({
         type: 'SETTINGS-CHANGED',
         messageBody: this.settings

@@ -1,4 +1,8 @@
+// Utilities.ts
+// General purpose utility functions
+
 import { GameSettings } from "../models/settings";
+import { SettingsRepositoryService } from "./settings-repository.service";
 
 
 //Returns the number of seconds between two dates
@@ -27,13 +31,13 @@ export function playMusic(elementId: string, type: 'BACKGROUND-MUSIC' | 'SOUND-E
     if (src) {
         audioElement.src = src;
     }
-    if (type === 'BACKGROUND-MUSIC' && GameSettings.Instance.playBackgroundMusic) {
-        audioElement.volume = GameSettings.Instance.musicVolume;
+    if (type === 'BACKGROUND-MUSIC' && SettingsRepositoryService.Instance.playBackgroundMusic) {
+        audioElement.volume = SettingsRepositoryService.Instance.musicVolume;
         audioElement.play();
     }
 
-    if (type === 'SOUND-EFFECT' && GameSettings.Instance.playSoundFX) {
-        audioElement.volume = GameSettings.Instance.soundFxVolume;
+    if (type === 'SOUND-EFFECT' && SettingsRepositoryService.Instance.playSoundFX) {
+        audioElement.volume = SettingsRepositoryService.Instance.soundFxVolume;
         audioElement.play();
     }
 }
