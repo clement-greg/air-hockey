@@ -142,3 +142,30 @@
 .player-bar.red {
     border-color: transparent transparent #e01249 transparent;
 }
+
+.is-red {
+    color: #e01249;
+}
+
+.is-blue {
+    color: #89CFF0;
+}
+
+#player-indicator {
+    position: absolute;
+    transition: all 1s ease;
+    height: 80px;
+    margin-top: -76px;
+    left: 91px;
+}
+
+#player-indicator.player-2 {
+    left: 358px;
+
+    .cls-1 {
+        fill: #89CFF0;
+    }
+    .cls-2 {
+        fill: #4287f5;
+    }
+}
