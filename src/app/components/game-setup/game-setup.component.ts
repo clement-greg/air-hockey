@@ -216,7 +216,6 @@ export class GameSetupComponent implements OnChanges {
     });
   }
 
-
   selectAvatar() {
     if (!this.config.player1) {
       this.config.player1 = new Player(1);

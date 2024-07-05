@@ -1,20 +1,11 @@
-<!-- 
-<mat-form-field appearance="outline">
-    <mat-label>Background Song URLs</mat-label>
-    <textarea rows="5" matInput [(ngModel)]="settings.songUrls"></textarea>
-</mat-form-field> -->
 <div style="width: 800px;height: 600px;">
-    <h3 style="margin-top: -35px">GameSettings</h3>
+    <h3 style="margin-top: -35px">Settings</h3>
     <mat-tab-group>
         <mat-tab label="General">
             <mat-form-field appearance="outline" style="margin-top: 20px; max-width: 250px;">
                 <mat-label>Game Duration (seconds)</mat-label>
                 <input matInput (ngModelChange)="saveSettings()" [(ngModel)]="settings.gameDuration" type="number">
             </mat-form-field>
-
-
-
-
             <mat-form-field appearance="outline" style="max-width: 250px;">
                 <mat-label>Puck Force</mat-label>
                 <input matInput (ngModelChange)="saveSettings()" [(ngModel)]="settings.puckForce" type="number">
@@ -58,13 +49,10 @@
             </div>
         </mat-tab>
 
-        <mat-tab label="Music Config">
+        <mat-tab label="Sound & Music">
             <mat-checkbox (ngModelChange)="savePlayBackgroundMusic($event)"
                 [(ngModel)]="settings.playBackgroundMusic">Play
                 Background Music</mat-checkbox>
-
-
-
             <div>
                 <mat-checkbox (ngModelChange)="saveSettings()" [(ngModel)]="settings.playSoundFX">Play Sound
                     Effects</mat-checkbox>
@@ -76,8 +64,6 @@
                     <input matSliderThumb (ngModelChange)="saveMusicSettings($event)"
                         [(ngModel)]="settings.musicVolume">
                 </mat-slider>
-
-
             </div>
 
             <div>
@@ -86,10 +72,7 @@
                     <input matSliderThumb (ngModelChange)="saveSoundFXSettings($event)"
                         [(ngModel)]="settings.soundFxVolume">
                 </mat-slider>
-
-
             </div>
-            
 
             <mat-form-field appearance="outline">
                 <mat-label>Intro Screen Music</mat-label>
@@ -117,5 +100,4 @@
             </div>
         </mat-tab>
     </mat-tab-group>
-
 </div>
