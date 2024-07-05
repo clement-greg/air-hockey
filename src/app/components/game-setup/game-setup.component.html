@@ -1,60 +1,56 @@
 <div class="blur-box" style="min-height: 550px;">
     <div class="selected-players">
         <div style="position: relative;">
-            <div class="top-text" *ngIf="!config.player1" [class.current-text]="!config.player1" [class.is-red]="!config.player1">Player 1</div>
+            <div class="top-text" *ngIf="!config.player1" [class.current-text]="!config.player1"
+                [class.is-red]="!config.player1">Player 1</div>
             <div class="top-text" *ngIf="config.player1" [class.current-text]="!config.player1">
                 {{config.player1.avatar.name}}</div>
             <img class="game-avatar" [class.current]="!config.player1" *ngIf="!config.player1"
                 src="../../assets/images/unknown-player.jpg">
             <img class="game-avatar" *ngIf="config.player1"
-                src="../../assets/images/{{config.player1.avatar.baseUrl}}.jpg">
-            <!-- <div class="player-bar red" *ngIf="!config.player1"></div> -->
+                src="../../assets/images/avatars/{{config.player1.avatar.baseUrl}}.jpg">
         </div>
         <div style="position: relative;">
-            <div class="top-text" *ngIf="!config.player2" [class.current-text]="!config.player2 && config.player1" [class.is-blue]="!config.player2 && config.player1">
+            <div class="top-text" *ngIf="!config.player2" [class.current-text]="!config.player2 && config.player1"
+                [class.is-blue]="!config.player2 && config.player1">
                 Player 2</div>
             <div class="top-text" *ngIf="config.player2" [class.current-text]="!config.player2 && config.player1"
                 style="font-size: 16px;">{{config.player2.avatar.name}}</div>
             <img class="game-avatar" [class.current]="!config.player2 && config.player1" *ngIf="!config.player2"
                 src="../../assets/images/unknown-player.jpg">
             <img class="game-avatar" *ngIf="config.player2"
-                src="../../assets/images/{{config.player2.avatar.baseUrl}}.jpg">
-            <!-- <div class="player-bar blue" *ngIf="!config.player2 && config.player1"></div> -->
+                src="../../assets/images/avatars/{{config.player2.avatar.baseUrl}}.jpg">
 
         </div>
         <div *ngIf="selectedGameType && gameTypeSelected">
 
             <div>{{selectedGameType.type}} </div>
 
-            <lottie-player style="height: 132px;" [src]="selectedGameType.lottieUrl" background="transparent" speed="1"
-                loop autoplay>
-            </lottie-player>
 
+            <app-lottie-player height="132px" [src]="selectedGameType.lottieUrl" [autoPlay]="true"
+                [loop]="true"></app-lottie-player>
         </div>
         <div *ngIf="!gameTypeSelected">
             <div class="top-text" [class.current-text]="config.player2 && config.player1">Game Type</div>
 
             <img class="game-avatar" [class.current]="config.player2 && config.player1"
                 src="../../assets/images/game-type-icon.jpg">
-
         </div>
     </div>
     <div>
-        <svg *ngIf="!config.player1 || !config.player2" id="player-indicator" [class.player-2]="config.player1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-            viewBox="0 0 182 101">
+        <svg *ngIf="!config.player1 || !config.player2 || (config.player1 && config.player2)"
+            [class.select-game]="config.player1 && config.player2" id="player-indicator"
+            [class.player-2]="config.player1 && !config.player2" xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 182 101">
             <defs>
                 <style>
-                    .cls-1 {
-                        fill: #e01249;
-                    }
-
                     .cls-1,
                     .cls-2 {
                         stroke-width: 0px;
                     }
 
                     .cls-2 {
-                        fill: red;
+                        fill: #e01249;
                     }
 
                     .cls-3 {
@@ -62,12 +58,15 @@
                     }
                 </style>
                 <filter id="AI_BevelShadow_1" x="-20%" y="-20%" width="140%" height="140%">
-                    <feGaussianBlur in="SourceAlpha" result="blur" stdDeviation="4" />
+                    <feGaussianBlur in="SourceAlpha" result="blur" stdDeviation="8" />
+                    <feFlood flood-color="#e5ed05" result="color" />
+                    <feComposite in="color" in2="blur" operator="in" result="blur"></feComposite>
                     <feOffset dx="4" dy="4" in="blur" result="offsetBlur" />
                     <feSpecularLighting in="blur" result="specOut" specularConstant="1" specularExponent="10"
-                        surfaceScale="5">
+                        surfaceScale="35">
                         <fePointLight x="-5000" y="-10000" z="-20000" />
                     </feSpecularLighting>
+
                     <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut" />
                     <feComposite in="SourceGraphic" in2="specOut" k1="0" k2="1" k3="1" k4="0" operator="arithmetic"
                         result="litPaint" />
@@ -81,8 +80,6 @@
                 <path class="cls-2"
                     d="M85.63,16.54l-57.48,57.18c-4.68,4.65-1.38,12.64,5.21,12.64h114.97c6.6,0,9.89-7.98,5.21-12.64l-57.48-57.18c-2.88-2.87-7.54-2.87-10.43,0Z" />
             </g>
-            <path class="cls-1"
-                d="M153.55,73.72l-57.48-57.18c-1.34-1.33-3.06-2.04-4.81-2.13v71.95h57.08c6.6,0,9.89-7.98,5.21-12.64Z" />
         </svg>
     </div>
     <div class="avatar-selector" *ngIf="!config.player1 || !config.player2">
@@ -90,9 +87,7 @@
             <ul>
                 <li *ngFor="let playerType of playerTypes" [class.greyscale]="isPlayerSelected(playerType)"
                     [class.selected]="selectedItem === playerType">
-
-                    <img src="../../assets/images/{{playerType.baseUrl}}.jpg">
-                    <!-- <span class="rank">{{playerType.points }}</span> -->
+                    <img src="../../assets/images/avatars/{{playerType.baseUrl}}.jpg">
                 </li>
             </ul>
         </div>
@@ -110,9 +105,10 @@
         <div>
             <ul>
                 <li *ngFor="let gameType of gameTypes" [class.selected]="config.gameType ===  gameType.type ">
-                    <lottie-player style="height: 65px;" [src]="gameType.lottieUrl" background="transparent" speed="1"
-                        loop autoplay>
-                    </lottie-player>
+                    <div class="lottie-container">
+                        <app-lottie-player height="65px" [src]="gameType.lottieUrl" [autoPlay]="true"
+                            [loop]="true"></app-lottie-player>
+                    </div>
                 </li>
             </ul>
         </div>
@@ -122,10 +118,12 @@
     </div>
 
     <div *ngIf="config.player1 && config.player2 && gameTypeSelected" style="text-align: center;">
-        <lottie-player style="height: 175px;"
-            src="https://lottie.host/1947fa7c-b49e-48bc-b5ad-cb095b63d13b/F3HgMZ4QoZ.json" background="transparent"
-            speed="1" loop autoplay>
-        </lottie-player><br>
+
+        <div class="lottie-container">
+            <app-lottie-player height="175px"
+                src="https://lottie.host/1947fa7c-b49e-48bc-b5ad-cb095b63d13b/F3HgMZ4QoZ.json" [autoPlay]="true"
+                [loop]="true"></app-lottie-player>
+        </div>
         Press Start To Continue
     </div>
 </div>

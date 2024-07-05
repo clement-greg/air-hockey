@@ -2,15 +2,15 @@
 <div class="center" *ngIf="winner">
     <div style="margin-top: 30px;">{{winner.name}} </div>
     <h2  class="expand-title">Wins!!!</h2>
-    <img src="../../assets/images/{{winner.baseUrl}}.jpg" class="game-avatar  player-winner">
+    <img src="../../assets/images/avatars/{{winner.baseUrl}}.jpg" class="game-avatar  player-winner">
 </div>
 
 <div *ngIf="isTie">
     <div class="center"  style="margin-top: 30px;">
         <h2 class="expand-title" style="margin-bottom: 40px;">Tie Game</h2>
     </div>
-    <img src="../../assets/images/{{result.player1.baseUrl}}.jpg" class="game-avatar player-1">
-    <img src="../../assets/images/{{result.player2.baseUrl}}.jpg" class="game-avatar player-2">
+    <img src="../../assets/images/avatars/{{result.player1.baseUrl}}.jpg" class="game-avatar player-1">
+    <img src="../../assets/images/avatars/{{result.player2.baseUrl}}.jpg" class="game-avatar player-2">
 </div>
 
 <h3 *ngIf="leaderBoardShown?.length" class="standings-label">The Standings</h3>
@@ -27,7 +27,7 @@
 
     <div *ngFor="let item of leaderBoardShown" class="fade-in-up">
         <div>
-            <img src="../../assets/images/{{item.avatar.baseUrl}}.jpg"  class="game-avatar">
+            <img src="../../assets/images/avatars/{{item.avatar.baseUrl}}.jpg"  class="game-avatar">
             <div class="rank">
                 {{leaderBoardShown.indexOf(item) + 1}}
             </div>

@@ -31,7 +31,7 @@
                     bottom: 20px;
                 }
 
-                lottie-player {
+                .lottie-container {
                     transition: transform .5s ease;
                     border-radius: 50%;
                     height: 65px;
@@ -56,7 +56,7 @@
                             z-index: 2;
                         }
 
-                        lottie-player {
+                        .lottie-container {
                             transform: scale(2);
                             box-shadow: 0px 0px 24px 0px rgb(255 255 40);
                             z-index: 2;
@@ -123,26 +123,6 @@
     }
 }
 
-.player-bar {
-    width: 0px;
-    height: 0px;
-    border-style: solid;
-    border-width: 0 50.5px 52px 50.5px;
-    transform: rotate(0deg);
-    position: absolute;
-    bottom: 0;
-    left: calc(50% - 50.5px);
-
-}
-
-.player-bar.blue {
-    border-color: transparent transparent #89CFF0 transparent;
-}
-
-.player-bar.red {
-    border-color: transparent transparent #e01249 transparent;
-}
-
 .is-red {
     color: #e01249;
 }
@@ -157,15 +137,16 @@
     height: 80px;
     margin-top: -76px;
     left: 91px;
-}
-
-#player-indicator.player-2 {
-    left: 358px;
-
-    .cls-1 {
-        fill: #89CFF0;
+    &.player-2 {
+        left: 358px;
+        .cls-2 {
+            fill: #4287f5;
+        } 
     }
-    .cls-2 {
-        fill: #4287f5;
+    &.select-game {
+        left: 625px;
+        .cls-2 {
+            fill: #21a31a;
+        }
     }
 }

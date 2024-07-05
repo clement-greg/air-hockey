@@ -7,16 +7,16 @@ import { JoystickState } from '../../services/joystick-state';
 import { PlayerAvatar } from '../../models/player-avatar';
 import { playMusic } from '../../services/utilities';
 import { LeaderBoardRepositoryService } from '../../services/leader-board-repository.service';
+import { LottiePlayerComponent } from '../lottie-player/lottie-player.component';
 
 
 
 @Component({
   selector: 'app-game-setup',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LottiePlayerComponent],
   templateUrl: './game-setup.component.html',
   styleUrl: './game-setup.component.scss',
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class GameSetupComponent implements OnChanges {
   selectedItem: PlayerAvatar;

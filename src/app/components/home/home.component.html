@@ -13,14 +13,14 @@
                 <div class="player-1"></div>
                 <h1 class="plus-one" *ngIf="game.showPlayerOneScore">+1</h1>
                 {{game.config.player1.avatar.name}}<br>
-                <img class="game-avatar" [class.pulsing]="game.showPlayerOneScore" src="../../assets/images/{{game.config.player1.avatar.baseUrl}}.jpg">
+                <img class="game-avatar" [class.pulsing]="game.showPlayerOneScore" src="../../assets/images/avatars/{{game.config.player1.avatar.baseUrl}}.jpg">
                 <h1>{{game.player1Score}}</h1>
             </div>
             <div class="center player-score">
                 <div class="player-2"></div>
                 <h1 class="plus-one" *ngIf="game.showPlayerTwoScore">+1</h1>
                 {{game.config.player2.avatar.name}}<br>
-                <img class="game-avatar" [class.pulsing]="game.showPlayerTwoScore" src="../../assets/images/{{game.config.player2.avatar.baseUrl}}.jpg">
+                <img class="game-avatar" [class.pulsing]="game.showPlayerTwoScore" src="../../assets/images/avatars/{{game.config.player2.avatar.baseUrl}}.jpg">
                 <h1>{{game.player2Score}}</h1>
             </div>
         </div>
@@ -47,9 +47,7 @@
 
 <div class="game-intro" *ngIf="game.introMode">
     <div>
-        <lottie-player src="https://lottie.host/75b9d86d-a206-4e91-b26c-badd7cb0c0fe/nshTIIF5IY.json"
-            background="transparent" speed="1" loop autoplay>
-        </lottie-player>
+        <app-lottie-player  src="https://lottie.host/75b9d86d-a206-4e91-b26c-badd7cb0c0fe/nshTIIF5IY.json"></app-lottie-player>
     </div>
 
 </div>

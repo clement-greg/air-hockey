@@ -14,13 +14,13 @@ import { CountDownComponent } from '../count-down/count-down.component';
 import { LeaderBoardRepositoryService } from '../../services/leader-board-repository.service';
 import { DisplayGameResultComponent } from '../display-game-result/display-game-result.component';
 import { LeaderBoardComponent } from '../leader-board/leader-board.component';
+import { LottiePlayerComponent } from '../lottie-player/lottie-player.component';
 
 @Component({ 
   selector: 'app-home',
   standalone: true,
-  imports: [MatButtonModule, GameSetupComponent, CountDownComponent, MatIconModule, DisplayGameResultComponent, CommonModule, SettingsComponent, PongComponent, LeaderBoardComponent],
+  imports: [MatButtonModule, GameSetupComponent, CountDownComponent, LottiePlayerComponent, MatIconModule, DisplayGameResultComponent, CommonModule, SettingsComponent, PongComponent, LeaderBoardComponent],
   templateUrl: './home.component.html',
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnDestroy {
