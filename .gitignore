@@ -41,4 +41,5 @@ testem.log
 .DS_Store
 Thumbs.db
 
+# Adobe auto-saved files
 /resources/after-effects/Adobe After Effects Auto-Save/*
