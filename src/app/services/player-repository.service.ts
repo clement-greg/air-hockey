@@ -27,7 +27,9 @@ export class PlayerRepository {
             { baseUrl: 'construction-worker', name: 'Bill The Builder' },
             { baseUrl: 'wizard', name: 'Gildorf' },
             { baseUrl: 'baseball-squirrel', name: 'The Natural' },
-            { baseUrl: 'wiz1', name: 'The Wiz' }
+            { baseUrl: 'wiz1', name: 'The Wiz' },
+            { baseUrl: 'scare-bear', name: 'Scare Bear' },
+            { baseUrl: 'honest-ape', name: 'Honest Ape' }
         ];
 
 
