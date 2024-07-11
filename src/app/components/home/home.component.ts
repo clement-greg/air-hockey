@@ -16,7 +16,7 @@ import { DisplayGameResultComponent } from '../display-game-result/display-game-
 import { LeaderBoardComponent } from '../leader-board/leader-board.component';
 import { LottiePlayerComponent } from '../lottie-player/lottie-player.component';
 
-@Component({ 
+@Component({
   selector: 'app-home',
   standalone: true,
   imports: [MatButtonModule, GameSetupComponent, CountDownComponent, LottiePlayerComponent, MatIconModule, DisplayGameResultComponent, CommonModule, SettingsComponent, PongComponent, LeaderBoardComponent],
@@ -108,6 +108,10 @@ export class HomeComponent implements OnDestroy {
 
   @HostListener('document:keyup', ['$event'])
   keyPress(evt: KeyboardEvent) {
+    if (this.game.settingsVisible) {
+      return;
+    }
+
     switch (evt.key) {
       case ' ':
         this.game?.handleSpace();
@@ -131,7 +135,7 @@ export class HomeComponent implements OnDestroy {
         }
         break;
       case 'b':
-        if (this.game.introMode) { 
+        if (this.game.introMode) {
           this.game.showLeaderboard = !this.game.showLeaderboard;
         } else {
           this.game.settingsVisible = false;

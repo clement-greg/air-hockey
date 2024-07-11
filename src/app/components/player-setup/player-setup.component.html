@@ -1,0 +1,58 @@
+<input type="file" id="my-file-upload" style="display: none;" multiple accept="image/*" (change)="handleFiles($event)">
+
+<div>
+    <div class="flex-container">
+        <div></div>
+        <div class="no-grow">
+            <button mat-button mat-raised-button color="primary" [disabled]="saving" (click)="save()">
+                <mat-spinner *ngIf="saving"></mat-spinner> Save
+            </button>
+        </div>
+    </div>
+    <div *ngIf="newPlayer">
+
+        <div class="flex-container" style="padding-top: 30px;">
+
+            <div class="no-grow" style="padding-right: 30px;">
+
+                <img (click)="findImage()" style="width: 120px;" *ngIf="newPlayer.dataUrl" [src]="newPlayer.dataUrl">
+
+                <button *ngIf="!newPlayer.dataUrl" style="width: 120px;height: unset;" mat-button mat-raised-button
+                    (click)="findImage()">
+                    <div>
+                        <mat-icon
+                            style="height: 60px;width: 60px;font-size: 60px;color: #333 !important;margin: 0">add_photo_alternate</mat-icon><br>
+                        Find
+                        Image
+                    </div>
+                </button>
+
+            </div>
+            <div>
+                <mat-form-field appearance="outline">
+                    <mat-label>Player Name</mat-label>
+                    <input matInput [(ngModel)]="newPlayer.name">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Description</mat-label>
+                    <textarea matInput [(ngModel)]="newPlayer.description"></textarea>
+                </mat-form-field>
+
+                <button mat-button mat-raised-button color="primary" [disabled]="!canSave" (click)="add()">
+                    <mat-spinner *ngIf="adding"></mat-spinner> Add Player
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <ul>
+        <li class="player" *ngFor="let player of players">
+            <img [src]="player.baseUrl" style="height: 64px;"><br> {{player.name}}
+            <br>
+            <button mat-button (click)="removePlayer(player)">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </li>
+    </ul>
+</div>

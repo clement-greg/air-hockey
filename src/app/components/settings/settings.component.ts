@@ -18,12 +18,12 @@ import {
 } from '@angular/material/snack-bar';
 import { SettingsRepositoryService } from '../../services/settings-repository.service';
 import { BlobStorageService } from '../../services/blob-storage.service';
-import { dataURIToArrayBuffer, resizeImage } from '../../services/utilities';
+import { PlayerSetupComponent } from '../player-setup/player-setup.component';
 
 @Component({
   selector: 'app-settings',
   standalone: true,
-  imports: [MatCheckboxModule, CommonModule, MatSelectModule, FormsModule, MatIconModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatSliderModule, MatTabsModule, MatSnackBarModule],
+  imports: [MatCheckboxModule, CommonModule, MatSelectModule, FormsModule, MatIconModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatSliderModule, MatTabsModule, MatSnackBarModule, PlayerSetupComponent],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.scss'
 })
@@ -95,41 +95,7 @@ export class SettingsComponent {
     sound.play();
   }
 
-  handleFiles(files: any) {
-    const thisItem = this;
-    if (files.srcElement) {
-      files = files.srcElement.files;
-    }
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      const imageType = /^image\//;
 
-      if (!imageType.test(file.type)) {
-        continue;
-      }
-      const reader = new FileReader();
-
-      const setUrl = (url: string | ArrayBuffer) => {
-        // this.url = url;
-        // this.urlChange.emit(this.url);
-      };
-      reader.onload = (function () {
-        return async (e) => {
-
-          console.log(e.target.result);
-          let url = e.target.result;
-          url = await resizeImage(url as string, undefined, 200);
-          const arrayBuffer = await dataURIToArrayBuffer(url as string);
-
-          await thisItem.blobStorage.uploadFile('some-file.jpg', arrayBuffer);
-          setUrl(e.target.result);
-
-        };
-      })();
-
-      reader.readAsDataURL(file);
-    }
-  }
 
   saveSettings() {
     setTimeout(() => {
@@ -141,3 +107,4 @@ export class SettingsComponent {
     });
   }
 }
+

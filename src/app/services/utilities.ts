@@ -71,6 +71,14 @@ export async function switchMusic(newSrc: string, isPumpRunning = false) {
     playMusic('bg-music', 'BACKGROUND-MUSIC', newSrc, isPumpRunning);
 }
 
+export function newid() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+        const r = Math.random() * 16 | 0;
+        const v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+
 
 //Creates a strongly typed shallow copy of an existing object.  
 export function copyObject(source: any, typeCreator: () => any) {
@@ -151,4 +159,9 @@ export async function dataURIToArrayBuffer(dataURI: string) {
 
     const response = await fetch(dataURI);
     return await response.arrayBuffer();
+}
+
+export function arrayBufferToString(arrayBuffer: ArrayBuffer): string {
+    const dec = new TextDecoder('utf-8');
+    return dec.decode(arrayBuffer);
 }

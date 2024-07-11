@@ -118,6 +118,18 @@ mat-option, mat-select, mat-tab-header, mat-label {
     border-radius: 50%;
 }
 
+button {
+    mat-spinner {
+        display: inline-block;
+        height: 20px !important;
+        width: 20px !important;
+        svg {
+            height: 20px !important;
+            width: 20px !important;
+        }
+    }
+}
+
 button mat-icon {
     color: #fff !important;
 }
