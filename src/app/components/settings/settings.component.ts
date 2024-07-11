@@ -8,7 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatTabsModule } from '@angular/material/tabs';
-import {MatSelectModule} from '@angular/material/select';
+import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { LeaderBoardRepositoryService } from '../../services/leader-board-repository.service';
@@ -17,6 +17,8 @@ import {
   MatSnackBarModule,
 } from '@angular/material/snack-bar';
 import { SettingsRepositoryService } from '../../services/settings-repository.service';
+import { BlobStorageService } from '../../services/blob-storage.service';
+import { dataURIToArrayBuffer, resizeImage } from '../../services/utilities';
 
 @Component({
   selector: 'app-settings',
@@ -32,6 +34,7 @@ export class SettingsComponent {
 
   constructor(private pubSub: PubSubService,
     private snackbar: MatSnackBar,
+    private blobStorage: BlobStorageService,
     private leaderboardReposition: LeaderBoardRepositoryService) { }
 
   swallowKeyUp(keyEvent: KeyboardEvent) {
@@ -90,6 +93,42 @@ export class SettingsComponent {
     sound.currentTime = 0;
     sound.volume = value;
     sound.play();
+  }
+
+  handleFiles(files: any) {
+    const thisItem = this;
+    if (files.srcElement) {
+      files = files.srcElement.files;
+    }
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const imageType = /^image\//;
+
+      if (!imageType.test(file.type)) {
+        continue;
+      }
+      const reader = new FileReader();
+
+      const setUrl = (url: string | ArrayBuffer) => {
+        // this.url = url;
+        // this.urlChange.emit(this.url);
+      };
+      reader.onload = (function () {
+        return async (e) => {
+
+          console.log(e.target.result);
+          let url = e.target.result;
+          url = await resizeImage(url as string, undefined, 200);
+          const arrayBuffer = await dataURIToArrayBuffer(url as string);
+
+          await thisItem.blobStorage.uploadFile('some-file.jpg', arrayBuffer);
+          setUrl(e.target.result);
+
+        };
+      })();
+
+      reader.readAsDataURL(file);
+    }
   }
 
   saveSettings() {

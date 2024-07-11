@@ -44,11 +44,11 @@ export class Game {
 
         this.player1Score = 0;
         this.player2Score = 0;
-        playMusic('bg-music', 'BACKGROUND-MUSIC', this.getRandomBackgroundMusicUrl());
         await this.doCountdown();
         this.startTime = new Date();
         this.warningPlayed = false;
         this.running = true;
+        playMusic('bg-music', 'BACKGROUND-MUSIC', this.getRandomBackgroundMusicUrl(), this.isPumpRunning);
         if (window.parent) {
             if (this.config.gameType === 'Virtual') {
                 const msg: GameMessage = {
@@ -70,6 +70,10 @@ export class Game {
         } else {
             this.playPong = false;
         }
+    }
+
+    get isPumpRunning() {
+        return this.running && (this.config.gameType === 'Both' || this.config.gameType === 'Physical');
     }
 
 
@@ -94,7 +98,7 @@ export class Game {
             case 'PLAYER_1_SCORED':
                 if (this.running) {
                     this.player1Score++;
-                    playMusic('score-1', 'SOUND-EFFECT');
+                    playMusic('score-1', 'SOUND-EFFECT',undefined, this.isPumpRunning);
                     this.showPlayerOneScore = true;
                     setTimeout(() => this.showPlayerOneScore = false, 1000);
                 }
@@ -102,7 +106,7 @@ export class Game {
             case 'PLAYER_2_SCORED':
                 if (this.running) {
                     this.player2Score++;
-                    playMusic('score-1', 'SOUND-EFFECT');
+                    playMusic('score-1', 'SOUND-EFFECT', undefined, this.isPumpRunning);
                     this.showPlayerTwoScore = true;
                     setTimeout(() => this.showPlayerTwoScore = false, 1000);
                 }
@@ -129,7 +133,7 @@ export class Game {
         let remaining = getSecondsBetweenDates(new Date(), this.endTime);
         if (remaining <= 10 && !this.warningPlayed) {
             this.warningPlayed = true;
-            playMusic('warning', 'SOUND-EFFECT');
+            playMusic('warning', 'SOUND-EFFECT', undefined, this.isPumpRunning);
         }
         if (remaining < 0) {
             remaining = 0;
@@ -162,14 +166,14 @@ export class Game {
             this.gameResult = gameResult;
 
             if (this.player1Score > this.player2Score) {
-                playMusic('win-soundfx', 'SOUND-EFFECT');
+                playMusic('win-soundfx', 'SOUND-EFFECT', undefined, this.isPumpRunning);
 
             }
             if (this.player2Score > this.player1Score) {
-                playMusic('win-soundfx', 'SOUND-EFFECT');
+                playMusic('win-soundfx', 'SOUND-EFFECT', undefined, this.isPumpRunning);
             }
             else if (this.player1Score === this.player2Score) {
-                playMusic('tie-game', 'SOUND-EFFECT');
+                playMusic('tie-game', 'SOUND-EFFECT', undefined, this.isPumpRunning);
             }
 
             this.running = false;

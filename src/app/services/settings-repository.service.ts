@@ -27,6 +27,13 @@ export class SettingsRepositoryService {
             if (!instance.puckResetForce) {
                 instance.puckResetForce = 3;
             }
+            if (!instance.musicVolumnWithPump) {
+                instance.musicVolumnWithPump = .7;
+            }
+
+            if (!instance.soundFxVolumnWithPump) {
+                instance.soundFxVolumnWithPump = .7;
+            }
 
             SettingsRepositoryService.instance = instance;
         }
@@ -34,7 +41,7 @@ export class SettingsRepositoryService {
         return SettingsRepositoryService.instance;
     }
 
-    
+
     static save() {
         const json = JSON.stringify(SettingsRepositoryService.Instance);
         localStorage.setItem('settings', json);

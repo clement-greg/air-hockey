@@ -74,6 +74,24 @@
                 </mat-slider>
             </div>
 
+            <div>
+                <div>Music Volume (While Air Pump Running)</div>
+                <mat-slider min="0" max="1" step=".05">
+                    <input matSliderThumb (ngModelChange)="saveMusicSettings($event)"
+                        [(ngModel)]="settings.musicVolumnWithPump">
+                </mat-slider>
+            </div>
+
+            <div>
+                <div>Sound FX Volume (While Air Pump Running)</div>
+                <mat-slider min="0" max="1" step=".05">
+                    <input matSliderThumb (ngModelChange)="saveSoundFXSettings($event)"
+                        [(ngModel)]="settings.soundFxVolumnWithPump">
+                </mat-slider>
+            </div>
+
+            
+
             <mat-form-field appearance="outline">
                 <mat-label>Intro Screen Music</mat-label>
                 <mat-select [(ngModel)]="settings.introScreenMusic" (ngModelChange)="saveSettings()">
@@ -98,6 +116,13 @@
                     Delete Standings
                 </button>
             </div>
+        </mat-tab>
+
+        <mat-tab label="Test Upload">
+
+            <input type="file" id="my-file-upload" multiple accept="image/*" (change)="handleFiles($event)">
+
+
         </mat-tab>
     </mat-tab-group>
 </div>

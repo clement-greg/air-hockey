@@ -23,7 +23,7 @@ export function playVideo(elementId: string) {
 }
 
 //Starts playing music when appropriate for the given HTMLAudioElement
-export function playMusic(elementId: string, type: 'BACKGROUND-MUSIC' | 'SOUND-EFFECT', src: string = null) {
+export function playMusic(elementId: string, type: 'BACKGROUND-MUSIC' | 'SOUND-EFFECT', src: string = null, pumpRunning = false) {
     const audioElement = document.getElementById(elementId) as HTMLAudioElement;
 
     audioElement.currentTime = 0;
@@ -32,12 +32,12 @@ export function playMusic(elementId: string, type: 'BACKGROUND-MUSIC' | 'SOUND-E
         audioElement.src = src;
     }
     if (type === 'BACKGROUND-MUSIC' && SettingsRepositoryService.Instance.playBackgroundMusic) {
-        audioElement.volume = SettingsRepositoryService.Instance.musicVolume;
+        audioElement.volume = pumpRunning ? SettingsRepositoryService.Instance.musicVolumnWithPump : SettingsRepositoryService.Instance.musicVolume;
         audioElement.play();
     }
 
     if (type === 'SOUND-EFFECT' && SettingsRepositoryService.Instance.playSoundFX) {
-        audioElement.volume = SettingsRepositoryService.Instance.soundFxVolume;
+        audioElement.volume = pumpRunning ? SettingsRepositoryService.Instance.soundFxVolumnWithPump : SettingsRepositoryService.Instance.soundFxVolume;
         audioElement.play();
     }
 }
@@ -66,9 +66,9 @@ export function fadeOutAudio(id: string) {
 }
 
 //Fades out the playing audio and starts a new music track
-export async function switchMusic(newSrc: string) {
+export async function switchMusic(newSrc: string, isPumpRunning = false) {
     await fadeOutAudio('bg-music');
-    playMusic('bg-music', 'BACKGROUND-MUSIC', newSrc);
+    playMusic('bg-music', 'BACKGROUND-MUSIC', newSrc, isPumpRunning);
 }
 
 
@@ -97,4 +97,58 @@ export function copyObject(source: any, typeCreator: () => any) {
 export function pauseMusic(elementId: string) {
     const audioElement = document.getElementById(elementId) as HTMLAudioElement;
     audioElement.pause();
+}
+
+export function resizeImage(dataUrl: string, maxWidth = 500, maxHeight = 500): Promise<string> {
+    return new Promise((resolve, reject) => {
+        const myImg: HTMLImageElement = document.createElement('img');
+        myImg.src = dataUrl;
+
+
+        myImg.onload = e => {
+            var width = myImg.width;
+            var height = myImg.height;
+
+            if (width > height) {
+                if (width > maxWidth) {
+                    height = height * (maxWidth / width);
+                    width = maxWidth;
+                }
+            } else {
+                if (height > maxHeight) {
+                    width = width * (maxHeight / height);
+                    height = maxHeight;
+                }
+            }
+
+            var canvas = document.createElement("canvas");
+            canvas.width = width;
+            canvas.height = height;
+            var ctx = canvas.getContext("2d");
+            ctx.drawImage(myImg, 0, 0, width, height);
+            const shortenedUrl = canvas.toDataURL('image/jpeg');
+
+            resolve(shortenedUrl);
+        };
+
+    });
+
+}
+
+export function dataURItoBuffer(dataURI: string) {
+    const byteString = atob(dataURI.split(',')[1]);
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const uint8Array = new Uint8Array(arrayBuffer);
+
+    for (let i = 0; i < byteString.length; i++) {
+        uint8Array[i] = byteString.charCodeAt(i);
+    }
+
+    return arrayBuffer;
+}
+
+export async function dataURIToArrayBuffer(dataURI: string) {
+
+    const response = await fetch(dataURI);
+    return await response.arrayBuffer();
 }

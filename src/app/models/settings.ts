@@ -9,4 +9,6 @@ export class GameSettings {
     gameMusicUrls: string[];
     introScreenMusic: string;
     gameDoneMusic: string;
+    musicVolumnWithPump: number;
+    soundFxVolumnWithPump: number;
 }
