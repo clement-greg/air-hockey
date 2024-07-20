@@ -28,7 +28,7 @@
 </div>
 
 <div class="modal-box" *ngIf="game.gameSetup">
-    <app-game-setup [(config)]="game.config" (setupCancelled)="setupCancelled()" (configChange)="configChange()"></app-game-setup>
+    <app-game-setup [(config)]="game.config" [game]="game" (setupCancelled)="setupCancelled()" (configChange)="configChange()"></app-game-setup>
 </div>
 
 <div class="modal-box" style="z-index: 200;" *ngIf="game.settingsVisible">

@@ -9,6 +9,7 @@ import { playMusic } from '../../services/utilities';
 import { LeaderBoardRepositoryService } from '../../services/leader-board-repository.service';
 import { LottiePlayerComponent } from '../lottie-player/lottie-player.component';
 import { PlayerRepository } from '../../services/player-repository.service';
+import { Game } from '../../models/game';
 
 
 
@@ -26,6 +27,7 @@ export class GameSetupComponent implements OnChanges {
   @Output() configChange: EventEmitter<GameSetupConfig> = new EventEmitter();
 
   @Output() setupCancelled: EventEmitter<boolean> = new EventEmitter();
+  @Input() game: Game;
   private joystick1 = new JoystickState(0);
   private joystick2 = new JoystickState(1);
   gameTypeSelected = false;
@@ -62,6 +64,9 @@ export class GameSetupComponent implements OnChanges {
   }
 
   player1ButtonPress(buttonNumber: number) {
+    if(this.game.running) {
+      return;
+    }
     if (this.config.player1 && !this.config.player2 && buttonNumber === 0) {
       return;
     }
@@ -69,6 +74,9 @@ export class GameSetupComponent implements OnChanges {
   }
 
   player2ButtonPress(buttonNumber: number) {
+    if(this.game.running) {
+      return;
+    }
     if (!this.config.player1 && buttonNumber === 0) {
       return;
     }
@@ -123,6 +131,9 @@ export class GameSetupComponent implements OnChanges {
   }
 
   player1SelectLeft() {
+    if(this.game.running) {
+      return;
+    }
     if (this.config.player1 && !this.config.player2) {
       return;
     }
@@ -130,6 +141,9 @@ export class GameSetupComponent implements OnChanges {
   }
 
   player1SelectRight() {
+    if(this.game.running) {
+      return;
+    }
     if (this.config.player1 && !this.config.player2) {
       return;
     }
@@ -137,6 +151,9 @@ export class GameSetupComponent implements OnChanges {
   }
 
   player2SelectLeft() {
+    if(this.game.running) {
+      return;
+    }
     if (!this.config.player1) {
       return;
     }
@@ -144,6 +161,9 @@ export class GameSetupComponent implements OnChanges {
   }
 
   player2SelectRight() {
+    if(this.game.running) {
+      return;
+    }
     if (!this.config.player1) {
       return;
     }
