@@ -37,8 +37,8 @@ export class PongComponent implements OnInit, OnDestroy {
   PADDLE_SIZE = 80;
   runAnimationFrame: number;
   renderAnimationFrame: number;
-  joystick1 = new JoystickState(0);
-  joystick2 = new JoystickState(1);
+  joystick1 = new JoystickState(1);
+  joystick2 = new JoystickState(0);
   pressedKeys: any = {};
 
   constructor(private pubSub: PubSubService) { }

@@ -28,8 +28,8 @@ export class GameSetupComponent implements OnChanges {
 
   @Output() setupCancelled: EventEmitter<boolean> = new EventEmitter();
   @Input() game: Game;
-  private joystick1 = new JoystickState(0);
-  private joystick2 = new JoystickState(1);
+  private joystick1 = new JoystickState(1);
+  private joystick2 = new JoystickState(0);
   gameTypeSelected = false;
   gameTypes: GameType[] = [
     { type: 'Virtual', lottieUrl: 'https://lottie.host/2624709a-b10c-43e1-af2a-623d1434c3b3/HhWUwa1d3c.json', description: 'Play pong using the joysticks' },
