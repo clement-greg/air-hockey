@@ -28,8 +28,8 @@ export class HomeComponent implements OnDestroy {
   game: Game;
   interval: any;
   private subscription: Subscription;
-  joystick1State = new JoystickState(1);
-  joystick2State = new JoystickState(0);
+  joystick1State = new JoystickState(0);
+  joystick2State = new JoystickState(1);
   private messageDates: any = {};
 
 
