@@ -80,6 +80,14 @@ export class HomeComponent implements OnDestroy {
     }
   }
 
+  get bgVideo() {
+    if(this.game.introMode) {
+      return '../../assets/video/dark-bg.mp4';
+    }
+
+    return '../../assets/video/dark-bg.mp4'
+  }
+
   get isFlashing() {
     if (typeof this.game.secondsRemaining != 'number') {
       return false;

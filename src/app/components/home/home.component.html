@@ -1,5 +1,5 @@
 <video loop muted [autoplay]="true"  [muted]="true" id="bg-video">
-    <source src="../../assets/video/hockey-background.mp4" type="video/mp4">
+    <source [src]="bgVideo" type="video/mp4">
 </video>
 <div class="game-surface">
     <div *ngIf="game?.config?.player1 && game?.config?.player2">
@@ -47,7 +47,7 @@
 
 <div class="game-intro" *ngIf="game.introMode">
     <div>
-        <app-lottie-player  src="https://lottie.host/75b9d86d-a206-4e91-b26c-badd7cb0c0fe/nshTIIF5IY.json"></app-lottie-player>
+        <!-- <app-lottie-player  src="https://lottie.host/75b9d86d-a206-4e91-b26c-badd7cb0c0fe/nshTIIF5IY.json"></app-lottie-player> -->
     </div>
 
 </div>
