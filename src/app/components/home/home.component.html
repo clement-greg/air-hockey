@@ -1,79 +1,85 @@
-<video loop muted [autoplay]="true" *ngIf="game.introMode"  [muted]="true" id="bg-video">
+<video loop muted [autoplay]="true" *ngIf="game.introMode" [muted]="true" id="bg-video">
     <source src="../../assets/video/dark-intro.mp4" type="video/mp4">
 </video>
-<video loop muted [autoplay]="true" *ngIf="!game.introMode"  [muted]="true" id="bg-video">
+<video loop muted [autoplay]="true" *ngIf="!game.introMode" [muted]="true" id="bg-video">
     <source src="../../assets/video/dark-bg.mp4" type="video/mp4">
 </video>
-<div class="game-surface">
-    <div *ngIf="game?.config?.player1 && game?.config?.player2 && !game.introMode && !game.gameResult">
+<div style="position: fixed;width: 100vw; height: 100vh;z-index: 3;">
+    <div class="game-surface">
+        <div *ngIf="game?.config?.player1 && game?.config?.player2 && !game.introMode && !game.gameResult">
 
-        <div class="center" [class.hidden]="!game.running">
-            Time Remaining
-            <h1 [class.flashing]="isFlashing">{{game.secondsRemaining}}</h1>
-        </div>
-        <div class="flex-container">
-            <div class="center player-score ">
-                <div class="player-1"></div>
-                <h1 class="plus-one" *ngIf="game.showPlayerOneScore">+1</h1>
-                {{game.config.player1.avatar.name}}<br>
-                <img class="game-avatar" [class.pulsing]="game.showPlayerOneScore" src="../../assets/images/avatars/{{game.config.player1.avatar.baseUrl}}.jpg">
-                <h1>{{game.player1Score}}</h1>
+            <div class="center" style="color: #fff;">
+                Time Remaining
+                <h1 [class.flashing]="isFlashing">{{game.secondsRemaining}}</h1>
             </div>
-            <div class="center player-score">
-                <div class="player-2"></div>
-                <h1 class="plus-one" *ngIf="game.showPlayerTwoScore">+1</h1>
-                {{game.config.player2.avatar.name}}<br>
-                <img class="game-avatar" [class.pulsing]="game.showPlayerTwoScore" src="../../assets/images/avatars/{{game.config.player2.avatar.baseUrl}}.jpg">
-                <h1>{{game.player2Score}}</h1>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal-box" *ngIf="game.gameSetup">
-    <app-game-setup [(config)]="game.config" [game]="game" (setupCancelled)="setupCancelled()" (configChange)="configChange()"></app-game-setup>
-</div>
-
-<div class="modal-box" style="z-index: 200;" *ngIf="game.settingsVisible">
-    <div class="blur-box">
-        <div class="flex-container">
-            <div></div>
-            <div class="no-grow">
-                <button mat-button (click)="game.settingsVisible = false">
-                    <mat-icon>close</mat-icon>
-                </button>
+            <div class="flex-container">
+                <div class="center player-score ">
+                    <div class="player-1"></div>
+                    <h1 class="plus-one" *ngIf="game.showPlayerOneScore">+1</h1>
+                    {{game.config.player1.avatar.name}}<br>
+                    <img class="game-avatar" [class.pulsing]="game.showPlayerOneScore"
+                        src="../../assets/images/avatars/{{game.config.player1.avatar.baseUrl}}.jpg">
+                    <h1>{{game.player1Score}}</h1>
+                </div>
+                <div class="center player-score">
+                    <div class="player-2"></div>
+                    <h1 class="plus-one" *ngIf="game.showPlayerTwoScore">+1</h1>
+                    {{game.config.player2.avatar.name}}<br>
+                    <img class="game-avatar" [class.pulsing]="game.showPlayerTwoScore"
+                        src="../../assets/images/avatars/{{game.config.player2.avatar.baseUrl}}.jpg">
+                    <h1>{{game.player2Score}}</h1>
+                </div>
             </div>
         </div>
-        <app-settings></app-settings>
-    </div>
-</div>
-
-<div class="game-intro" *ngIf="game.introMode">
-    <div>
-        <!-- <app-lottie-player  src="https://lottie.host/75b9d86d-a206-4e91-b26c-badd7cb0c0fe/nshTIIF5IY.json"></app-lottie-player> -->
     </div>
 
-</div>
 
-<div class="modal-box " *ngIf="game.gameResult">
-    <div class="blur-box game-result">
-        <app-display-game-result [result]="game.gameResult"></app-display-game-result>
+    <div class="modal-box" *ngIf="game.gameSetup">
+        <app-game-setup [(config)]="game.config" [game]="game" (setupCancelled)="setupCancelled()"
+            (configChange)="configChange()"></app-game-setup>
     </div>
-</div>
 
-<div class="modal-box" *ngIf="game.showLeaderboard">
-    <div class="blur-box game-result">
-        <app-leader-board></app-leader-board>
+    <div class="modal-box" style="z-index: 200;" *ngIf="game.settingsVisible">
+        <div class="blur-box">
+            <div class="flex-container">
+                <div></div>
+                <div class="no-grow">
+                    <button mat-button (click)="game.settingsVisible = false">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </div>
+            </div>
+            <app-settings></app-settings>
+        </div>
     </div>
-</div>
 
-<div class="modal-box" style="z-index: 10000;" *ngIf="game.playPong">
-    <app-pong></app-pong>
+    <div class="game-intro" *ngIf="game.introMode">
+        <div>
+            <!-- <app-lottie-player  src="https://lottie.host/75b9d86d-a206-4e91-b26c-badd7cb0c0fe/nshTIIF5IY.json"></app-lottie-player> -->
+        </div>
+
+    </div>
+
+    <div class="modal-box " *ngIf="game.gameResult">
+        <div class="blur-box game-result">
+            <app-display-game-result [result]="game.gameResult"></app-display-game-result>
+        </div>
+    </div>
+
+    <div class="modal-box" *ngIf="game.showLeaderboard">
+        <div class="blur-box game-result">
+            <app-leader-board></app-leader-board>
+        </div>
+    </div>
+
+    <div class="modal-box" style="z-index: 10000;" *ngIf="game.playPong">
+        <app-pong></app-pong>
+    </div>
 </div>
 
 <div style="display: none;">
     <audio src="../../assets/music/score-1.mp3" id="score-1"></audio>
-    <audio src="../../assets/music/bg-music.mp3"  id="bg-music"></audio>
+    <audio src="../../assets/music/bg-music.mp3" id="bg-music"></audio>
     <audio src="../../assets/music/win.mp3" id="win-soundfx"></audio>
     <audio src="../../assets/music/warning.mp3" id="warning"></audio>
     <audio src="../../assets/music/tie-game.mp3" id="tie-game"></audio>
