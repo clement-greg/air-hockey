@@ -2,7 +2,7 @@
 
 :root {
     --mdc-outlined-text-field-outline-color: #fff;
-    --mat-tab-header-active-hover-label-text-color:#fff;
+    --mat-tab-header-active-hover-label-text-color: #fff;
     --mat-tab-header-inactive-hover-label-text-color: #fff !important;
     --mat-select-enabled-trigger-text-color: #fff;
 
@@ -14,20 +14,38 @@
 }
 
 
-html, body { height: 100%; color: #fff}
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-.mat-h1, .mat-headline-5, .mat-typography .mat-h1, .mat-typography .mat-headline-5, .mat-typography h1 {
+html,
+body {
+    height: 100%;
+    color: #fff;
+    background: #000;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.mat-h1,
+.mat-headline-5,
+.mat-typography .mat-h1,
+.mat-typography .mat-headline-5,
+.mat-typography h1 {
     font-size: 120px;
     line-height: 130px;
     text-shadow: 4px 4px 14px #2480A0;
-    color: rgba(255,255,255,.8);
+    color: rgba(255, 255, 255, .8);
     font-family: "sporty-pro", sans-serif !important;
 }
 
-.mat-h2, .mat-headline-6, .mat-typography .mat-h2, .mat-typography .mat-headline-6, .mat-typography h2 {
+.mat-h2,
+.mat-headline-6,
+.mat-typography .mat-h2,
+.mat-typography .mat-headline-6,
+.mat-typography h2 {
     font-size: 70px;
     text-shadow: 4px 4px 14px #2480A0;
-    color: rgba(255,255,255,.8);
+    color: rgba(255, 255, 255, .8);
     font-family: "sporty-pro", sans-serif !important;
     line-height: 80px;
 }
@@ -35,15 +53,19 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 mat-form-field {
     display: block !important;
 }
+
 h3 {
     font-size: 35px !important;
     line-height: 40px !important;
     text-shadow: 4px 4px 14px #2480A0;
-    color: rgba(255,255,255,.8);
+    color: rgba(255, 255, 255, .8);
     font-family: "sporty-pro", sans-serif !important;
 }
 
-mat-option, mat-select, mat-tab-header, mat-label {
+mat-option,
+mat-select,
+mat-tab-header,
+mat-label {
     text-shadow: none;
 }
 
@@ -66,7 +88,7 @@ mat-option, mat-select, mat-tab-header, mat-label {
 .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__leading,
 .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__notch,
 .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__trailing {
-  border-color: var(#fff) !important;
+    border-color: var(#fff) !important;
 }
 
 .flex-container {
@@ -84,10 +106,16 @@ mat-option, mat-select, mat-tab-header, mat-label {
 .center {
     text-align: center;
 }
+
 .mat-mdc-checkbox .mdc-form-field {
     color: #fff !important;
 }
-.mat-body, .mat-body-2, .mat-typography .mat-body, .mat-typography .mat-body-2, .mat-typography {
+
+.mat-body,
+.mat-body-2,
+.mat-typography .mat-body,
+.mat-typography .mat-body-2,
+.mat-typography {
     font-size: 28px;
     line-height: 32px;
     text-shadow: 1px 1px 1px #333;
@@ -97,20 +125,24 @@ mat-option, mat-select, mat-tab-header, mat-label {
     from {
         transform: translateY(-200px) scale(.5);
     }
+
     to {
         transform: translateY(0) scale(1);
     }
 }
+
+
+
 .blur-box {
     width: 100%;
     max-width: 350px;
     display: table;
     margin: 50px auto 0;
-    box-shadow: 1px 1px 24px 1px #0000001a;
     border-radius: 17px;
     padding: 30px;
     backdrop-filter: blur(20px);
     animation: blur-box-enter .5s ease;
+    box-shadow: 0px 0px 62px 30px rgba(36, 128, 160, .5);
 }
 
 .game-avatar {
@@ -123,6 +155,7 @@ button {
         display: inline-block;
         height: 20px !important;
         width: 20px !important;
+
         svg {
             height: 20px !important;
             width: 20px !important;
@@ -139,11 +172,13 @@ button mat-icon {
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
+
 .fade-in-up {
     animation: fade-in-up .7s ease;
 }
