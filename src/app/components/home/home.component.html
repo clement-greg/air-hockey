@@ -1,8 +1,11 @@
-<video loop muted [autoplay]="true"  [muted]="true" id="bg-video">
-    <source [src]="bgVideo" type="video/mp4">
+<video loop muted [autoplay]="true" *ngIf="game.introMode"  [muted]="true" id="bg-video">
+    <source src="../../assets/video/dark-intro.mp4" type="video/mp4">
+</video>
+<video loop muted [autoplay]="true" *ngIf="!game.introMode"  [muted]="true" id="bg-video">
+    <source src="../../assets/video/dark-bg.mp4" type="video/mp4">
 </video>
 <div class="game-surface">
-    <div *ngIf="game?.config?.player1 && game?.config?.player2">
+    <div *ngIf="game?.config?.player1 && game?.config?.player2 && !game.introMode && !game.gameResult">
 
         <div class="center" [class.hidden]="!game.running">
             Time Remaining

@@ -82,7 +82,7 @@ export class HomeComponent implements OnDestroy {
 
   get bgVideo() {
     if(this.game.introMode) {
-      return '../../assets/video/dark-bg.mp4';
+      return '../../assets/video/dark-intro.mp4';
     }
 
     return '../../assets/video/dark-bg.mp4'

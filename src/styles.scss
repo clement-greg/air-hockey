@@ -19,14 +19,14 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .mat-h1, .mat-headline-5, .mat-typography .mat-h1, .mat-typography .mat-headline-5, .mat-typography h1 {
     font-size: 120px;
     line-height: 130px;
-    text-shadow: 4px 4px 14px rgba(0,0,0,0.6);
+    text-shadow: 4px 4px 14px #2480A0;
     color: rgba(255,255,255,.8);
     font-family: "sporty-pro", sans-serif !important;
 }
 
 .mat-h2, .mat-headline-6, .mat-typography .mat-h2, .mat-typography .mat-headline-6, .mat-typography h2 {
     font-size: 70px;
-    text-shadow: 4px 4px 14px rgba(0,0,0,0.6);
+    text-shadow: 4px 4px 14px #2480A0;
     color: rgba(255,255,255,.8);
     font-family: "sporty-pro", sans-serif !important;
     line-height: 80px;
@@ -38,7 +38,7 @@ mat-form-field {
 h3 {
     font-size: 35px !important;
     line-height: 40px !important;
-    text-shadow: 4px 4px 14px rgba(0,0,0,0.6);
+    text-shadow: 4px 4px 14px #2480A0;
     color: rgba(255,255,255,.8);
     font-family: "sporty-pro", sans-serif !important;
 }
