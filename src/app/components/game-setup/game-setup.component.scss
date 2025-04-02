@@ -137,14 +137,18 @@
     height: 80px;
     margin-top: -76px;
     left: 91px;
-    &.player-2 {
+    &.player-1 {
         left: 358px;
+
+    }
+    &.player-2 {
+        left: 625px;
         .cls-2 {
             fill: #4287f5;
         } 
     }
+
     &.select-game {
-        left: 625px;
         .cls-2 {
             fill: #21a31a;
         }

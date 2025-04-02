@@ -1,4 +1,4 @@
-import { CUSTOM_ELEMENTS_SCHEMA, Component, EventEmitter, HostListener, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Player } from '../../models/player';
 import { GameSetupConfig } from '../../models/game-setup-config';
@@ -20,7 +20,7 @@ import { Game } from '../../models/game';
   templateUrl: './game-setup.component.html',
   styleUrl: './game-setup.component.scss',
 })
-export class GameSetupComponent implements OnChanges {
+export class GameSetupComponent implements OnChanges, OnDestroy {
   selectedItem: PlayerAvatar;
 
   @Input() config: GameSetupConfig = new GameSetupConfig();
@@ -34,7 +34,10 @@ export class GameSetupComponent implements OnChanges {
   gameTypes: GameType[] = [
     { type: 'Virtual', lottieUrl: 'https://lottie.host/2624709a-b10c-43e1-af2a-623d1434c3b3/HhWUwa1d3c.json', description: 'Play pong using the joysticks' },
     { type: 'Physical', lottieUrl: 'https://lottie.host/063f9150-34fc-4bdc-92df-16318a0f3a79/xG6AAyhFbC.json', description: 'Play air hockey on the real table' },
-    { type: 'Both', lottieUrl: 'https://lottie.host/a7044b1d-7b7c-4dbe-8c08-f8579798acd4/pnWDVXLTWJ.json', description: 'Play both pong and the real table simultaneously' }
+    { type: 'Both', lottieUrl: 'https://lottie.host/a7044b1d-7b7c-4dbe-8c08-f8579798acd4/pnWDVXLTWJ.json', description: 'Play both pong and the real table simultaneously' },
+    { type: 'AZ', lottieUrl: 'https://lottie.host/e7bc1a5a-32bd-4ad9-8350-d92e73322f69/le7yEpIimV.json', description: 'Play AZ' },
+    { type: 'UT', lottieUrl: 'https://lottie.host/2624709a-b10c-43e1-af2a-623d1434c3b3/HhWUwa1d3c.json', description: 'Play UT' },
+    { type: 'NV', lottieUrl: 'https://lottie.host/2624709a-b10c-43e1-af2a-623d1434c3b3/HhWUwa1d3c.json', description: 'Play NV' },
   ];
 
   constructor(private leaderboardRepository: LeaderBoardRepositoryService) {
@@ -45,6 +48,14 @@ export class GameSetupComponent implements OnChanges {
     this.joystick2.onLeftJoyStick = this.player2SelectLeft.bind(this);
     this.joystick2.onRightJoyStick = this.player2SelectRight.bind(this);
     this.joystick2.onButtonPress = this.player2ButtonPress.bind(this);
+  }
+  ngOnDestroy(): void {
+    this.joystick1.onLeftJoyStick = null;
+    this.joystick1.onRightJoyStick = null;
+    this.joystick1.onButtonPress = null;
+    this.joystick2.onLeftJoyStick = null;
+    this.joystick2.onRightJoyStick = null;
+    this.joystick2.onButtonPress = null;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -64,7 +75,7 @@ export class GameSetupComponent implements OnChanges {
   }
 
   player1ButtonPress(buttonNumber: number) {
-    if(this.game.running) {
+    if (this.game.running) {
       return;
     }
     if (this.config.player1 && !this.config.player2 && buttonNumber === 0) {
@@ -74,7 +85,7 @@ export class GameSetupComponent implements OnChanges {
   }
 
   player2ButtonPress(buttonNumber: number) {
-    if(this.game.running) {
+    if (this.game.running) {
       return;
     }
     if (!this.config.player1 && buttonNumber === 0) {
@@ -114,10 +125,10 @@ export class GameSetupComponent implements OnChanges {
 
   back() {
     playMusic('back-click', 'SOUND-EFFECT');
-    if (this.config.player1 && this.config.player2 && this.gameTypeSelected) {
-      this.gameTypeSelected = false;
-      return;
-    }
+    // if (this.config.player1 && this.config.player2 && this.gameTypeSelected) {
+    //   this.gameTypeSelected = false;
+    //   return;
+    // }
     if (this.config.player2) {
       delete this.config.player2;
       return;
@@ -126,12 +137,16 @@ export class GameSetupComponent implements OnChanges {
       delete this.config.player1;
       return;
     }
+    if(this.gameTypeSelected) {
+      this.gameTypeSelected = false;
+      return;
+    }
 
     this.setupCancelled.emit(true);
   }
 
   player1SelectLeft() {
-    if(this.game.running) {
+    if (this.game.running) {
       return;
     }
     if (this.config.player1 && !this.config.player2) {
@@ -141,7 +156,7 @@ export class GameSetupComponent implements OnChanges {
   }
 
   player1SelectRight() {
-    if(this.game.running) {
+    if (this.game.running) {
       return;
     }
     if (this.config.player1 && !this.config.player2) {
@@ -151,7 +166,7 @@ export class GameSetupComponent implements OnChanges {
   }
 
   player2SelectLeft() {
-    if(this.game.running) {
+    if (this.game.running) {
       return;
     }
     if (!this.config.player1) {
@@ -161,7 +176,7 @@ export class GameSetupComponent implements OnChanges {
   }
 
   player2SelectRight() {
-    if(this.game.running) {
+    if (this.game.running) {
       return;
     }
     if (!this.config.player1) {
@@ -171,7 +186,7 @@ export class GameSetupComponent implements OnChanges {
   }
 
   selectLeft() {
-    if (this.config.player1 && this.config.player2 && !this.gameTypeSelected) {
+    if (!this.gameTypeSelected) {
       const type = this.gameTypes.find(i => i.type === this.config.gameType);
       let index = this.gameTypes.indexOf(type);
       index--;
@@ -204,7 +219,7 @@ export class GameSetupComponent implements OnChanges {
   }
 
   selectRight() {
-    if (this.config.player1 && this.config.player2 && !this.gameTypeSelected) {
+    if (!this.gameTypeSelected) {
       const type = this.gameTypes.find(i => i.type === this.config.gameType);
       let index = this.gameTypes.indexOf(type);
       index++;
@@ -238,7 +253,11 @@ export class GameSetupComponent implements OnChanges {
   }
 
   selectAvatar() {
-    if (!this.config.player1) {
+    if (!this.gameTypeSelected) {
+      this.gameTypeSelected = true;
+      playMusic('click', 'SOUND-EFFECT');
+    }
+    else if (!this.config.player1 && !this.isExternalGame) {
       this.config.player1 = new Player(1);
       this.config.player1.avatar = this.selectedItem;
       playMusic('click', 'SOUND-EFFECT');
@@ -249,7 +268,7 @@ export class GameSetupComponent implements OnChanges {
         this.selectLeft();
       }
     }
-    else if (!this.config.player2) {
+    else if (!this.config.player2 && !this.isExternalGame) {
       if (this.config.player1.avatar.baseUrl === this.selectedItem.baseUrl) {
         return;
       }
@@ -257,13 +276,14 @@ export class GameSetupComponent implements OnChanges {
       this.config.player2.avatar = this.selectedItem;
       playMusic('click', 'SOUND-EFFECT');
 
-    } else if (!this.gameTypeSelected) {
-      this.gameTypeSelected = true;
-      playMusic('click', 'SOUND-EFFECT');
     } else {
       this.configChange.emit(this.config);
       playMusic('click', 'SOUND-EFFECT');
     }
+  }
+
+  get isExternalGame() {
+    return this.selectedGameType?.type === 'AZ' || this.selectedGameType?.type === 'UT' || this.selectedGameType?.type === 'NV';
   }
 
   isPlayerSelected(playerType: PlayerAvatar) {

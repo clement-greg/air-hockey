@@ -15,6 +15,7 @@ import { LeaderBoardRepositoryService } from '../../services/leader-board-reposi
 import { DisplayGameResultComponent } from '../display-game-result/display-game-result.component';
 import { LeaderBoardComponent } from '../leader-board/leader-board.component';
 import { LottiePlayerComponent } from '../lottie-player/lottie-player.component';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-home',
@@ -35,6 +36,7 @@ export class HomeComponent implements OnDestroy {
 
   constructor(zone: NgZone,
     pubSub: PubSubService,
+    private sanitizer: DomSanitizer,
     leaderboard: LeaderBoardRepositoryService) {
 
     this.game = new Game(leaderboard);
@@ -77,6 +79,10 @@ export class HomeComponent implements OnDestroy {
   private joystickButtonPress(index: number) {
     if (index === 0) {
       this.game?.handleSpace();
+    }
+    if(index === 9 && this.showEmbeddedGame) {
+      this.showEmbeddedGame = false;
+      this.game.gameSetup = true;
     }
   }
 
@@ -161,7 +167,18 @@ export class HomeComponent implements OnDestroy {
     this.game.processGameMessage(message);
   }
 
+  showEmbeddedGame  = false;
+  embeddedGameUrl: any;
   configChange() {
+    if(this.game.config.gameType === 'AZ' || this.game.config.gameType === 'UT' || this.game.config.gameType === 'NV') {
+      this.showEmbeddedGame = true;
+      this.game.gameSetup = false;
+      this.embeddedGameUrl = this.sanitizer.bypassSecurityTrustResourceUrl( `https://elevate-game-gjbmgwdegjb7eza2.westus-01.azurewebsites.net/?state=${this.game.config.gameType}`);
+      setTimeout(()=> {
+        document.getElementById('external-game-iframe').focus();
+      }, 500);
+      return;
+    }
     this.game.gameSetup = false;
     this.game.restart();
 
