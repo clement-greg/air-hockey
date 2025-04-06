@@ -78,7 +78,7 @@ export class GameSetupComponent implements OnChanges, OnDestroy {
     if (this.game.running) {
       return;
     }
-    if (this.config.player1 && !this.config.player2 && buttonNumber === 0) {
+    if (this.gameTypeSelected && this.config.player1 && !this.config.player2 && buttonNumber === 0) {
       return;
     }
     this.buttonPress(buttonNumber);
@@ -88,7 +88,7 @@ export class GameSetupComponent implements OnChanges, OnDestroy {
     if (this.game.running) {
       return;
     }
-    if (!this.config.player1 && buttonNumber === 0) {
+    if (this.gameTypeSelected && !this.config.player1 && buttonNumber === 0) {
       return;
     }
     this.buttonPress(buttonNumber);
@@ -169,7 +169,7 @@ export class GameSetupComponent implements OnChanges, OnDestroy {
     if (this.game.running) {
       return;
     }
-    if (!this.config.player1) {
+    if (this.gameTypeSelected && !this.config.player1) {
       return;
     }
     this.selectLeft();
@@ -179,7 +179,7 @@ export class GameSetupComponent implements OnChanges, OnDestroy {
     if (this.game.running) {
       return;
     }
-    if (!this.config.player1) {
+    if (this.gameTypeSelected && !this.config.player1) {
       return;
     }
     this.selectRight();
