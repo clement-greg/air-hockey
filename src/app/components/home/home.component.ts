@@ -80,14 +80,14 @@ export class HomeComponent implements OnDestroy {
     if (index === 0) {
       this.game?.handleSpace();
     }
-    if(index === 9 && this.showEmbeddedGame) {
+    if (index === 9 && this.showEmbeddedGame) {
       this.showEmbeddedGame = false;
       this.game.gameSetup = true;
     }
   }
 
   get bgVideo() {
-    if(this.game.introMode) {
+    if (this.game.introMode) {
       return '../../assets/video/dark-intro.mp4';
     }
 
@@ -167,14 +167,30 @@ export class HomeComponent implements OnDestroy {
     this.game.processGameMessage(message);
   }
 
-  showEmbeddedGame  = false;
+  showEmbeddedGame = false;
   embeddedGameUrl: any;
   configChange() {
-    if(this.game.config.gameType === 'AZ' || this.game.config.gameType === 'UT' || this.game.config.gameType === 'NV') {
+    if (this.game.config.gameType === 'AZ' || this.game.config.gameType === 'UT' || this.game.config.gameType === 'NV' || this.game.config.gameType === 'MOON' || this.game.config.gameType === 'PAC' || this.game.config.gameType === 'ASTRIODS' || this.game.config.gameType === 'SKEET') {
       this.showEmbeddedGame = true;
       this.game.gameSetup = false;
-      this.embeddedGameUrl = this.sanitizer.bypassSecurityTrustResourceUrl( `https://elevate-game-gjbmgwdegjb7eza2.westus-01.azurewebsites.net/?state=${this.game.config.gameType}`);
-      setTimeout(()=> {
+      switch (this.game.config.gameType) {
+        case 'MOON':
+          this.embeddedGameUrl = this.sanitizer.bypassSecurityTrustResourceUrl('https://gregbclement.com/games/moon-landing?timeout=');
+          break;
+        case 'PAC':
+          this.embeddedGameUrl = this.sanitizer.bypassSecurityTrustResourceUrl('https://gregbclement.com/games/elevate-man?timeout=');
+          break;
+        case 'ASTRIODS':
+          this.embeddedGameUrl = this.sanitizer.bypassSecurityTrustResourceUrl('https://gregbclement.com/games/asteroids?auto-start=true&timeout=');
+          break;
+        case 'SKEET':
+          this.embeddedGameUrl = this.sanitizer.bypassSecurityTrustResourceUrl('https://gregbclement.com/games/skeet?auto-start=true&timeout=');
+          break;
+        default:
+          this.embeddedGameUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`https://elevate-game-gjbmgwdegjb7eza2.westus-01.azurewebsites.net/?state=${this.game.config.gameType}`);
+      }
+
+      setTimeout(() => {
         document.getElementById('external-game-iframe').focus();
       }, 500);
       return;
