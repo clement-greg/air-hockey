@@ -1,0 +1,165 @@
+{
+    "asset": {
+        "copyright": "2024 (c) Adobe Inc.",
+        "generator": "Adobe Substance 3D Stager - b368b4ea89877ae9d75d646d6e9ba341712ce6ad",
+        "version": "2.0"
+    },
+    "accessors": [
+        {
+            "bufferView": 0,
+            "componentType": 5126,
+            "count": 6649,
+            "type": "VEC3",
+            "max": [
+                20.0715389251709,
+                2.2492270469665529,
+                20.0715389251709
+            ],
+            "min": [
+                -20.0715389251709,
+                -1.3584977388381959,
+                -20.0715389251709
+            ]
+        },
+        {
+            "bufferView": 1,
+            "componentType": 5126,
+            "count": 6649,
+            "type": "VEC3"
+        },
+        {
+            "bufferView": 2,
+            "componentType": 5126,
+            "count": 6649,
+            "type": "VEC2"
+        },
+        {
+            "bufferView": 3,
+            "componentType": 5125,
+            "count": 13164,
+            "type": "SCALAR",
+            "max": [
+                6648.0
+            ],
+            "min": [
+                0.0
+            ]
+        }
+    ],
+    "bufferViews": [
+        {
+            "buffer": 0,
+            "byteOffset": 0,
+            "byteLength": 79788,
+            "target": 34962
+        },
+        {
+            "buffer": 0,
+            "byteOffset": 79788,
+            "byteLength": 79788,
+            "target": 34962
+        },
+        {
+            "buffer": 0,
+            "byteOffset": 159576,
+            "byteLength": 53192,
+            "target": 34962
+        },
+        {
+            "buffer": 0,
+            "byteOffset": 212768,
+            "byteLength": 52656,
+            "target": 34963
+        }
+    ],
+    "buffers": [
+        {
+            "byteLength": 265424,
+            "uri": "puck-red_binary.bin"
+        }
+    ],
+    "materials": [
+        {
+            "pbrMetallicRoughness": {
+                "baseColorFactor": [
+                    1.0,
+                    0.02814839594066143,
+                    0.0,
+                    1.0
+                ],
+                "roughnessFactor": 0.20000000298023225
+            },
+            "name": "red_anodized_metal_1_material3",
+            "doubleSided": true,
+            "extensions": {
+                "KHR_materials_ior": {
+                    "ior": 1.600000023841858
+                }
+            }
+        }
+    ],
+    "meshes": [
+        {
+            "name": "Cylinder-252E001_n3d",
+            "primitives": [
+                {
+                    "attributes": {
+                        "POSITION": 0,
+                        "NORMAL": 1,
+                        "TEXCOORD_0": 2
+                    },
+                    "indices": 3,
+                    "material": 0
+                }
+            ]
+        }
+    ],
+    "nodes": [
+        {
+            "name": "working_cam_n3d"
+        },
+        {
+            "children": [
+                2
+            ],
+            "translation": [
+                9.430920600891114,
+                0.9729830026626587,
+                18.66218376159668
+            ],
+            "scale": [
+                0.19920887053012849,
+                0.19920887053012849,
+                0.19920887053012849
+            ],
+            "name": "puck_n3d"
+        },
+        {
+            "translation": [
+                8.683897018432618,
+                -1.3584977388381959,
+                -21.586957931518556
+            ],
+            "rotation": [
+                0.0,
+                1.0,
+                0.0,
+                7.121489643379785e-15
+            ],
+            "mesh": 0,
+            "name": "Cylinder%2E001_n3d"
+        }
+    ],
+    "scenes": [
+        {
+            "nodes": [
+                1
+            ],
+            "name": "scene"
+        }
+    ],
+    "scene": 0,
+    "extensionsUsed": [
+        "KHR_materials_ior"
+    ]
+}

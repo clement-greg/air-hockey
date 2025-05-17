@@ -1,0 +1,25 @@
+mdl 1.3;
+
+using state import *;
+
+import adobe::mtl::*;
+import adobe::util::*;
+import ::tex::gamma_mode;
+import ::state::normal;
+
+export material blue_steel(*)
+  = adobe::mtl::standard(
+    opacity : adobe::util::float_texture( texture_2d("Blue_steel_ST7NT3C/Blue_steel_opacity.png", ::tex::gamma_linear) ),
+    baseColor : adobe::util::color_texture( texture_2d("Blue_steel_ST7NT3C/Blue_steel_baseColor.png", ::tex::gamma_srgb) ),
+    height : float(0.5),
+    normal : ::state::normal(),
+    density : float(0.0),
+    metallic : adobe::util::float_texture( texture_2d("Blue_steel_ST7NT3C/Blue_steel_metallic.png", ::tex::gamma_linear) ),
+    interiorColor : color(1.0, 1.0, 1.0),
+    translucence : float(0.0),
+    indexOfRefraction : float(1.6),
+    heightScale : float(1.0),
+    roughness : adobe::util::float_texture( texture_2d("Blue_steel_ST7NT3C/Blue_steel_roughness.png", ::tex::gamma_linear) ),
+    glow : adobe::util::float_texture( texture_2d("Blue_steel_ST7NT3C/Blue_steel_glow.png", ::tex::gamma_linear) )
+    );
+
