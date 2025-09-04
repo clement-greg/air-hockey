@@ -1,12 +1,16 @@
-
 <div class="center" *ngIf="winner">
     <div style="margin-top: 30px;">{{winner.name}} </div>
-    <h2  class="expand-title">Wins!!!</h2>
-    <img src="../../assets/images/avatars/{{winner.baseUrl}}.jpg" class="game-avatar  player-winner">
+    <h2 class="expand-title">Wins!!!</h2>
+    <img src="../../assets/images/avatars/{{winner.baseUrl}}.jpg" *ngIf="!winner.hasVideo"
+        class="game-avatar  player-winner">
+    <video *ngIf="winner.hasVideo" class="game-avatar  player-winner" autoplay muted loop>
+        <source src="../../assets/video/avatar/{{winner.baseUrl}}.mp4" type="video/mp4">
+ 
+    </video>
 </div>
 
 <div *ngIf="isTie">
-    <div class="center"  style="margin-top: 30px;">
+    <div class="center" style="margin-top: 30px;">
         <h2 class="expand-title" style="margin-bottom: 40px;">Tie Game</h2>
     </div>
     <img src="../../assets/images/avatars/{{result.player1.baseUrl}}.jpg" class="game-avatar player-1">
@@ -27,7 +31,7 @@
 
     <div *ngFor="let item of leaderBoardShown" class="fade-in-up">
         <div>
-            <img src="../../assets/images/avatars/{{item.avatar.baseUrl}}.jpg"  class="game-avatar">
+            <img src="../../assets/images/avatars/{{item.avatar.baseUrl}}.jpg" class="game-avatar">
             <div class="rank">
                 {{leaderBoardShown.indexOf(item) + 1}}
             </div>

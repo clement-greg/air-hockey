@@ -35,10 +35,9 @@ export class GameSetupComponent implements OnChanges, OnDestroy {
     { type: 'Virtual', lottieUrl: 'https://lottie.host/2624709a-b10c-43e1-af2a-623d1434c3b3/HhWUwa1d3c.json', description: 'Play pong using the joysticks' },
     { type: 'Physical', lottieUrl: 'https://lottie.host/063f9150-34fc-4bdc-92df-16318a0f3a79/xG6AAyhFbC.json', description: 'Play air hockey on the real table' },
     { type: 'Both', lottieUrl: 'https://lottie.host/a7044b1d-7b7c-4dbe-8c08-f8579798acd4/pnWDVXLTWJ.json', description: 'Play both pong and the real table simultaneously' },
-    { type: 'ASTRIODS', lottieUrl: 'https://lottie.host/feef3b3c-de0f-4f79-ba74-0e87f738974c/WO8NamNotl.json', description: 'Astroids' },
-    { type: 'MOON', lottieUrl: 'https://lottie.host/8422d3b8-e7e6-4979-a160-216b2140256b/k9ADyPbV9C.json', description: 'Moon Landing' },
-    // { type: 'SKEET', lottieUrl: 'https://lottie.host/2624709a-b10c-43e1-af2a-623d1434c3b3/HhWUwa1d3c.json', description: 'Skeet Shooting' },
-    { type: 'PAC', lottieUrl: 'https://lottie.host/2624709a-b10c-43e1-af2a-623d1434c3b3/HhWUwa1d3c.json', description: 'Elevate Man' },
+    // { type: 'ASTRIODS', lottieUrl: 'https://lottie.host/feef3b3c-de0f-4f79-ba74-0e87f738974c/WO8NamNotl.json', description: 'Astroids' },
+    // { type: 'MOON', lottieUrl: 'https://lottie.host/8422d3b8-e7e6-4979-a160-216b2140256b/k9ADyPbV9C.json', description: 'Moon Landing' },
+    // { type: 'PAC', lottieUrl: 'https://lottie.host/2624709a-b10c-43e1-af2a-623d1434c3b3/HhWUwa1d3c.json', description: 'Elevate Man' },
   ];
 
   constructor(private leaderboardRepository: LeaderBoardRepositoryService) {

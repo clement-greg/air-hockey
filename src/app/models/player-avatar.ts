@@ -6,4 +6,5 @@ export class PlayerAvatar {
     dataUrl?: string;
     description?: string;
     id?: string;
+    hasVideo?: boolean;
 }
