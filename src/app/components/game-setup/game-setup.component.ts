@@ -41,7 +41,7 @@ export class GameSetupComponent implements OnChanges, OnDestroy {
   ];
 
   constructor(private leaderboardRepository: LeaderBoardRepositoryService) {
-    this.selectedItem = this.playerTypes[14];
+    this.selectedItem = this.playerTypes[Math.round(this.playerTypes.length / 2)];
     this.joystick1.onLeftJoyStick = this.player1SelectLeft.bind(this);
     this.joystick1.onRightJoyStick = this.player1SelectRight.bind(this);
     this.joystick1.onButtonPress = this.player1ButtonPress.bind(this);

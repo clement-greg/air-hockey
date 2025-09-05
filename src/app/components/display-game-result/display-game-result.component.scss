@@ -1,3 +1,5 @@
+// scale variable
+$scale: 1.5;
 @keyframes player-1-animation {
     from {
         transform: translateX(0) rotate(0);
@@ -21,16 +23,17 @@
 .player-winner {
     animation: player-winner-animation 1s ease;
     animation-fill-mode: forwards;
+    transform: scale(2);
 }
 
 @keyframes player-2-animation {
     from {
-        transform: translateX(800px) rotate(0);
+        transform: translateX(800px) rotate(0) ;
     }
 
     50% {
 
-        transform: translateX(390px) rotate(-750deg);
+        transform: translateX(390px) rotate(-750deg) ;
     }
 
     100% {
@@ -41,13 +44,13 @@
 
 @keyframes player-winner-animation {
     from {
-        transform: translateX(400px) rotate(0);
+        transform: translateX(400px) rotate(0) scale($scale);
     }
     70% {
-        transform: translateX(-50px) rotate(-750deg);
+        transform: translateX(-50px) rotate(-750deg) scale($scale);
     }
     100% {
-        transform: translateX(0) rotate(-720deg);
+        transform: translateX(0) rotate(-720deg) scale($scale);
     }
 }
 
@@ -75,6 +78,7 @@
     transform: scaleY(0);
     animation-fill-mode: forwards;
     transform-origin: 50% 0%;
+    margin-bottom: 45px;
 }
 
 .leader-board-table>div {
@@ -133,7 +137,7 @@
 }
 
 .standings-label {
-    margin-top: 80px;
+    margin-top: 40px;
 }
 
 @media(max-height: 900px) {

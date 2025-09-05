@@ -91,7 +91,11 @@
             <ul>
                 <li *ngFor="let playerType of playerTypes" [class.greyscale]="isPlayerSelected(playerType)"
                     [class.selected]="selectedItem === playerType">
-                    <img src="../../assets/images/avatars/{{playerType.baseUrl}}.jpg">
+                    <img *ngIf="selectedItem !== playerType || !playerType.hasVideo" src="../../assets/images/avatars/{{playerType.baseUrl}}.jpg">
+                    <video *ngIf="selectedItem === playerType && playerType.hasVideo" class="game-avatar"
+                        autoplay muted loop>
+                        <source src="../../assets/video/avatar/{{playerType.baseUrl}}.mp4" type="video/mp4">
+                    </video>
                 </li>
             </ul>
         </div>
